@@ -1,0 +1,38 @@
+html {
+	min-height: 100%;
+	min-width: 100%;
+}
+
+.gradient {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#F9FDFF', endColorstr = '#i75D6FF');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr = '#F9FDFF', endColorstr = '#75D6FF')";
+	background-image: -moz-linear-gradient(top, #F9FDFF, #75D6FF);
+	background-image: -ms-linear-gradient(top, #F9FDFF, #75D6FF);
+	background-image: -o-linear-gradient(top, #F9FDFF, #75D6FF);
+	background-image: -webkit-linear-gradient(top, #F9FDFF, #75D6FF);
+	background-image: linear-gradient(top, #F9FDFF, #75D6FF);
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+}
+	
+div.contentSelector {
+	width: 50%;
+	float: left;
+}
+
+div.contentDisplay {
+	width: 50%;
+	float: left;
+}
+
+table.searchBox {
+	width: 80%;
+	margin-right: auto;
+	border-collapse: collapse;
+}
+
+.highlighted {
+	background-color: #ffff00;
+}
+

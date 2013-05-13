@@ -1,0 +1,51 @@
+<html ng-app="sjpApp">
+<head>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script> -->
+	<script src="./local/angular.min.js"></script>
+	<!-- <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> -->
+	<script src="./local/jquery-1.9.1.min.js"></script>
+	<script src="./controllers.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body class="gradient">
+	<div ng-controller="ContentSelectionController" class="contentSelector">
+		<form ng-submit="searchJobs()" style="display:inline">
+			<table class="searchBox">
+				<tr>
+					<td style="width:100%">
+						<input style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string">
+					</td>
+					<td><button>Search</button></td>
+				</tr>
+			</table>
+			<input type="checkbox" ng-model="searchString.caseInsensitive">Case-insensitive</input>
+			<input type="checkbox" ng-model="searchString.global">Global</input>
+			<input type="checkbox" ng-model="searchString.multiline">Multi-line</input><br />
+		</form>
+		<i>
+			For info on regular expressions, see 
+			<a href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">this reference</a>
+		</i>
+		<ul>
+			<li ng-repeat="company in companies">
+				<a href="javascript:void(0)" ng-click="toggleJobListView(company)">
+					{{ company.name }}
+				</a>
+				<ul ng-show="company.expanded">
+					<li ng-repeat="job in company.jobs" ng-show="job.visible">
+						<a ng-href="javascript:void(0);" ng-click="selectJd($parent.$index, $index)">
+							{{ job.Title }}
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div ng-controller="ContentDisplayController" class="contentDisplay">
+		<h1>{{ company }}</h1>
+		<h2>{{ title }}</h2>
+		<a ng-href="{{ sourceUri }}">Link to Original</a><br /><br />
+		<div ng-bind-html-unsafe="fullDescription"></div><br />
+	</div>
+</body>
+</html>
