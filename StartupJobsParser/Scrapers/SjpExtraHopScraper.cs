@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Net;
 
@@ -6,10 +7,11 @@ namespace StartupJobsParser
 {
     public class SjpExtraHopScraper : SjpScraper
     {
+        private Uri _defaultUri = new Uri("http://www.jobscore.com/jobs/extrahopnetworks");
         public override string CompanyName { get { return "ExtraHop"; } }
-        public override string DefaultUri
+        public override Uri DefaultUri
         {
-            get { return "http://www.extrahop.com/company/jobs/"; }
+            get { return _defaultUri; }
         }
 
         public SjpExtraHopScraper(string storageDirPath, ISjpIndex index)
@@ -17,27 +19,32 @@ namespace StartupJobsParser
         {
         }
 
-        protected override IEnumerable<JobDescription> GetJds(string uri)
+        protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//div[@class='entry']/ul/li/a[starts-with(@href, 'http://www.extrahop.com/company/jobs/')]"))
+            foreach (HtmlNode jdListing in doc.DocumentNode.SelectNodes("//tr[@class='job-listing']"))
             {
-                yield return GetExtraHopJd(jdLink.Attributes["href"].Value);
+                HtmlNode titleAndLink = jdListing.SelectSingleNode("td[@class='job-title']/a");
+                HtmlNode location = jdListing.SelectSingleNode("td[@class='job-attribute']");
+                yield return GetExtraHopJd(
+                    titleAndLink.InnerText.Trim(),
+                    location.InnerText.Trim(),
+                    new Uri(titleAndLink.Attributes["href"].Value)
+                    );
             }
         }
 
-        private JobDescription GetExtraHopJd(string jdLink)
+        private JobDescription GetExtraHopJd(string jobTitle, string jobLocation, Uri jdUri)
         {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdLink);
-            string title = doc.DocumentNode.SelectSingleNode("//div[@id='Content']/h1").InnerText;
-            string description = doc.DocumentNode.SelectSingleNode("//div[@class='entry']").InnerText;
+            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
+            string description = doc.DocumentNode.SelectSingleNode("//div[@class='main_container']/div[starts-with(@class, 'left')]").InnerText;
 
             return new JobDescription()
             {
-                SourceUri = jdLink,
+                SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title),
-                Location = "Seattle, WA",
+                Title = jobTitle,
+                Location = jobLocation,
                 FullDescription = WebUtility.HtmlDecode(description)
             };
         }

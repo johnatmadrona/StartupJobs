@@ -11,7 +11,7 @@ namespace StartupJobsParser
         protected ISjpIndex m_index;
 
         public abstract string CompanyName { get; }
-        public abstract string DefaultUri { get; }
+        public abstract Uri DefaultUri { get; }
 
         // TODO: Abstract storage
         protected SjpScraper(string storageDirPath, ISjpIndex index)
@@ -31,7 +31,7 @@ namespace StartupJobsParser
             Scrape(DefaultUri);
         }
 
-        public void Scrape(string uri)
+        public void Scrape(Uri uri)
         {
             List<JobDescription> newJDs = new List<JobDescription>(GetJds(uri));
 
@@ -67,6 +67,6 @@ namespace StartupJobsParser
             }
         }
 
-        protected abstract IEnumerable<JobDescription> GetJds(string uri);
+        protected abstract IEnumerable<JobDescription> GetJds(Uri uri);
     }
 }

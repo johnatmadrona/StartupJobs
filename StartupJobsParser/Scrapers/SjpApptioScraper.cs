@@ -7,10 +7,11 @@ namespace StartupJobsParser
 {
     public class SjpApptioScraper : SjpScraper
     {
+        private Uri _defaultUri = new Uri("http://sj.tbe.taleo.net/CH18/ats/careers/searchResults.jsp?org=APPTIO&cws=1");
         public override string CompanyName { get { return "Apptio"; } }
-        public override string DefaultUri
+        public override Uri DefaultUri
         {
-            get { return "http://sj.tbe.taleo.net/CH18/ats/careers/searchResults.jsp?org=APPTIO&cws=1"; }
+            get { return _defaultUri; }
         }
 
         public SjpApptioScraper(string storageDirPath, ISjpIndex index)
@@ -18,25 +19,25 @@ namespace StartupJobsParser
         {
         }
 
-        protected override IEnumerable<JobDescription> GetJds(string uri)
+        protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
             foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//a[contains(@href, 'requisition.jsp')]"))
             {
-                yield return GetApptioJd(jdLink.Attributes["href"].Value);
+                yield return GetApptioJd(new Uri(jdLink.Attributes["href"].Value));
             }
         }
 
-        private JobDescription GetApptioJd(string jdLink)
+        private JobDescription GetApptioJd(Uri jdUri)
         {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdLink);
+            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
             string title = doc.DocumentNode.SelectSingleNode("//section[@id='main']/table/tr[3]").InnerText;
             string location = doc.DocumentNode.SelectSingleNode("//section[@id='main']/table/tr[4]/td[2]").InnerText;
             string description = doc.DocumentNode.SelectSingleNode("//section[@id='main']/table/tr[7]").InnerText;
 
             return new JobDescription()
             {
-                SourceUri = jdLink,
+                SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = WebUtility.HtmlDecode(title),
                 Location = WebUtility.HtmlDecode(location),

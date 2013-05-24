@@ -1,0 +1,3 @@
+echo Running python server...
+python -m http.server
+

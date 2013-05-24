@@ -8,10 +8,11 @@ namespace StartupJobsParser
 {
     public class SjpSmartsheetScraper : SjpScraper
     {
+        private Uri _defaultUri = new Uri("http://www.smartsheet.com/careers");
         public override string CompanyName { get { return "Smartsheet"; } }
-        public override string DefaultUri
+        public override Uri DefaultUri
         {
-            get { return "http://www.smartsheet.com/careers"; }
+            get { return _defaultUri; }
         }
 
         public SjpSmartsheetScraper(string storageDirPath, ISjpIndex index)
@@ -19,24 +20,22 @@ namespace StartupJobsParser
         {
         }
 
-        protected override IEnumerable<JobDescription> GetJds(string uri)
+        protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
-            Uri baseUri = new Uri(uri);
-
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
             foreach (HtmlNode jdSection in doc.DocumentNode.SelectNodes("//div[@class='job-container']"))
             {
                 string jobTitle = WebUtility.HtmlDecode(jdSection.SelectSingleNode("h3").InnerText);
                 string jdLink = jdSection.SelectSingleNode("div[@class='view-job-description-button-container']/a").Attributes["href"].Value;
-                Uri jdUri = new Uri(baseUri, jdLink);
+                Uri jdUri = new Uri(uri, jdLink);
 
-                yield return GetSmartsheetJd(jobTitle, jdUri.AbsoluteUri);
+                yield return GetSmartsheetJd(jobTitle, jdUri);
             }
         }
 
-        private JobDescription GetSmartsheetJd(string title, string jdLink)
+        private JobDescription GetSmartsheetJd(string title, Uri jdUri)
         {
-            string description = SjpUtils.GetTextFromPdf(jdLink);
+            string description = SjpUtils.GetTextFromPdf(jdUri);
 
             string location = "Bellevue, WA";
             Regex locationRegex = new Regex(@"(?<location>\w+, [A-Z]{2})[^\w]");
@@ -48,7 +47,7 @@ namespace StartupJobsParser
 
             return new JobDescription()
             {
-                SourceUri = jdLink,
+                SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = title,
                 Location = location,
