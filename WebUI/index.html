@@ -6,6 +6,9 @@
 	<script src="./local/jquery-1.9.1.min.js"></script>
 	<script src="./controllers.js"></script>
 	<link rel="stylesheet" type="text/css" href="style.css" />
+  <title>Madrona Jobs Search</title>
+  <!-- Great site for creating icon files: http://convertico.org/ -->
+  <link rel="shortcut icon" href="images/madrona_logo.ico" type="image/x-icon"/>
 </head>
 <body class="gradient">
 	<div ng-controller="ContentSelectionController" class="contentSelector">
@@ -47,5 +50,8 @@
 		<a ng-href="{{ sourceUri }}">Link to Original</a><br /><br />
 		<div ng-bind-html-unsafe="fullHtmlDescription"></div><br />
 	</div>
+  <div class="footer">
+    &#169; 2013 Madrona Venture Group, LLC. 206-674-3000. <a href="mailto:information@madrona.com">information@madrona.com</a>.
+  </div>
 </body>
 </html>
