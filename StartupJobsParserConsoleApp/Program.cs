@@ -1,8 +1,7 @@
-﻿using System;
+﻿using StartupJobsParser;
+using System;
 using System.Collections.Generic;
-using StartupJobsParser;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace StartupJobsParserConsoleApp
@@ -21,6 +20,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpIndochinoScraper(".\\data\\indochino\\", index));
             scrapers.Add(new SjpSmartsheetScraper(".\\data\\smartsheet\\", index));
             scrapers.Add(new SjpPayscaleScraper(".\\data\\payscale\\", index));
+            scrapers.Add(new SjpBuuteeqScraper(".\\data\\buuteeq\\", index));
 
             Parallel.ForEach(scrapers, scraper =>
             {
