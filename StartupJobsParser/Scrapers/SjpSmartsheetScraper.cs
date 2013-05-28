@@ -25,19 +25,18 @@ namespace StartupJobsParser
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
             foreach (HtmlNode jdSection in doc.DocumentNode.SelectNodes("//div[@class='job-container']"))
             {
-                string jobTitle = WebUtility.HtmlDecode(jdSection.SelectSingleNode("h3").InnerText);
+                string jobTitle = WebUtility.HtmlDecode(jdSection.SelectSingleNode("h3").InnerText).Trim();
                 string jdLink = jdSection.SelectSingleNode("div[@class='view-job-description-button-container']/a").Attributes["href"].Value;
                 Uri jdUri = new Uri(uri, jdLink);
 
-                yield return GetSmartsheetJd(jobTitle, jdUri);
+                yield return GetSmartsheetJd(jobTitle, "Bellevue, WA", jdUri);
             }
         }
 
-        private JobDescription GetSmartsheetJd(string title, Uri jdUri)
+        private JobDescription GetSmartsheetJd(string title, string location, Uri jdUri)
         {
             string description = SjpUtils.GetTextFromPdf(jdUri);
 
-            string location = "Bellevue, WA";
             Regex locationRegex = new Regex(@"(?<location>\w+, [A-Z]{2})[^\w]");
             Match m = locationRegex.Match(description);
             if (m.Success)
@@ -51,7 +50,8 @@ namespace StartupJobsParser
                 Company = CompanyName,
                 Title = title,
                 Location = location,
-                FullDescription = description
+                FullTextDescription = description,
+                FullHtmlDescription = WebUtility.HtmlEncode(description)
             };
         }
     }

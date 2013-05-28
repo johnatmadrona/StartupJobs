@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using StartupJobsParser;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace StartupJobsParserConsoleApp
 {
@@ -13,16 +15,17 @@ namespace StartupJobsParserConsoleApp
             ISjpIndex index = new SjpLocalDiskIndex(Path.GetFullPath(".\\index\\"));
 
             List<ISjpScraper> scrapers = new List<ISjpScraper>();
-            //scrapers.Add(new SjpApptioScraper(".\\data\\apptio\\", index));
-            //scrapers.Add(new SjpRedfinScraper(".\\data\\redfin\\", index));
-            //scrapers.Add(new SjpExtraHopScraper(".\\data\\extrahop\\", index));
-            //scrapers.Add(new SjpIndochinoScraper(".\\data\\indochino\\", index));
+            scrapers.Add(new SjpApptioScraper(".\\data\\apptio\\", index));
+            scrapers.Add(new SjpRedfinScraper(".\\data\\redfin\\", index));
+            scrapers.Add(new SjpExtraHopScraper(".\\data\\extrahop\\", index));
+            scrapers.Add(new SjpIndochinoScraper(".\\data\\indochino\\", index));
             scrapers.Add(new SjpSmartsheetScraper(".\\data\\smartsheet\\", index));
+            scrapers.Add(new SjpPayscaleScraper(".\\data\\payscale\\", index));
 
-            foreach (ISjpScraper scraper in scrapers)
+            Parallel.ForEach(scrapers, scraper =>
             {
                 scraper.Scrape();
-            }
+            });
 
             //foreach (JobDescription jd in index.FindJds("java"))
             //{

@@ -42,7 +42,8 @@ namespace StartupJobsParser
                         doc.Add(new Field("Company", jd.Company, Field.Store.YES, Field.Index.ANALYZED));
                         doc.Add(new Field("Title", jd.Title, Field.Store.YES, Field.Index.ANALYZED));
                         doc.Add(new Field("Location", jd.Location, Field.Store.YES, Field.Index.ANALYZED));
-                        doc.Add(new Field("FullDescription", jd.FullDescription, Field.Store.YES, Field.Index.ANALYZED));
+                        doc.Add(new Field("FullTextDescription", jd.FullTextDescription, Field.Store.NO, Field.Index.ANALYZED));
+                        doc.Add(new Field("FullHtmlDescription", jd.FullHtmlDescription, Field.Store.YES, Field.Index.NO));
                         doc.Add(new Field("StorageUri", jd.StorageUri, Field.Store.YES, Field.Index.NO));
                         indexWriter.AddDocument(doc);
                         indexWriter.Commit();

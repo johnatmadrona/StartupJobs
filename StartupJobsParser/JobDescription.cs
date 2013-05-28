@@ -9,7 +9,7 @@ namespace StartupJobsParser
         {
             get
             {
-                return ((uint)FullDescription.GetHashCode()).ToString();
+                return ((uint)FullTextDescription.GetHashCode()).ToString();
             }
         }
 
@@ -29,7 +29,10 @@ namespace StartupJobsParser
         public string Location { get; set; }
 
         [DataMember]
-        public string FullDescription { get; set; }
+        public string FullTextDescription { get; set; }
+
+        [DataMember]
+        public string FullHtmlDescription { get; set; }
 
         [DataMember]
         public string Responsibilities { get; set; }

@@ -97,7 +97,7 @@ sjpAppModule.controller(
 					var visible = true;
 					var exp = createRegExpFromSearchString($scope.searchString);
 					if (exp != null) {
-						if (exp.exec($scope.companies[i].jobs[j].FullDescription) == null) {
+						if (exp.exec($scope.companies[i].jobs[j].FullTextDescription) == null) {
 							visible = false;
 						}
 					}
@@ -120,14 +120,14 @@ sjpAppModule.controller(
 		$scope.company = "Company";
 		$scope.title = "Title";
 		$scope.sourceUri = "SourceUri";
-		$scope.fullDescription = "Description";
+		$scope.fullHtmlDescription = "FullHtmlDescription";
 		$scope.$on("jdSelected", function() {
 			$scope.company = sjpSharedService.selectedJd.Company;
 			$scope.title = sjpSharedService.selectedJd.Title;
 			$scope.sourceUri = sjpSharedService.selectedJd.SourceUri;
 
-			$scope.fullDescription = 
-				sjpSharedService.selectedJd.FullDescription.replace(
+			$scope.fullHtmlDescription = 
+				sjpSharedService.selectedJd.FullHtmlDescription.replace(
 					sjpSharedService.searchRegExp,
 					function(val) {
 						return "<span class='highlighted'>" + val + "</span>";

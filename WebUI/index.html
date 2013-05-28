@@ -13,7 +13,7 @@
 			<table class="searchBox">
 				<tr>
 					<td style="width:100%">
-						<input style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string">
+            <input style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string"></input>
 					</td>
 					<td><button>Search</button></td>
 				</tr>
@@ -45,7 +45,7 @@
 		<h1>{{ company }}</h1>
 		<h2>{{ title }}</h2>
 		<a ng-href="{{ sourceUri }}">Link to Original</a><br /><br />
-		<div ng-bind-html-unsafe="fullDescription"></div><br />
+		<div ng-bind-html-unsafe="fullHtmlDescription"></div><br />
 	</div>
 </body>
 </html>
