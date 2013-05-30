@@ -20,6 +20,7 @@ namespace StartupJobsParserConsoleApp
             //scrapers.Add(new SjpHaikuDeckScraper(".\\data\\haikudeck\\", index));
             //scrapers.Add(new SjpIndochinoScraper(".\\data\\indochino\\", index));
             //scrapers.Add(new SjpPayscaleScraper(".\\data\\payscale\\", index));
+            scrapers.Add(new SjpQumuloScraper(".\\data\\qumulo\\", index));
             //scrapers.Add(new SjpRedfinScraper(".\\data\\redfin\\", index));
             //scrapers.Add(new SjpRoverScraper(".\\data\\rover\\", index));
             //scrapers.Add(new SjpSkytapScraper(".\\data\\skytap\\", index));

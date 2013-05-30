@@ -67,6 +67,7 @@
     <Compile Include="Scrapers\SjpHaikuDeckScraper.cs" />
     <Compile Include="Scrapers\SjpIndochinoScraper.cs" />
     <Compile Include="Scrapers\SjpPayscaleScraper.cs" />
+    <Compile Include="Scrapers\SjpQumuloScraper.cs" />
     <Compile Include="Scrapers\SjpRedfinScraper.cs" />
     <Compile Include="Scrapers\SjpRoverScraper.cs" />
     <Compile Include="Scrapers\SjpSkytapScraper.cs" />
