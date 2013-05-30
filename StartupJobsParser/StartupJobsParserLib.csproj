@@ -63,6 +63,7 @@
     <Compile Include="Scrapers\ISjpScraper.cs" />
     <Compile Include="Scrapers\SjpApptioScraper.cs" />
     <Compile Include="Scrapers\SjpBuuteeqScraper.cs" />
+    <Compile Include="Scrapers\SjpCheezburgerScraper.cs" />
     <Compile Include="Scrapers\SjpContextRelevantScraper.cs" />
     <Compile Include="Scrapers\SjpExtraHopScraper.cs" />
     <Compile Include="Scrapers\SjpHaikuDeckScraper.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Scrapers\SjpPayscaleScraper.cs" />
     <Compile Include="Scrapers\SjpQumuloScraper.cs" />
     <Compile Include="Scrapers\SjpRedfinScraper.cs" />
+    <Compile Include="Scrapers\SjpResumatorScraperBase.cs" />
     <Compile Include="Scrapers\SjpRoverScraper.cs" />
     <Compile Include="Scrapers\SjpSkytapScraper.cs" />
     <Compile Include="Scrapers\SjpSmartsheetScraper.cs" />
