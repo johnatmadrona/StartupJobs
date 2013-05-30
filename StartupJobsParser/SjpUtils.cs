@@ -4,6 +4,7 @@ using iTextSharp.text.pdf.parser;
 using System;
 using System.IO;
 using System.Net;
+using System.Text;
 
 namespace StartupJobsParser
 {
@@ -23,7 +24,7 @@ namespace StartupJobsParser
             {
                 using (Stream htmlStream = resp.GetResponseStream())
                 {
-                    doc.Load(htmlStream);
+                    doc.Load(htmlStream, Encoding.UTF8);
                 }
             }
 

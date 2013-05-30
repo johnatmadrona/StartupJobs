@@ -69,6 +69,7 @@
     <Compile Include="Scrapers\SjpPayscaleScraper.cs" />
     <Compile Include="Scrapers\SjpRedfinScraper.cs" />
     <Compile Include="Scrapers\SjpRoverScraper.cs" />
+    <Compile Include="Scrapers\SjpSkytapScraper.cs" />
     <Compile Include="Scrapers\SjpSmartsheetScraper.cs" />
     <Compile Include="SjpLocalDiskIndex.cs" />
     <Compile Include="SjpLogger.cs" />

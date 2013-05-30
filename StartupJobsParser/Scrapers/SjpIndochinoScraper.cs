@@ -25,13 +25,26 @@ namespace StartupJobsParser
             foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//ul[starts-with(@class,'positions')]/li/a"))
             {
                 Uri jdUri = new Uri(uri, jdLink.Attributes["href"].Value);
-                yield return GetIndochinoJd(jdUri);
+                JobDescription jd = GetIndochinoJd(jdUri);
+                if (jd != null)
+                {
+                    yield return jd;
+                }
             }
         }
 
         private JobDescription GetIndochinoJd(Uri jdUri)
         {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
+            HtmlDocument doc;
+            try
+            {
+                doc = SjpUtils.GetHtmlDoc(jdUri);
+            }
+            catch (WebException ex)
+            {
+                Console.WriteLine("ERROR: Failed to retrieve URI '{0}' - {1}", jdUri, ex);
+                return null;
+            }
 
             string title = doc.DocumentNode.SelectSingleNode("//article[@class='jobpost']/header/h1").InnerText;
 
