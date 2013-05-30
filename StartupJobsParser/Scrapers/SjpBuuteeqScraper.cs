@@ -8,7 +8,7 @@ namespace StartupJobsParser
     public class SjpBuuteeqScraper : SjpScraper
     {
         private Uri _defaultUri = new Uri("http://jobs.buuteeq.me/promotions.htm");
-        public override string CompanyName { get { return "Buuteeq"; } }
+        public override string CompanyName { get { return "buuteeq"; } }
         public override Uri DefaultUri
         {
             get { return _defaultUri; }
