@@ -70,12 +70,14 @@
     <Compile Include="Scrapers\SjpIndochinoScraper.cs" />
     <Compile Include="Scrapers\SjpMixpoScraper.cs" />
     <Compile Include="Scrapers\SjpPayscaleScraper.cs" />
+    <Compile Include="Scrapers\SjpPlacedScraper.cs" />
     <Compile Include="Scrapers\SjpQumuloScraper.cs" />
     <Compile Include="Scrapers\SjpRedfinScraper.cs" />
     <Compile Include="Scrapers\SjpResumatorScraperBase.cs" />
     <Compile Include="Scrapers\SjpRoverScraper.cs" />
     <Compile Include="Scrapers\SjpSkytapScraper.cs" />
     <Compile Include="Scrapers\SjpSmartsheetScraper.cs" />
+    <Compile Include="Scrapers\SjpTier3Scraper.cs" />
     <Compile Include="SjpLocalDiskIndex.cs" />
     <Compile Include="SjpLogger.cs" />
     <Compile Include="Scrapers\SjpScraper.cs" />
