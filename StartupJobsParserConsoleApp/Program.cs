@@ -32,6 +32,7 @@ namespace StartupJobsParserConsoleApp
             //scrapers.Add(new SjpSkytapScraper(".\\data\\skytap\\", index));
             //scrapers.Add(new SjpSmartsheetScraper(".\\data\\smartsheet\\", index));
             //scrapers.Add(new SjpTier3Scraper(".\\data\\tier3\\", index));
+            scrapers.Add(new SjpZ2LiveScraper(".\\data\\z2live\\", index));
 
             Parallel.ForEach(scrapers, scraper =>
             {

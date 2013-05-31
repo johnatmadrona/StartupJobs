@@ -80,6 +80,7 @@
     <Compile Include="Scrapers\SjpSkytapScraper.cs" />
     <Compile Include="Scrapers\SjpSmartsheetScraper.cs" />
     <Compile Include="Scrapers\SjpTier3Scraper.cs" />
+    <Compile Include="Scrapers\SjpZ2LiveScraper.cs" />
     <Compile Include="SjpLocalDiskIndex.cs" />
     <Compile Include="SjpLogger.cs" />
     <Compile Include="Scrapers\SjpScraper.cs" />
