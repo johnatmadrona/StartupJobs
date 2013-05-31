@@ -61,12 +61,14 @@
     <Compile Include="JobDescription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scrapers\ISjpScraper.cs" />
+    <Compile Include="Scrapers\SjpAdReadyScraper.cs" />
     <Compile Include="Scrapers\SjpApptioScraper.cs" />
     <Compile Include="Scrapers\SjpBuuteeqScraper.cs" />
     <Compile Include="Scrapers\SjpCheezburgerScraper.cs" />
     <Compile Include="Scrapers\SjpContextRelevantScraper.cs" />
     <Compile Include="Scrapers\SjpExtraHopScraper.cs" />
     <Compile Include="Scrapers\SjpHaikuDeckScraper.cs" />
+    <Compile Include="Scrapers\SjpImpinjScraper.cs" />
     <Compile Include="Scrapers\SjpIndochinoScraper.cs" />
     <Compile Include="Scrapers\SjpMixpoScraper.cs" />
     <Compile Include="Scrapers\SjpPayscaleScraper.cs" />
