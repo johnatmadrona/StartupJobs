@@ -38,18 +38,18 @@ namespace StartupJobsParser
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
 
-            string title = doc.DocumentNode.SelectSingleNode("//h1").InnerText;
-            string location = doc.DocumentNode.SelectSingleNode("//h2").InnerText;
-            string description = doc.DocumentNode.SelectSingleNode("//div[@class='jobDesc']").InnerHtml;
+            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//h1");
+            HtmlNode locationNode = doc.DocumentNode.SelectSingleNode("//h2");
+            HtmlNode descriptionNode = doc.DocumentNode.SelectSingleNode("//div[@class='jobDesc']");
 
             return new JobDescription()
             {
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
-                Location = WebUtility.HtmlDecode(location).Trim(),
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = SjpUtils.GetCleanTextFromHtml(locationNode),
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

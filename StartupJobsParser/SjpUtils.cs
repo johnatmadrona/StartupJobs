@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace StartupJobsParser
 {
@@ -51,6 +52,18 @@ namespace StartupJobsParser
             }
 
             return jdText;
+        }
+
+        public static string GetCleanTextFromHtml(HtmlNode htmlNode)
+        {
+            return GetCleanTextFromHtmlEncodedText(htmlNode.InnerText);
+        }
+
+        public static string GetCleanTextFromHtmlEncodedText(string rawText)
+        {
+            string text = WebUtility.HtmlDecode(rawText).Trim();
+            text = text.Replace("\\u000a", " ").Replace("\\u000d", " ");
+            return Regex.Replace(text, "\\s+", " ");
         }
     }
 }

@@ -24,7 +24,9 @@ namespace StartupJobsParser
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
             foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//article[contains(@class,'job-item')]/a"))
             {
-                string location = jdLink.SelectSingleNode("span[@class='location']").InnerText;
+                string location = SjpUtils.GetCleanTextFromHtml(
+                    jdLink.SelectSingleNode("span[@class='location']")
+                    );
                 yield return GetTier3Jd(new Uri(uri, jdLink.Attributes["href"].Value), location);
             }
         }
@@ -34,17 +36,17 @@ namespace StartupJobsParser
             HtmlNode jdNode = SjpUtils.GetHtmlDoc(uri).DocumentNode;
 
             HtmlNode targetNode = jdNode.SelectSingleNode("//div[@class='container']/div[@class='row']");
-            string title = targetNode.SelectSingleNode("div[@class='span12']/h1").InnerText;
-            string description = targetNode.SelectSingleNode("div[@class='span9']").InnerHtml;
+            HtmlNode titleNode = targetNode.SelectSingleNode("div[@class='span12']/h1");
+            HtmlNode descriptionNode = targetNode.SelectSingleNode("div[@class='span9']");
 
             return new JobDescription()
             {
                 SourceUri = uri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
-                Location = WebUtility.HtmlDecode(location).Trim(),
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = location,
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

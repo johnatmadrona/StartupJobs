@@ -31,18 +31,26 @@ namespace StartupJobsParser
         private JobDescription GetApptioJd(Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
-            string title = doc.DocumentNode.SelectSingleNode("//section[@id='main']/table/tr[3]").InnerText;
-            string location = doc.DocumentNode.SelectSingleNode("//section[@id='main']/table/tr[4]/td[2]").InnerText;
-            string description = doc.DocumentNode.SelectSingleNode("//section[@id='main']/table/tr[7]").InnerHtml;
+            HtmlNode jdNode = doc.DocumentNode.SelectSingleNode("//section[@id='main']/table");
+
+            HtmlNode titleNode = jdNode.SelectSingleNode("tr/td/h1");
+            HtmlNode locationNode = jdNode.SelectSingleNode("tr/td/b");
+
+            // TODO: We're losing some data like the wrapping table...
+            HtmlNode descriptionNode = jdNode.SelectSingleNode("tr");
+            while (!SjpUtils.GetCleanTextFromHtml(descriptionNode).StartsWith("Description", StringComparison.OrdinalIgnoreCase))
+            {
+                descriptionNode = descriptionNode.NextSibling;
+            }
 
             return new JobDescription()
             {
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
-                Location = WebUtility.HtmlDecode(location).Trim(),
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = SjpUtils.GetCleanTextFromHtml(locationNode),
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

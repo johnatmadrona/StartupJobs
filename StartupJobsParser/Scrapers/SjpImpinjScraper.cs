@@ -32,9 +32,9 @@ namespace StartupJobsParser
         {
             HtmlNode jdNode = SjpUtils.GetHtmlDoc(uri).DocumentNode;
 
-            string title = jdNode.SelectSingleNode("html/body/table/tr/td[@class='InteriorHeader']").InnerText;
+            HtmlNode titleNode = jdNode.SelectSingleNode("html/body/table/tr/td[@class='InteriorHeader']");
             
-            string location = "Seattle, WA";
+            HtmlNode locationNode = null;
             foreach (HtmlNode entry in jdNode.SelectNodes("//table[@class='InteriorTable']/tr/td"))
             {
                 if (entry.InnerText.Trim().StartsWith("Location:", StringComparison.OrdinalIgnoreCase))
@@ -44,7 +44,7 @@ namespace StartupJobsParser
                     {
                         next = next.NextSibling;
                     }
-                    location = next.InnerText;
+                    locationNode = next;
                     break;
                 }
             }
@@ -54,16 +54,15 @@ namespace StartupJobsParser
             {
                 remove.ParentNode.RemoveChild(remove, false);
             }
-            string description = descriptionNode.InnerHtml;
 
             return new JobDescription()
             {
                 SourceUri = uri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
-                Location = WebUtility.HtmlDecode(location).Trim(),
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = SjpUtils.GetCleanTextFromHtml(locationNode),
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

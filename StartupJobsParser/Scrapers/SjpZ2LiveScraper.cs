@@ -32,23 +32,23 @@ namespace StartupJobsParser
         {
             HtmlNode jdNode = SjpUtils.GetHtmlDoc(uri).DocumentNode;
 
-            string title = jdNode.SelectSingleNode("//h3[@class='career-listing-title']").InnerText;
+            HtmlNode titleNode = jdNode.SelectSingleNode("//h3[@class='career-listing-title']");
 
             const string LocationPrefix = "Location:";
             string location = jdNode.SelectSingleNode("//strong[@class='location']").InnerText;
             int locationOffset = location.IndexOf(LocationPrefix) + LocationPrefix.Length;
             location = location.Substring(locationOffset);
 
-            string description = jdNode.SelectSingleNode("//div[@class='ee-rich-text']").InnerHtml;
+            HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[@class='ee-rich-text']");
 
             return new JobDescription()
             {
                 SourceUri = uri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
-                Location = WebUtility.HtmlDecode(location).Trim(),
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = SjpUtils.GetCleanTextFromHtmlEncodedText(location),
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

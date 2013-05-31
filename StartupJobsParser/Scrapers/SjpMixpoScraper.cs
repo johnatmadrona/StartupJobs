@@ -33,7 +33,7 @@ namespace StartupJobsParser
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
             HtmlNode jdNode = doc.DocumentNode.SelectSingleNode("//div[@id='content']");
             
-            string title = jdNode.SelectSingleNode("h2").InnerText;
+            HtmlNode titleNode = jdNode.SelectSingleNode("h2");
 
             HtmlNode remove = jdNode.SelectSingleNode("p[@id='breadcrumb']");
             remove.ParentNode.RemoveChild(remove, false);
@@ -42,16 +42,14 @@ namespace StartupJobsParser
             remove = jdNode.SelectSingleNode("a[starts-with(@class, 'email')]");
             remove.ParentNode.RemoveChild(remove, false);
 
-            string description = jdNode.InnerHtml;
-
             return new JobDescription()
             {
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = "Seattle, WA",
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(jdNode),
+                FullHtmlDescription = jdNode.InnerHtml
             };
         }
     }

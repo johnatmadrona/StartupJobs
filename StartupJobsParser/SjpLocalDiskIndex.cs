@@ -14,7 +14,8 @@ namespace StartupJobsParser
     {
         public string IndexDirPath { get; private set; }
 
-        private DirectoryInfo m_directoryInfo;
+        private DirectoryInfo _directoryInfo;
+        private static volatile object _indexWriterMutex = new object();
 
         public SjpLocalDiskIndex(string indexDirPath)
         {
@@ -25,28 +26,32 @@ namespace StartupJobsParser
 
             IndexDirPath = indexDirPath;
 
-            m_directoryInfo = new DirectoryInfo(indexDirPath);
+            _directoryInfo = new DirectoryInfo(indexDirPath);
         }
 
         public void AddToIndex(JobDescription jd)
         {
-            using (Lns.SimpleFSDirectory luceneDir = new Lns.SimpleFSDirectory(m_directoryInfo))
+            using (Lns.SimpleFSDirectory luceneDir = new Lns.SimpleFSDirectory(_directoryInfo))
             {
                 using (Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
                 {
-                    using (IndexWriter indexWriter =
-                        new IndexWriter(luceneDir, analyzer, Lucene.Net.Index.IndexWriter.MaxFieldLength.UNLIMITED))
+                    // Lucene only allow a single writer
+                    lock (_indexWriterMutex)
                     {
-                        Document doc = new Document();
-                        doc.Add(new Field("Uid", jd.Uid, Field.Store.YES, Field.Index.ANALYZED));
-                        doc.Add(new Field("Company", jd.Company, Field.Store.YES, Field.Index.ANALYZED));
-                        doc.Add(new Field("Title", jd.Title, Field.Store.YES, Field.Index.ANALYZED));
-                        doc.Add(new Field("Location", jd.Location, Field.Store.YES, Field.Index.ANALYZED));
-                        doc.Add(new Field("FullTextDescription", jd.FullTextDescription, Field.Store.NO, Field.Index.ANALYZED));
-                        doc.Add(new Field("FullHtmlDescription", jd.FullHtmlDescription, Field.Store.YES, Field.Index.NO));
-                        doc.Add(new Field("StorageUri", jd.StorageUri, Field.Store.YES, Field.Index.NO));
-                        indexWriter.AddDocument(doc);
-                        indexWriter.Commit();
+                        using (IndexWriter indexWriter =
+                            new IndexWriter(luceneDir, analyzer, Lucene.Net.Index.IndexWriter.MaxFieldLength.UNLIMITED))
+                        {
+                            Document doc = new Document();
+                            doc.Add(new Field("Uid", jd.Uid, Field.Store.YES, Field.Index.ANALYZED));
+                            doc.Add(new Field("Company", jd.Company, Field.Store.YES, Field.Index.ANALYZED));
+                            doc.Add(new Field("Title", jd.Title, Field.Store.YES, Field.Index.ANALYZED));
+                            doc.Add(new Field("Location", jd.Location, Field.Store.YES, Field.Index.ANALYZED));
+                            doc.Add(new Field("FullTextDescription", jd.FullTextDescription, Field.Store.NO, Field.Index.ANALYZED));
+                            doc.Add(new Field("FullHtmlDescription", jd.FullHtmlDescription, Field.Store.YES, Field.Index.NO));
+                            doc.Add(new Field("StorageUri", jd.StorageUri, Field.Store.YES, Field.Index.NO));
+                            indexWriter.AddDocument(doc);
+                            indexWriter.Commit();
+                        }
                     }
                 }
             }
@@ -54,7 +59,7 @@ namespace StartupJobsParser
 
         public void RemoveFromIndex(string uid)
         {
-            using (Lns.SimpleFSDirectory luceneDir = new Lns.SimpleFSDirectory(m_directoryInfo))
+            using (Lns.SimpleFSDirectory luceneDir = new Lns.SimpleFSDirectory(_directoryInfo))
             {
                 using (Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
                 {
@@ -71,7 +76,7 @@ namespace StartupJobsParser
 
         public IEnumerable<JobDescription> FindJds(string term)
         {
-            using (Lns.SimpleFSDirectory luceneDir = new Lns.SimpleFSDirectory(m_directoryInfo))
+            using (Lns.SimpleFSDirectory luceneDir = new Lns.SimpleFSDirectory(_directoryInfo))
             {
                 using (Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
                 {

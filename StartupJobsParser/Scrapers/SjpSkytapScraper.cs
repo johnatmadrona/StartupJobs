@@ -34,19 +34,17 @@ namespace StartupJobsParser
             HtmlNode jdNode = doc.DocumentNode.SelectSingleNode("//div[@id='content']/div/div[@class='column']");
 
             HtmlNode titleNode = jdNode.SelectSingleNode("h1");
-            string title = titleNode.InnerText;
 
             titleNode.ParentNode.RemoveChild(titleNode, false);
-            string description = jdNode.InnerHtml;
 
             return new JobDescription()
             {
                 SourceUri = uri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = "Seattle, WA",
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(jdNode),
+                FullHtmlDescription = jdNode.InnerHtml
             };
         }
     }

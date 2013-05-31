@@ -61,22 +61,22 @@ namespace StartupJobsParser
         protected JobDescription GetResumatorJd(HtmlNode jdNode, Uri uri)
         {
             HtmlNode titleNode = jdNode.SelectSingleNode("div[starts-with(@class, 'resumator-job-title')]");
-            string title = titleNode.InnerText;
 
             HtmlNode locationNode = titleNode.NextSibling;
             Regex regex = new Regex(@"(?<Location>\w+, [A-Z]{2})");
-            string location = regex.Match(locationNode.InnerText).Groups["Location"].Value;
+            string location = regex.Match(SjpUtils.GetCleanTextFromHtml(locationNode)).Groups["Location"].Value;
 
-            string description = jdNode.SelectSingleNode("div/div[starts-with(@class, 'resumator-job-description')]").InnerHtml;
+            HtmlNode descriptionNode = 
+                jdNode.SelectSingleNode("div/div[starts-with(@class, 'resumator-job-description')]");
 
             return new JobDescription()
             {
                 SourceUri = uri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(titleNode.InnerText).Trim(),
-                Location = WebUtility.HtmlDecode(location).Trim(),
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = location,
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

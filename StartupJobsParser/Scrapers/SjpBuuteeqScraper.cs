@@ -43,17 +43,17 @@ namespace StartupJobsParser
         private JobDescription GetBuuteeqJd(Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
-            string title = doc.DocumentNode.SelectSingleNode("//div[@class='artMainCon']/h1").InnerText;
-            string description = doc.DocumentNode.SelectSingleNode("//div[@class='artMainCon']").InnerHtml;
+            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//div[@class='artMainCon']/h1");
+            HtmlNode descriptionNode = doc.DocumentNode.SelectSingleNode("//div[@class='artMainCon']");
 
             return new JobDescription()
             {
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = "Seattle, WA",
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

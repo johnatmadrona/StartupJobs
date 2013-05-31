@@ -14,8 +14,8 @@ namespace StartupJobsParserConsoleApp
             ISjpIndex index = new SjpLocalDiskIndex(Path.GetFullPath(".\\index\\"));
 
             List<ISjpScraper> scrapers = new List<ISjpScraper>();
-            scrapers.Add(new SjpAdReadyScraper(".\\data\\adready\\", index));
-            //scrapers.Add(new SjpApptioScraper(".\\data\\apptio\\", index));
+            //scrapers.Add(new SjpAdReadyScraper(".\\data\\adready\\", index));
+            scrapers.Add(new SjpApptioScraper(".\\data\\apptio\\", index));
             //scrapers.Add(new SjpBuuteeqScraper(".\\data\\buuteeq\\", index));
             //scrapers.Add(new SjpCheezburgerScraper(".\\data\\cheezburger\\", index));
             //scrapers.Add(new SjpContextRelevantScraper(".\\data\\contextrelevant\\", index));
@@ -32,7 +32,7 @@ namespace StartupJobsParserConsoleApp
             //scrapers.Add(new SjpSkytapScraper(".\\data\\skytap\\", index));
             //scrapers.Add(new SjpSmartsheetScraper(".\\data\\smartsheet\\", index));
             //scrapers.Add(new SjpTier3Scraper(".\\data\\tier3\\", index));
-            scrapers.Add(new SjpZ2LiveScraper(".\\data\\z2live\\", index));
+            //scrapers.Add(new SjpZ2LiveScraper(".\\data\\z2live\\", index));
 
             Parallel.ForEach(scrapers, scraper =>
             {

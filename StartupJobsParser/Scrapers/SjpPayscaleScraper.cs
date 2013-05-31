@@ -148,17 +148,15 @@ namespace StartupJobsParser
 
         private JobDescription GetPayscaleJd(HtmlDocument doc, Uri jdUri)
         {
-            string title = WebUtility.HtmlDecode(
-                doc.DocumentNode.SelectSingleNode("//span[@class='jobListHeader']").InnerText
-                ).Trim();
+            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//span[@class='jobListHeader']");
 
             return new JobDescription()
             {
                 SourceUri = jdUri.AbsolutePath,
                 Company = CompanyName,
-                Title = title,
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = "Seattle, WA",
-                FullTextDescription =  WebUtility.HtmlDecode(doc.DocumentNode.InnerText).Trim(),
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(doc.DocumentNode),
                 FullHtmlDescription = doc.DocumentNode.InnerHtml
             };
         }

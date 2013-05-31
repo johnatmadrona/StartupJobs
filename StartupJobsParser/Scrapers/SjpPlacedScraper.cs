@@ -32,17 +32,17 @@ namespace StartupJobsParser
         {
             HtmlNode jdNode = SjpUtils.GetHtmlDoc(uri).DocumentNode;
 
-            string title = jdNode.SelectSingleNode("//h1[@class='banner_title']").InnerText;
-            string description = jdNode.SelectSingleNode("//div[@id='content']").InnerHtml;
+            HtmlNode titleNode = jdNode.SelectSingleNode("//h1[@class='banner_title']");
+            HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[@id='content']");
 
             return new JobDescription()
             {
                 SourceUri = uri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = "Seattle, WA",
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

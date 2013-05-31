@@ -46,7 +46,7 @@ namespace StartupJobsParser
                 return null;
             }
 
-            string title = doc.DocumentNode.SelectSingleNode("//article[@class='jobpost']/header/h1").InnerText;
+            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//article[@class='jobpost']/header/h1");
 
             string location = doc.DocumentNode.SelectSingleNode("//article[@class='jobpost']/header/div").InnerText;
             if (location.Contains("|"))
@@ -54,16 +54,16 @@ namespace StartupJobsParser
                 location = location.Split('|')[1];
             }
 
-            string description = doc.DocumentNode.SelectSingleNode("//section[@class='jobpost-content']").InnerHtml;
+            HtmlNode descriptionNode = doc.DocumentNode.SelectSingleNode("//section[@class='jobpost-content']");
 
             return new JobDescription()
             {
                 SourceUri = jdUri.AbsolutePath,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
-                Location = WebUtility.HtmlDecode(location).Trim(),
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = SjpUtils.GetCleanTextFromHtmlEncodedText(location),
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

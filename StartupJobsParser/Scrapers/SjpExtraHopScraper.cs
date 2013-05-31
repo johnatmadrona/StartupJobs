@@ -27,8 +27,8 @@ namespace StartupJobsParser
                 HtmlNode titleAndLink = jdListing.SelectSingleNode("td[@class='job-title']/a");
                 HtmlNode location = jdListing.SelectSingleNode("td[@class='job-attribute']");
                 yield return GetExtraHopJd(
-                    WebUtility.HtmlDecode(titleAndLink.InnerText).Trim(),
-                    WebUtility.HtmlDecode(location.InnerText).Trim(),
+                    SjpUtils.GetCleanTextFromHtml(titleAndLink),
+                    SjpUtils.GetCleanTextFromHtml(location),
                     new Uri(titleAndLink.Attributes["href"].Value)
                     );
             }
@@ -37,7 +37,10 @@ namespace StartupJobsParser
         private JobDescription GetExtraHopJd(string jobTitle, string jobLocation, Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
-            string description = doc.DocumentNode.SelectSingleNode("//div[@class='main_container']/div[starts-with(@class, 'left')]").InnerHtml;
+            HtmlNode descriptionNode = 
+                doc.DocumentNode.SelectSingleNode(
+                    "//div[@class='main_container']/div[starts-with(@class, 'left')]"
+                    );
 
             return new JobDescription()
             {
@@ -45,8 +48,8 @@ namespace StartupJobsParser
                 Company = CompanyName,
                 Title = jobTitle,
                 Location = jobLocation,
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

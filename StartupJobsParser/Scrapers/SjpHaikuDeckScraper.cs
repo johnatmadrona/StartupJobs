@@ -30,17 +30,17 @@ namespace StartupJobsParser
 
         private JobDescription GetHaikuDeckJd(HtmlNode jdNode, Uri uri)
         {
-            string title = jdNode.SelectSingleNode("div[@class='accordion-heading']").InnerText;
-            string description = jdNode.SelectSingleNode("div/div[@class='accordion-inner']").InnerHtml;
+            HtmlNode titleNode = jdNode.SelectSingleNode("div[@class='accordion-heading']");
+            HtmlNode descriptionNode = jdNode.SelectSingleNode("div/div[@class='accordion-inner']");
 
             return new JobDescription()
             {
                 SourceUri = uri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = "Fremont, WA",
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

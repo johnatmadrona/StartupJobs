@@ -31,16 +31,16 @@ namespace StartupJobsParser
         private JobDescription GetSkytapJd(HtmlNode jdNode, Uri uri)
         {
             string title = jdNode.Attributes["data-position"].Value;
-            string description = jdNode.SelectSingleNode("div[@class='jdbg']/div[@class='body']/span").InnerHtml;
+            HtmlNode descriptionNode = jdNode.SelectSingleNode("div[@class='jdbg']/div[@class='body']/span");
 
             return new JobDescription()
             {
                 SourceUri = uri.AbsoluteUri,
                 Company = CompanyName,
-                Title = WebUtility.HtmlDecode(title).Trim(),
+                Title = SjpUtils.GetCleanTextFromHtmlEncodedText(title),
                 Location = "Seattle, WA",
-                FullTextDescription = WebUtility.HtmlDecode(description).Trim(),
-                FullHtmlDescription = description
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

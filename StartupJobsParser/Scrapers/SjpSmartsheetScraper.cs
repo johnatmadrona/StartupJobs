@@ -44,13 +44,16 @@ namespace StartupJobsParser
                 location = m.Groups["location"].Value;
             }
 
+            string cleanTextDescription = description.Replace('\n', ' ').Replace('\r', ' ');
+            cleanTextDescription = Regex.Replace(cleanTextDescription, "\\s+", " ");
+
             return new JobDescription()
             {
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = title,
                 Location = location,
-                FullTextDescription = description,
+                FullTextDescription = cleanTextDescription,
                 FullHtmlDescription = WebUtility.HtmlEncode(description)
             };
         }
