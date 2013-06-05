@@ -70,6 +70,8 @@
     <Compile Include="Scrapers\SjpHaikuDeckScraper.cs" />
     <Compile Include="Scrapers\SjpImpinjScraper.cs" />
     <Compile Include="Scrapers\SjpIndochinoScraper.cs" />
+    <Compile Include="Scrapers\SjpIntrepidLearningScraper.cs" />
+    <Compile Include="Scrapers\SjpJobviteScraperBase.cs" />
     <Compile Include="Scrapers\SjpMixpoScraper.cs" />
     <Compile Include="Scrapers\SjpPayscaleScraper.cs" />
     <Compile Include="Scrapers\SjpPlacedScraper.cs" />
