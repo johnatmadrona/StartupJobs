@@ -16,7 +16,7 @@ namespace StartupJobsParserConsoleApp
             List<ISjpScraper> scrapers = new List<ISjpScraper>();
             //scrapers.Add(new Sjp2ndWatchScraper(".\\data\\2ndwatch\\", index));
             //scrapers.Add(new SjpAdReadyScraper(".\\data\\adready\\", index));
-            //scrapers.Add(new SjpApptioScraper(".\\data\\apptio\\", index));
+            scrapers.Add(new SjpApptioScraper(".\\data\\apptio\\", index));
             //scrapers.Add(new SjpBuuteeqScraper(".\\data\\buuteeq\\", index));
             //scrapers.Add(new SjpCheezburgerScraper(".\\data\\cheezburger\\", index));
             //scrapers.Add(new SjpContextRelevantScraper(".\\data\\contextrelevant\\", index));
@@ -25,7 +25,7 @@ namespace StartupJobsParserConsoleApp
             //scrapers.Add(new SjpImpinjScraper(".\\data\\impinj\\", index));
             //scrapers.Add(new SjpIndochinoScraper(".\\data\\indochino\\", index));
             //scrapers.Add(new SjpIntrepidLearningScraper(".\\data\\intrepidlearning\\", index));
-            scrapers.Add(new SjpMozScraper(".\\data\\moz\\", index));
+            //scrapers.Add(new SjpMozScraper(".\\data\\moz\\", index));
             //scrapers.Add(new SjpMixpoScraper(".\\data\\mixpo\\", index));
             //scrapers.Add(new SjpPayscaleScraper(".\\data\\payscale\\", index));
             //scrapers.Add(new SjpPlacedScraper(".\\data\\placed\\", index));
@@ -35,6 +35,7 @@ namespace StartupJobsParserConsoleApp
             //scrapers.Add(new SjpSkytapScraper(".\\data\\skytap\\", index));
             //scrapers.Add(new SjpSmartsheetScraper(".\\data\\smartsheet\\", index));
             //scrapers.Add(new SjpTier3Scraper(".\\data\\tier3\\", index));
+            //scrapers.Add(new SjpWildTangentScraper(".\\data\\wildtangent\\", index));
             //scrapers.Add(new SjpZ2LiveScraper(".\\data\\z2live\\", index));
 
             Parallel.ForEach(scrapers, scraper =>
