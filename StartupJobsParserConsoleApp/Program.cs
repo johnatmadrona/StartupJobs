@@ -14,7 +14,7 @@ namespace StartupJobsParserConsoleApp
             ISjpIndex index = new SjpLocalDiskIndex(Path.GetFullPath(".\\index\\"));
 
             List<ISjpScraper> scrapers = new List<ISjpScraper>();
-            scrapers.Add(new Sjp2ndWatchScraper(".\\data\\2ndwatch\\", index));
+            //scrapers.Add(new Sjp2ndWatchScraper(".\\data\\2ndwatch\\", index));
             //scrapers.Add(new SjpAdReadyScraper(".\\data\\adready\\", index));
             //scrapers.Add(new SjpApptioScraper(".\\data\\apptio\\", index));
             //scrapers.Add(new SjpBuuteeqScraper(".\\data\\buuteeq\\", index));
@@ -25,6 +25,7 @@ namespace StartupJobsParserConsoleApp
             //scrapers.Add(new SjpImpinjScraper(".\\data\\impinj\\", index));
             //scrapers.Add(new SjpIndochinoScraper(".\\data\\indochino\\", index));
             //scrapers.Add(new SjpIntrepidLearningScraper(".\\data\\intrepidlearning\\", index));
+            scrapers.Add(new SjpMozScraper(".\\data\\moz\\", index));
             //scrapers.Add(new SjpMixpoScraper(".\\data\\mixpo\\", index));
             //scrapers.Add(new SjpPayscaleScraper(".\\data\\payscale\\", index));
             //scrapers.Add(new SjpPlacedScraper(".\\data\\placed\\", index));
