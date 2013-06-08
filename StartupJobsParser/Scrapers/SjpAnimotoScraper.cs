@@ -5,12 +5,12 @@ using System.Net;
 
 namespace StartupJobsParser
 {
-    public class SjpIntrepidLearningScraper : SjpJobviteScraperBase
+    public class SjpAnimotoScraper : SjpJobviteScraperBase
     {
-        public override string CompanyName { get { return "Intrepid Learning"; } }
-        protected override string JobviteCompanyId { get { return "q089VfwW"; } }
+        public override string CompanyName { get { return "Animoto"; } }
+        protected override string JobviteCompanyId { get { return "qBr9VfwQ"; } }
 
-        public SjpIntrepidLearningScraper(string storageDirPath, ISjpIndex index)
+        public SjpAnimotoScraper(string storageDirPath, ISjpIndex index)
             : base(storageDirPath, index)
         {
         }
@@ -18,17 +18,17 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdUriNode in doc.DocumentNode.SelectNodes("//a[@class='jvjoblink']"))
+            foreach (HtmlNode jdUriNode in doc.DocumentNode.SelectNodes("//table[@class='joblist']/tr/td/a[starts-with(@onclick,'jvGoToPage')]"))
             {
-                yield return GetIntrepidLearningJd(ExtractJdUriFromGoToPageLink(jdUriNode));
+                yield return GetAnimotoJd(ExtractJdUriFromGoToPageLink(jdUriNode));
             }
         }
 
-        private JobDescription GetIntrepidLearningJd(Uri jdUri)
+        private JobDescription GetAnimotoJd(Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
 
-            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//div[@class='jvheader']");
+            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//div[@class='jvjobheader']/h2");
 
             HtmlNode locationNode = titleNode.NextSibling;
             string location = null;
@@ -44,15 +44,7 @@ namespace StartupJobsParser
                 }
             }
 
-            HtmlNode descriptionNode = titleNode.ParentNode;
-            foreach (HtmlNode remove in descriptionNode.SelectNodes("div"))
-            {
-                remove.ParentNode.RemoveChild(remove, false);
-            }
-            foreach (HtmlNode remove in descriptionNode.SelectNodes("script"))
-            {
-                remove.ParentNode.RemoveChild(remove, false);
-            }
+            HtmlNode descriptionNode = doc.DocumentNode.SelectSingleNode("//div[@class='jvdescriptionbody']");
 
             return new JobDescription()
             {

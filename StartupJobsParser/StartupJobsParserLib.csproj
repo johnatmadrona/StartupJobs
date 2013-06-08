@@ -63,6 +63,7 @@
     <Compile Include="Scrapers\ISjpScraper.cs" />
     <Compile Include="Scrapers\Sjp2ndWatch.cs" />
     <Compile Include="Scrapers\SjpAdReadyScraper.cs" />
+    <Compile Include="Scrapers\SjpAnimotoScraper.cs" />
     <Compile Include="Scrapers\SjpApptioScraper.cs" />
     <Compile Include="Scrapers\SjpBuuteeqScraper.cs" />
     <Compile Include="Scrapers\SjpCheezburgerScraper.cs" />

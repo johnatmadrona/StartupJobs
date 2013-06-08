@@ -16,7 +16,8 @@ namespace StartupJobsParserConsoleApp
             List<ISjpScraper> scrapers = new List<ISjpScraper>();
             //scrapers.Add(new Sjp2ndWatchScraper(".\\data\\2ndwatch\\", index));
             //scrapers.Add(new SjpAdReadyScraper(".\\data\\adready\\", index));
-            scrapers.Add(new SjpApptioScraper(".\\data\\apptio\\", index));
+            //scrapers.Add(new SjpApptioScraper(".\\data\\apptio\\", index));
+            scrapers.Add(new SjpAnimotoScraper(".\\data\\animoto\\", index));
             //scrapers.Add(new SjpBuuteeqScraper(".\\data\\buuteeq\\", index));
             //scrapers.Add(new SjpCheezburgerScraper(".\\data\\cheezburger\\", index));
             //scrapers.Add(new SjpContextRelevantScraper(".\\data\\contextrelevant\\", index));
