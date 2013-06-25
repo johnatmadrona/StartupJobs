@@ -40,6 +40,7 @@ sjpAppModule.controller(
 				$scope.companies.push(newCompany);
 			});
 		};
+
 		function iterateDir(url, callback) {
 			$.get(url, function(data) {
 				var html = $("<div />").html(data).contents();
@@ -59,6 +60,7 @@ sjpAppModule.controller(
 				alert("Status: " + status + "\nError: " + error);
 			});
 		};
+
 		$scope.companies = [];
 		iterateDir("http://127.0.0.1:8000/data", function(companyUrl) {
 			iterateDir(companyUrl, function(jdUrl) {
@@ -70,6 +72,14 @@ sjpAppModule.controller(
 
 		$scope.toggleJobListView = function(company) {
 			company.expanded = !company.expanded;
+		};
+
+		$scope.toggleAllCausesExpansion = true;
+		$scope.toggleAllCompanyJobListViews = function() {
+			for (var i = 0; i < $scope.companies.length; i++) {
+				$scope.companies[i].expanded = $scope.toggleAllCausesExpansion;
+			}
+			$scope.toggleAllCausesExpansion = !$scope.toggleAllCausesExpansion;
 		};
 
 		function createRegExpFromSearchString(searchString) {

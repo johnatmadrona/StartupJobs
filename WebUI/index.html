@@ -29,6 +29,9 @@
 			For info on regular expressions, see 
 			<a href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">this reference</a>
 		</i>
+    <br />
+    <br />
+    <button ng-click="toggleAllCompanyJobListViews()">{{ { true: 'Expand All', false: 'Collapse All' }[toggleAllCausesExpansion] }}</button>
 		<ul>
 			<li ng-repeat="company in companies">
 				<a href="javascript:void(0)" ng-click="toggleJobListView(company)">

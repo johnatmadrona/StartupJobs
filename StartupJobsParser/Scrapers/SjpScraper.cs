@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Runtime.Serialization.Json;
 
 namespace StartupJobsParser
@@ -33,7 +34,35 @@ namespace StartupJobsParser
 
         public void Scrape(Uri uri)
         {
-            List<JobDescription> newJDs = new List<JobDescription>(GetJds(uri));
+            List<JobDescription> newJDs;
+            try
+            {
+                newJDs = new List<JobDescription>(GetJds(uri));
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    HttpStatusCode httpStatusCode = ((HttpWebResponse)ex.Response).StatusCode;
+                    if (httpStatusCode == HttpStatusCode.InternalServerError)
+                    {
+                        // If internal error, just skip this and retrieve 
+                        // the data in a future run
+                        Console.WriteLine("WARNING: Skipping '{0}' scraper due to remote server error", CompanyName);
+                        return;
+                    }
+                    else
+                    {
+                        Console.WriteLine("ERROR: Http request status {0}. {1}", httpStatusCode, ex);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("ERROR: Web request status {0}. {1}", ex.Status, ex);
+                }
+
+                throw;
+            }
 
             List<string> removedJDs = new List<string>(Directory.GetFiles(m_storageDirPath));
             foreach (JobDescription jd in newJDs)

@@ -22,10 +22,15 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdInfoNode in doc.DocumentNode.SelectNodes("//table[@class='cs_table']/tr[@class='cs_container']"))
+
+            HtmlNodeCollection jdInfoNodes = doc.DocumentNode.SelectNodes("//table[@class='cs_table']/tr[@class='cs_container']");
+            if (jdInfoNodes != null)
             {
-                HtmlNode jdLink = jdInfoNode.SelectSingleNode("td[@class='cs_table']/a");
-                yield return GetAdReadyJd(new Uri(uri, jdLink.Attributes["href"].Value));
+                foreach (HtmlNode jdInfoNode in jdInfoNodes)
+                {
+                    HtmlNode jdLink = jdInfoNode.SelectSingleNode("td[@class='cs_table']/a");
+                    yield return GetAdReadyJd(new Uri(uri, jdLink.Attributes["href"].Value));
+                }
             }
         }
 
