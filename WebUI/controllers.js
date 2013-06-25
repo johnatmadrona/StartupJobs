@@ -20,7 +20,9 @@ sjpAppModule.controller(
 			text: "",
 			caseInsensitive: true,
 			global: true,
-			multiline: true
+			multiline: true,
+			searchTitles: true,
+			searchDescriptions: true
 		};
 
 		function parseJd(jd) {
@@ -104,11 +106,15 @@ sjpAppModule.controller(
 		$scope.searchJobs = function() {
 			for (var i = 0; i < $scope.companies.length; i++) {
 				for (var j = 0; j < $scope.companies[i].jobs.length; j++) {
-					var visible = true;
+					var visible = false;
 					var exp = createRegExpFromSearchString($scope.searchString);
 					if (exp != null) {
-						if (exp.exec($scope.companies[i].jobs[j].FullTextDescription) == null) {
-							visible = false;
+						if ($scope.searchString.searchTitles && 
+							exp.exec($scope.companies[i].jobs[j].Title) != null) {
+							visible = true;
+						} else  if ($scope.searchString.searchDescriptions && 
+							exp.exec($scope.companies[i].jobs[j].FullTextDescription) != null) {
+							visible = true;
 						}
 					}
 					$scope.companies[i].jobs[j].visible = visible;
