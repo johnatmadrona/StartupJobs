@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ISjpIndex.cs" />
+    <Compile Include="Storage\ISjpStorage.cs" />
     <Compile Include="JobDescription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scrapers\ISjpScraper.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="SjpLocalDiskIndex.cs" />
     <Compile Include="SjpLogger.cs" />
     <Compile Include="Scrapers\SjpScraper.cs" />
+    <Compile Include="Storage\SjpStorageDisk.cs" />
     <Compile Include="SjpUtils.cs" />
   </ItemGroup>
   <ItemGroup>

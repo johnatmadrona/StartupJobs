@@ -14,8 +14,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpQumuloScraper(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public SjpQumuloScraper(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
 
@@ -24,11 +24,11 @@ namespace StartupJobsParser
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
             foreach (HtmlNode jdNode in doc.DocumentNode.SelectNodes("//div[@data-position]"))
             {
-                yield return GetSkytapJd(jdNode, uri);
+                yield return GetQumuloJd(jdNode, uri);
             }
         }
 
-        private JobDescription GetSkytapJd(HtmlNode jdNode, Uri uri)
+        private JobDescription GetQumuloJd(HtmlNode jdNode, Uri uri)
         {
             string title = jdNode.Attributes["data-position"].Value;
             HtmlNode descriptionNode = jdNode.SelectSingleNode("div[@class='jdbg']/div[@class='body']/span");

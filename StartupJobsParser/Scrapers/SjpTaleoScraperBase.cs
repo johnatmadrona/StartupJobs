@@ -8,8 +8,8 @@ namespace StartupJobsParser
     {
         protected abstract string JdContentTableXPath { get; }
 
-        public SjpTaleoScraperBase(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public SjpTaleoScraperBase(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
 
@@ -18,11 +18,11 @@ namespace StartupJobsParser
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
             foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//a[contains(@href, 'requisition.jsp')]"))
             {
-                yield return GetApptioJd(new Uri(jdLink.Attributes["href"].Value));
+                yield return GetTaleoJd(new Uri(jdLink.Attributes["href"].Value));
             }
         }
 
-        private JobDescription GetApptioJd(Uri jdUri)
+        private JobDescription GetTaleoJd(Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
             HtmlNode jdNode = doc.DocumentNode.SelectSingleNode(JdContentTableXPath);

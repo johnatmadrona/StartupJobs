@@ -3,6 +3,7 @@ using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
@@ -10,6 +11,7 @@ using Lns = Lucene.Net.Store;
 
 namespace StartupJobsParser
 {
+    /*
     public class SjpLocalDiskIndex : ISjpIndex
     {
         public string IndexDirPath { get; private set; }
@@ -48,7 +50,6 @@ namespace StartupJobsParser
                             doc.Add(new Field("Location", jd.Location, Field.Store.YES, Field.Index.ANALYZED));
                             doc.Add(new Field("FullTextDescription", jd.FullTextDescription, Field.Store.NO, Field.Index.ANALYZED));
                             doc.Add(new Field("FullHtmlDescription", jd.FullHtmlDescription, Field.Store.YES, Field.Index.NO));
-                            doc.Add(new Field("StorageUri", jd.StorageUri, Field.Store.YES, Field.Index.NO));
                             indexWriter.AddDocument(doc);
                             indexWriter.Commit();
                         }
@@ -88,16 +89,19 @@ namespace StartupJobsParser
                         {
                             Document doc = indexSearcher.Doc(results.ScoreDocs[i].Doc);
                             JobDescription jd;
-                            using (FileStream fs = new FileStream(doc.Get("StorageUri"), FileMode.Open, FileAccess.Read))
-                            {
-                                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(JobDescription));
-                                jd = ser.ReadObject(fs) as JobDescription;
-                            }
-                            yield return jd;
+                            throw new NotImplementedException("Cannot look up storage path");
+                            // StorageUri has been removed from the object
+                            //using (FileStream fs = new FileStream(doc.Get("StorageUri"), FileMode.Open, FileAccess.Read))
+                            //{
+                            //    DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(JobDescription));
+                            //    jd = ser.ReadObject(fs) as JobDescription;
+                            //}
+                            //yield return jd;
                         }
                     }
                 }
             }
         }
     }
+    */
 }

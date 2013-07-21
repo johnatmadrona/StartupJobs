@@ -14,8 +14,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpSkytapScraper(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public SjpSkytapScraper(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
 

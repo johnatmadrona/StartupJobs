@@ -18,8 +18,8 @@ namespace StartupJobsParser
             get { return "//div[@id='taleoContent']/table"; }
         }
 
-        public SjpWildTangentScraper(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public SjpWildTangentScraper(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
     }

@@ -17,9 +17,6 @@ namespace StartupJobsParser
         public string SourceUri { get; set; }
 
         [DataMember]
-        public string StorageUri { get; set; }
-
-        [DataMember]
         public string Company { get; set; }
 
         [DataMember]

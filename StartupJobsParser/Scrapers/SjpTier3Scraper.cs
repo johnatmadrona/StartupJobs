@@ -14,8 +14,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpTier3Scraper(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public SjpTier3Scraper(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
 

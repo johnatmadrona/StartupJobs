@@ -22,8 +22,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpMozScraper(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public SjpMozScraper(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
     }

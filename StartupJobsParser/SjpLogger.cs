@@ -5,6 +5,8 @@ namespace StartupJobsParser
 {
     public static class SjpLogger
     {
+        private static object s_lock = new object();
+
         public static void Log(string format, params object[] args)
         {
             string text = string.Format(format, args);
@@ -14,7 +16,10 @@ namespace StartupJobsParser
                 text
                 );
             Console.Write(output);
-            File.AppendAllText("log.txt", output);
+            lock (s_lock)
+            {
+                File.AppendAllText("log.txt", output);
+            }
         }
     }
 }

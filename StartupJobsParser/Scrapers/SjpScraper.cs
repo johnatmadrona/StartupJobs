@@ -8,22 +8,19 @@ namespace StartupJobsParser
 {
     public abstract class SjpScraper : ISjpScraper
     {
-        protected string m_storageDirPath;
+        protected ISjpStorage m_storage;
         protected ISjpIndex m_index;
 
         public abstract string CompanyName { get; }
         public abstract Uri DefaultUri { get; }
 
-        // TODO: Abstract storage
-        protected SjpScraper(string storageDirPath, ISjpIndex index)
+        protected SjpScraper(ISjpStorage storage, ISjpIndex index)
         {
-            // Use full path
-            m_storageDirPath = Path.GetFullPath(storageDirPath);
-            if (!Directory.Exists(m_storageDirPath))
+            if (storage == null)
             {
-                Directory.CreateDirectory(m_storageDirPath);
+                throw new ArgumentNullException("storage", "Storage cannot be null");
             }
-
+            m_storage = storage;
             m_index = index;
         }
 
@@ -64,26 +61,23 @@ namespace StartupJobsParser
                 throw;
             }
 
-            List<string> removedJDs = new List<string>(Directory.GetFiles(m_storageDirPath));
+            List<string> removedJDs = new List<string>(m_storage.List());
             foreach (JobDescription jd in newJDs)
             {
-                string filePath = m_storageDirPath + jd.Uid + ".jd";
-                jd.StorageUri = filePath;
-
-                if (!File.Exists(filePath))
+                string id = jd.Uid + ".jd";
+                if (!m_storage.Exists(id))
                 {
                     SjpLogger.Log("New JD: " + jd.Title);
-                    using (FileStream file = File.Create(filePath))
+                    m_storage.Add(id, typeof(JobDescription), jd);
+                    if (m_index != null)
                     {
-                        DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(JobDescription));
-                        ser.WriteObject(file, jd);
+                        m_index.AddToIndex(jd);
                     }
-                    m_index.AddToIndex(jd);
                 }
                 else
                 {
                     // This is not removed, so take it off the removed list
-                    removedJDs.Remove(filePath);
+                    removedJDs.Remove(id);
                 }
             }
 
@@ -91,8 +85,11 @@ namespace StartupJobsParser
             {
                 SjpLogger.Log("JD Removed: " + removedJD);
                 string uid = Path.GetFileNameWithoutExtension(removedJD);
-                m_index.RemoveFromIndex(uid);
-                File.Delete(removedJD);
+                if (m_index != null)
+                {
+                    m_index.RemoveFromIndex(uid);
+                }
+                m_storage.Delete(removedJD);
             }
         }
 

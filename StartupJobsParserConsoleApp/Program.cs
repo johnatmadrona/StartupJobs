@@ -11,33 +11,33 @@ namespace StartupJobsParserConsoleApp
         static void Main(string[] args)
         {
             //string indexDirPath = Directory.GetCurrentDirectory() + "\\index\\";
-            ISjpIndex index = new SjpLocalDiskIndex(Path.GetFullPath(".\\index\\"));
+            ISjpIndex index = null;// new SjpLocalDiskIndex(Path.GetFullPath(".\\index\\"));
 
             List<ISjpScraper> scrapers = new List<ISjpScraper>();
-            scrapers.Add(new Sjp2ndWatchScraper(".\\data\\2ndwatch\\", index));
-            scrapers.Add(new SjpAdReadyScraper(".\\data\\adready\\", index));
-            scrapers.Add(new SjpApptioScraper(".\\data\\apptio\\", index));
-            scrapers.Add(new SjpAnimotoScraper(".\\data\\animoto\\", index));
-            scrapers.Add(new SjpBuuteeqScraper(".\\data\\buuteeq\\", index));
-            scrapers.Add(new SjpCheezburgerScraper(".\\data\\cheezburger\\", index));
-            scrapers.Add(new SjpContextRelevantScraper(".\\data\\contextrelevant\\", index));
-            scrapers.Add(new SjpExtraHopScraper(".\\data\\extrahop\\", index));
-            scrapers.Add(new SjpHaikuDeckScraper(".\\data\\haikudeck\\", index));
-            scrapers.Add(new SjpImpinjScraper(".\\data\\impinj\\", index));
-            scrapers.Add(new SjpIndochinoScraper(".\\data\\indochino\\", index));
-            scrapers.Add(new SjpIntrepidLearningScraper(".\\data\\intrepidlearning\\", index));
-            scrapers.Add(new SjpMozScraper(".\\data\\moz\\", index));
-            scrapers.Add(new SjpMixpoScraper(".\\data\\mixpo\\", index));
-            scrapers.Add(new SjpPayscaleScraper(".\\data\\payscale\\", index));
-            scrapers.Add(new SjpPlacedScraper(".\\data\\placed\\", index));
-            scrapers.Add(new SjpQumuloScraper(".\\data\\qumulo\\", index));
-            scrapers.Add(new SjpRedfinScraper(".\\data\\redfin\\", index));
-            scrapers.Add(new SjpRoverScraper(".\\data\\rover\\", index));
-            scrapers.Add(new SjpSkytapScraper(".\\data\\skytap\\", index));
-            scrapers.Add(new SjpSmartsheetScraper(".\\data\\smartsheet\\", index));
-            scrapers.Add(new SjpTier3Scraper(".\\data\\tier3\\", index));
-            scrapers.Add(new SjpWildTangentScraper(".\\data\\wildtangent\\", index));
-            scrapers.Add(new SjpZ2LiveScraper(".\\data\\z2live\\", index));
+            scrapers.Add(new Sjp2ndWatchScraper(new SjpStorageDisk(".\\data\\2ndwatch\\"), index));
+            scrapers.Add(new SjpAdReadyScraper(new SjpStorageDisk(".\\data\\adready\\"), index));
+            scrapers.Add(new SjpApptioScraper(new SjpStorageDisk(".\\data\\apptio\\"), index));
+            scrapers.Add(new SjpAnimotoScraper(new SjpStorageDisk(".\\data\\animoto\\"), index));
+            scrapers.Add(new SjpBuuteeqScraper(new SjpStorageDisk(".\\data\\buuteeq\\"), index));
+            scrapers.Add(new SjpCheezburgerScraper(new SjpStorageDisk(".\\data\\cheezburger\\"), index));
+            scrapers.Add(new SjpContextRelevantScraper(new SjpStorageDisk(".\\data\\contextrelevant\\"), index));
+            scrapers.Add(new SjpExtraHopScraper(new SjpStorageDisk(".\\data\\extrahop\\"), index));
+            scrapers.Add(new SjpHaikuDeckScraper(new SjpStorageDisk(".\\data\\haikudeck\\"), index));
+            scrapers.Add(new SjpImpinjScraper(new SjpStorageDisk(".\\data\\impinj\\"), index));
+            scrapers.Add(new SjpIndochinoScraper(new SjpStorageDisk(".\\data\\indochino\\"), index));
+            scrapers.Add(new SjpIntrepidLearningScraper(new SjpStorageDisk(".\\data\\intrepidlearning\\"), index));
+            scrapers.Add(new SjpMozScraper(new SjpStorageDisk(".\\data\\moz\\"), index));
+            scrapers.Add(new SjpMixpoScraper(new SjpStorageDisk(".\\data\\mixpo\\"), index));
+            scrapers.Add(new SjpPayscaleScraper(new SjpStorageDisk(".\\data\\payscale\\"), index));
+            scrapers.Add(new SjpPlacedScraper(new SjpStorageDisk(".\\data\\placed\\"), index));
+            scrapers.Add(new SjpQumuloScraper(new SjpStorageDisk(".\\data\\qumulo\\"), index));
+            scrapers.Add(new SjpRedfinScraper(new SjpStorageDisk(".\\data\\redfin\\"), index));
+            scrapers.Add(new SjpRoverScraper(new SjpStorageDisk(".\\data\\rover\\"), index));
+            scrapers.Add(new SjpSkytapScraper(new SjpStorageDisk(".\\data\\skytap\\"), index));
+            scrapers.Add(new SjpSmartsheetScraper(new SjpStorageDisk(".\\data\\smartsheet\\"), index));
+            scrapers.Add(new SjpTier3Scraper(new SjpStorageDisk(".\\data\\tier3\\"), index));
+            scrapers.Add(new SjpWildTangentScraper(new SjpStorageDisk(".\\data\\wildtangent\\"), index));
+            scrapers.Add(new SjpZ2LiveScraper(new SjpStorageDisk(".\\data\\z2live\\"), index));
 
             Parallel.ForEach(scrapers, scraper =>
             {

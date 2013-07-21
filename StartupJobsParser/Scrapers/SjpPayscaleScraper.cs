@@ -14,8 +14,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpPayscaleScraper(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public SjpPayscaleScraper(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
 
@@ -152,7 +152,7 @@ namespace StartupJobsParser
 
             return new JobDescription()
             {
-                SourceUri = jdUri.AbsolutePath,
+                SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = "Seattle, WA",

@@ -14,8 +14,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpIndochinoScraper(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public SjpIndochinoScraper(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
 
@@ -58,7 +58,7 @@ namespace StartupJobsParser
 
             return new JobDescription()
             {
-                SourceUri = jdUri.AbsolutePath,
+                SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = SjpUtils.GetCleanTextFromHtmlEncodedText(location),

@@ -22,8 +22,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpCheezburgerScraper(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public SjpCheezburgerScraper(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
     }

@@ -108,7 +108,9 @@ sjpAppModule.controller(
 				for (var j = 0; j < $scope.companies[i].jobs.length; j++) {
 					var visible = false;
 					var exp = createRegExpFromSearchString($scope.searchString);
-					if (exp != null) {
+					if (exp == null) {
+						visible = true;
+					} else {
 						if ($scope.searchString.searchTitles && 
 							exp.exec($scope.companies[i].jobs[j].Title) != null) {
 							visible = true;

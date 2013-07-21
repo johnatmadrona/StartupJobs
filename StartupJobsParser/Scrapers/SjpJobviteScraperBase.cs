@@ -14,8 +14,8 @@ namespace StartupJobsParser
         private Uri _defaultUri = null;
         public override Uri DefaultUri { get { return _defaultUri; } }
 
-        public SjpJobviteScraperBase(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public SjpJobviteScraperBase(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
             _defaultUri = new Uri(string.Format(_listUriFormat, JobviteCompanyId));
         }

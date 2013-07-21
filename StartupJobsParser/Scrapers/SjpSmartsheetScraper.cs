@@ -15,8 +15,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpSmartsheetScraper(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public SjpSmartsheetScraper(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
 

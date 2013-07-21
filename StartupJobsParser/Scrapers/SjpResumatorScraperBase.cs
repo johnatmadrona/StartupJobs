@@ -11,8 +11,8 @@ namespace StartupJobsParser
     {
         public abstract Uri PublicUri { get; }
 
-        protected SjpResumatorScraperBase(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        protected SjpResumatorScraperBase(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
 

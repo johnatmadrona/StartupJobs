@@ -22,8 +22,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public Sjp2ndWatchScraper(string storageDirPath, ISjpIndex index)
-            : base(storageDirPath, index)
+        public Sjp2ndWatchScraper(ISjpStorage storage, ISjpIndex index)
+            : base(storage, index)
         {
         }
     }
