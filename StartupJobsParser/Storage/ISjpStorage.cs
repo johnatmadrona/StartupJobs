@@ -4,8 +4,13 @@ using System.Collections.Generic;
 public interface ISjpStorage
 {
     IEnumerable<string> List();
-    void Add(string id, Type type, object obj);
-    bool Exists(string id);
-    object Get(string id, Type type);
-    void Delete(string id);
+    IEnumerable<string> List(string prefix);
+
+    void Add(string key, Type type, object obj);
+
+    bool Exists(string key);
+
+    object Get(string key, Type type);
+
+    void Delete(string key);
 }

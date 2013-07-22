@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
+using System.Text.RegularExpressions;
 
 namespace StartupJobsParser
 {
@@ -31,10 +32,10 @@ namespace StartupJobsParser
 
         public void Scrape(Uri uri)
         {
-            List<JobDescription> newJDs;
+            List<JobDescription> newJds;
             try
             {
-                newJDs = new List<JobDescription>(GetJds(uri));
+                newJds = new List<JobDescription>(GetJds(uri));
             }
             catch (WebException ex)
             {
@@ -61,14 +62,33 @@ namespace StartupJobsParser
                 throw;
             }
 
-            List<string> removedJDs = new List<string>(m_storage.List());
-            foreach (JobDescription jd in newJDs)
+            List<string> obsoleteJds = StoreNewJdsAndGetObsoleteJds(newJds);
+
+            foreach (string obsoleteJd in obsoleteJds)
             {
-                string id = jd.Uid + ".jd";
-                if (!m_storage.Exists(id))
+                SjpLogger.Log("JD Removed: " + obsoleteJd);
+                if (m_index != null)
+                {
+                    m_index.RemoveFromIndex(obsoleteJd);
+                }
+                m_storage.Delete(obsoleteJd);
+            }
+        }
+
+        private List<string> StoreNewJdsAndGetObsoleteJds(List<JobDescription> newJds)
+        {
+            // Create a list of previously discovered JDs to identify obsolete JDs
+            List<string> obsoleteJds = new List<string>(m_storage.List(GetJdStoragePrefix()));
+
+
+            // Add new JDs to storage and refine the list of obsolete JDs
+            foreach (JobDescription jd in newJds)
+            {
+                string key = GetJdStorageKey(jd);
+                if (!m_storage.Exists(key))
                 {
                     SjpLogger.Log("New JD: " + jd.Title);
-                    m_storage.Add(id, typeof(JobDescription), jd);
+                    m_storage.Add(key, typeof(JobDescription), jd);
                     if (m_index != null)
                     {
                         m_index.AddToIndex(jd);
@@ -76,21 +96,39 @@ namespace StartupJobsParser
                 }
                 else
                 {
-                    // This is not removed, so take it off the removed list
-                    removedJDs.Remove(id);
+                    // This item already exists in storage, meaning it's 
+                    // on the obsolete list, but shouldn't be
+                    obsoleteJds.Remove(key);
                 }
             }
 
-            foreach (string removedJD in removedJDs)
+            return obsoleteJds;
+        }
+
+        private void RemoveObsoleteJds(List<string> obsoleteJds)
+        {
+            foreach (string obsoleteJd in obsoleteJds)
             {
-                SjpLogger.Log("JD Removed: " + removedJD);
-                string uid = Path.GetFileNameWithoutExtension(removedJD);
+                SjpLogger.Log("JD Removed: " + obsoleteJd);
+                string uid = Path.GetFileNameWithoutExtension(obsoleteJd);
                 if (m_index != null)
                 {
                     m_index.RemoveFromIndex(uid);
                 }
-                m_storage.Delete(removedJD);
+                m_storage.Delete(obsoleteJd);
             }
+        }
+
+        public string GetJdStoragePrefix()
+        {
+            Regex badChars = new Regex(@"[^a-z^0-9^\.^-]+");
+            return badChars.Replace(CompanyName.ToLowerInvariant(), "") + "/";
+        }
+
+        public string GetJdStorageKey(JobDescription jd)
+        {
+            string uid = ((uint)jd.FullTextDescription.GetHashCode()).ToString();
+            return GetJdStoragePrefix() + uid + ".jd";
         }
 
         protected abstract IEnumerable<JobDescription> GetJds(Uri uri);

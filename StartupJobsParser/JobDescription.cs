@@ -5,14 +5,6 @@ namespace StartupJobsParser
     [DataContract]
     public class JobDescription
     {
-        public string Uid
-        {
-            get
-            {
-                return ((uint)FullTextDescription.GetHashCode()).ToString();
-            }
-        }
-
         [DataMember]
         public string SourceUri { get; set; }
 

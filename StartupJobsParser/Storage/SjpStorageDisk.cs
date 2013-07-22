@@ -5,39 +5,64 @@ using System.Runtime.Serialization.Json;
 
 public class SjpStorageDisk : ISjpStorage
 {
-    private string m_dirPath;
+    private string m_rootPath;
 
-    public SjpStorageDisk(string dirPath)
+    public SjpStorageDisk(string rootDirPath)
     {
         // Use full path
-        m_dirPath = Path.GetFullPath(dirPath);
-        if (!Directory.Exists(m_dirPath))
+        m_rootPath = Path.GetFullPath(rootDirPath);
+        if (!m_rootPath.EndsWith("\\"))
         {
-            Directory.CreateDirectory(m_dirPath);
+            m_rootPath += "\\";
+        }
+        if (!Directory.Exists(m_rootPath))
+        {
+            Directory.CreateDirectory(m_rootPath);
         }
     }
 
-    private string PathFromId(string id)
+    private string PathFromKey(string key)
     {
-        return m_dirPath + id;
+        return m_rootPath + key;
     }
 
-    private string IdFromPath(string path)
+    private string KeyFromPath(string path)
     {
-        return path.Substring(m_dirPath.Length);
+        return path.Substring(m_rootPath.Length);
     }
 
     public IEnumerable<string> List()
     {
-        foreach (string path in Directory.GetFiles(m_dirPath))
+        return List(null);
+    }
+
+    public IEnumerable<string> List(string prefix)
+    {
+        string dirPath = m_rootPath;
+        if (prefix != null)
         {
-            yield return IdFromPath(path);
+            dirPath += prefix;
+        }
+
+        if (Directory.Exists(dirPath))
+        {
+            foreach (string objPath in Directory.GetFiles(dirPath))
+            {
+                yield return KeyFromPath(objPath);
+            }
         }
     }
 
-    public void Add(string id, Type type, object obj)
+    public void Add(string key, Type type, object obj)
     {
-        string path = PathFromId(id);
+        string path = PathFromKey(key);
+
+        string dirPath = Path.GetDirectoryName(path);
+        if (!Directory.Exists(dirPath))
+        {
+            Directory.CreateDirectory(dirPath);
+        }
+
         DataContractJsonSerializer ser = new DataContractJsonSerializer(type);
         using (FileStream file = File.Create(path))
         {
@@ -45,14 +70,14 @@ public class SjpStorageDisk : ISjpStorage
         }
     }
 
-    public bool Exists(string id)
+    public bool Exists(string key)
     {
-        return File.Exists(PathFromId(id));
+        return File.Exists(PathFromKey(key));
     }
 
-    public object Get(string id, Type type)
+    public object Get(string key, Type type)
     {
-        string path = PathFromId(id);
+        string path = PathFromKey(key);
         if (!File.Exists(path))
         {
             return null;
@@ -65,8 +90,8 @@ public class SjpStorageDisk : ISjpStorage
         }
     }
 
-    public void Delete(string id)
+    public void Delete(string key)
     {
-        File.Delete(PathFromId(id));
+        File.Delete(PathFromKey(key));
     }
 }
