@@ -20,7 +20,7 @@ namespace StartupJobsParserConsoleApp
             }
 
             //SjpStorageDisk storage = new SjpStorageDisk(".\\data\\");
-            SjpStorageS3 storage = new SjpStorageS3(RegionEndpoint.USWest2, "sjp-data");
+            SjpStorageS3 storage = new SjpStorageS3(RegionEndpoint.USWest2, "madrona-sjp");
             List<ISjpScraper> scrapers = GetScrapers(storage, GetIndex());
 
             Parallel.ForEach(scrapers, scraper =>

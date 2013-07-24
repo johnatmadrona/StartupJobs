@@ -122,7 +122,7 @@ namespace StartupJobsParser
         public string GetJdStoragePrefix()
         {
             Regex badChars = new Regex(@"[^a-z^0-9^\.^-]+");
-            return badChars.Replace(CompanyName.ToLowerInvariant(), "") + "/";
+            return "data/" + badChars.Replace(CompanyName.ToLowerInvariant(), "") + "/";
         }
 
         public string GetJdStorageKey(JobDescription jd)

@@ -35,12 +35,18 @@ public class SjpStorageS3 : ISjpStorage, IDisposable
         m_client = client;
         m_bucketName = bucketName;
 
+        DeleteBucketRequest req1 = new DeleteBucketRequest()
+        {
+            BucketName = m_bucketName
+        };
+
         if (!AmazonS3Util.DoesS3BucketExist(m_bucketName, m_client))
         {
             PutBucketRequest req = new PutBucketRequest()
             {
                 BucketName = m_bucketName,
-                UseClientRegion = true
+                UseClientRegion = true,
+                CannedACL = S3CannedACL.PublicRead
             };
             PutBucketResponse res = m_client.PutBucket(req);
         }
@@ -104,7 +110,8 @@ public class SjpStorageS3 : ISjpStorage, IDisposable
         PutObjectRequest req = new PutObjectRequest()
         {
             BucketName = m_bucketName,
-            Key = key
+            Key = key,
+            CannedACL = S3CannedACL.PublicRead
         };
         DataContractJsonSerializer ser = new DataContractJsonSerializer(type);
         using (MemoryStream data = new MemoryStream())

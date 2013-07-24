@@ -43,19 +43,49 @@ sjpAppModule.controller(
 			});
 		};
 
-		function iterateDir(url, callback) {
+		function iterateAwsDir(path, callback) {
+			if (path.charAt(path.length - 1) != '/') {
+				path += "/";
+			}
+			var url = "/?prefix=" + encodeURIComponent(path) + "&delimiter=%2F";
+			$.get(url, function(data) {
+				var xml = $(data);
+				var commonPrefixes = xml.find("CommonPrefixes");
+				if (commonPrefixes.length > 0) {
+					commonPrefixes.each(function() {
+						$(this).find("Prefix").each(function() {
+							callback($(this).text());
+						});
+					});
+				}
+				var contents = xml.find("Contents");
+				if (contents.length > 0) {
+					contents.each(function() {
+						callback($(this).find("Key").text());
+					});
+				}
+			}).error(function(xhr, status, error) {
+				alert("Status: " + status + "\nError: " + error);
+			});
+		};
+
+		function iterateLocalDir(path, callback) {
+			if (path.charAt(path.length - 1) != '/') {
+				path += "/";
+			}
+			var url = "./" + path;
 			$.get(url, function(data) {
 				var html = $("<div />").html(data).contents();
 				html.find("a").each(function(index) {
 					var childUrl = "";
-					var path = $(this).attr("href").trim();
-					if (path.indexOf("http") != 0 && path.charAt(0) != '/') {
+					var childPath = $(this).attr("href").trim();
+					if (childPath.indexOf("http") != 0 && childPath.charAt(0) != '/') {
 						childUrl = url;
-						if (childUrl.charAt(childUrl.length - 1)) {
+						if (childUrl.charAt(childUrl.length - 1) != '/') {
 							childUrl += "/";
 						}
 					}
-					childUrl += path;
+					childUrl += childPath;
 					callback(childUrl);
 				});
 			}).error(function(xhr, status, error) {
@@ -64,7 +94,11 @@ sjpAppModule.controller(
 		};
 
 		$scope.companies = [];
-		iterateDir("http://127.0.0.1:8000/data", function(companyUrl) {
+		var iterateDir = iterateAwsDir;
+		if ($(location).attr("href").indexOf("127.0.0.1") >= 0) {
+			iterateDir = iterateLocalDir
+		}
+		iterateDir("data/", function(companyUrl) {
 			iterateDir(companyUrl, function(jdUrl) {
 				$.getJSON(jdUrl, parseJd).error(function(xhr, status, error) {
 					alert("Status: " + status + "\nError: " + error);
