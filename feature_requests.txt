@@ -1,4 +1,3 @@
-Expand-all/Collapse-all
 Symbol to indicate when lists are expanded
 Filter out company lists when all of their jobs are filtered out
 

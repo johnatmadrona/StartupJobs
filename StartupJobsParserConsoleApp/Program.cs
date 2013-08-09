@@ -23,10 +23,28 @@ namespace StartupJobsParserConsoleApp
             SjpStorageS3 storage = new SjpStorageS3(RegionEndpoint.USWest2, "madrona-sjp");
             List<ISjpScraper> scrapers = GetScrapers(storage, GetIndex());
 
+            List<KeyValuePair<Type, Exception>> errors = new List<KeyValuePair<Type,Exception>>();
             Parallel.ForEach(scrapers, scraper =>
             {
-                scraper.Scrape();
+                try
+                {
+                    scraper.Scrape();
+                }
+                catch (Exception ex)
+                {
+                    errors.Add(new KeyValuePair<Type,Exception>(scraper.GetType(), ex));
+                }
             });
+
+            if (errors.Count > 0)
+            {
+                Console.WriteLine("\nERRORS:");
+                Console.WriteLine("=======\n");
+                foreach (var error in errors)
+                {
+                    Console.WriteLine("{0}:\n{1}\n", error.Key, error.Value);
+                }
+            }
 
             Console.WriteLine("Done. Press <enter>.");
             Console.ReadLine();

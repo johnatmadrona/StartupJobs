@@ -22,7 +22,7 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//a[@class='job-inner']"))
+            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//a[@class='career-inner']"))
             {
                 yield return GetZ2LiveJd(new Uri(uri, jdLink.Attributes["href"].Value));
             }
