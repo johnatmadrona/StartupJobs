@@ -127,7 +127,7 @@ namespace StartupJobsParser
 
         public string GetJdStorageKey(JobDescription jd)
         {
-            string uid = ((uint)jd.FullTextDescription.GetHashCode()).ToString();
+            string uid = ((uint)jd.ToString().GetHashCode()).ToString();
             return GetJdStoragePrefix() + uid + ".jd";
         }
 

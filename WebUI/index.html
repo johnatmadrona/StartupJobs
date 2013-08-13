@@ -1,9 +1,9 @@
 <html ng-app="sjpApp">
 <head>
-	<!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script> -->
-	<script src="./local/angular.min.js"></script>
-	<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
-	<script src="./local/jquery-1.9.1.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+  <!-- <script src="./local/angular.min.js"></script> -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <!-- <script src="./local/jquery-1.9.1.min.js"></script> -->
 	<script src="./controllers.js"></script>
 	<link rel="stylesheet" type="text/css" href="style.css" />
   <title>Madrona Jobs Search</title>
@@ -40,7 +40,7 @@
 					{{ company.name }}
 				</a>
 				<ul ng-show="company.expanded">
-					<li ng-repeat="job in company.jobs" ng-show="job.visible">
+					<li ng-repeat="job in company.jobs | orderBy:'Title'" ng-show="job.visible">
 						<a ng-href="javascript:void(0);" ng-click="selectJd($parent.$index, $index)">
 							{{ job.Title }}
 						</a>

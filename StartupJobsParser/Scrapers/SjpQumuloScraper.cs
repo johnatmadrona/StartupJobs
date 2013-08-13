@@ -1,13 +1,12 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-using System.Net;
 
 namespace StartupJobsParser
 {
     public class SjpQumuloScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://www.qumulo.com/#/qumulo_jobs_eng");
+        private Uri _defaultUri = new Uri("http://qumulo.catsone.com/careers/");
         public override string CompanyName { get { return "Qumulo"; } }
         public override Uri DefaultUri
         {
@@ -22,23 +21,25 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdNode in doc.DocumentNode.SelectNodes("//div[@data-position]"))
+            foreach (HtmlNode jdNode in doc.DocumentNode.SelectNodes("//a[@class='jobTitle']"))
             {
-                yield return GetQumuloJd(jdNode, uri);
+                yield return GetQumuloJd(new Uri(jdNode.Attributes["href"].Value));
             }
         }
 
-        private JobDescription GetQumuloJd(HtmlNode jdNode, Uri uri)
+        private JobDescription GetQumuloJd(Uri uri)
         {
-            string title = jdNode.Attributes["data-position"].Value;
-            HtmlNode descriptionNode = jdNode.SelectSingleNode("div[@class='jdbg']/div[@class='body']/span");
+            HtmlNode jdNode = SjpUtils.GetHtmlDoc(uri).DocumentNode;
+            HtmlNode titleNode = jdNode.SelectSingleNode("//h1[@id='jobTitle']");
+            HtmlNode locationNode = jdNode.SelectSingleNode("//div[@id='jobDetailLocation']/strong");
+            HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[@class='detailsJobDescription']");
 
             return new JobDescription()
             {
                 SourceUri = uri.AbsoluteUri,
                 Company = CompanyName,
-                Title = SjpUtils.GetCleanTextFromHtmlEncodedText(title),
-                Location = "Seattle, WA",
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = SjpUtils.GetCleanTextFromHtml(locationNode),
                 FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
                 FullHtmlDescription = descriptionNode.InnerHtml
             };
