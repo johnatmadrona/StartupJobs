@@ -29,19 +29,36 @@ sjpAppModule.controller(
 			jd.visible = true;
 			$scope.$apply(function() {
 				for (var i = 0; i < $scope.companies.length; i++) {
-					if ($scope.companies[i].name == jd.Company) {
-						$scope.companies[i].jobs.push(jd);
+					var company = $scope.companies[i];
+					if (company.name == jd.Company) {
+						// Sorted insertion because Angular doesn't seem to 
+						// properly support sorted nested lists
+						// TODO: Investigate whether this can be addressed 
+						// in Angular instead of here
+						for (var j = 0; j < company.jobs.length; j++) {
+							if (jd.Title < company.jobs[j].Title) {
+								company.jobs.splice(j, 0, jd);
+								return;
+							}
+						}
+						company.jobs.push(jd);
+						return;
+					} else if (jd.Company < company.name) {
+						$scope.companies.splice(i, 0, {
+							"name": jd.Company,
+							"expanded": false,
+							"jobs": [jd]
+						});
 						return;
 					}
 				}
-				var newCompany = {};
-				newCompany.name = jd.Company;
-				newCompany.expanded = false;
-				newCompany.jobs = [];
-				newCompany.jobs.push(jd);
-				$scope.companies.push(newCompany);
+				$scope.companies.push({
+					"name": jd.Company,
+					"expanded": false,
+					"jobs": [jd]
+				});
 			});
-		};
+		}
 
 		function iterateAwsDir(path, callback) {
 			if (path.charAt(path.length - 1) != '/') {
@@ -67,7 +84,7 @@ sjpAppModule.controller(
 			}).error(function(xhr, status, error) {
 				alert("Status: " + status + "\nError: " + error);
 			});
-		};
+		}
 
 		function iterateLocalDir(path, callback) {
 			if (path.charAt(path.length - 1) != '/') {
@@ -91,7 +108,7 @@ sjpAppModule.controller(
 			}).error(function(xhr, status, error) {
 				alert("Status: " + status + "\nError: " + error);
 			});
-		};
+		}
 
 		$scope.companies = [];
 		var iterateDir = iterateAwsDir;
@@ -169,10 +186,10 @@ sjpAppModule.controller(
 sjpAppModule.controller(
 	"ContentDisplayController",
 	function($scope, sjpSharedService) {
-		$scope.company = "Company";
-		$scope.title = "Title";
-		$scope.sourceUri = "SourceUri";
-		$scope.fullHtmlDescription = "FullHtmlDescription";
+		$scope.company = "Madrona Venture Group";
+		$scope.title = "Startup Job Search";
+		$scope.sourceUri = "#";
+		$scope.fullHtmlDescription = "Use the search box and the navigation tree to explore startup jobs";
 		$scope.$on("jdSelected", function() {
 			$scope.company = sjpSharedService.selectedJd.Company;
 			$scope.title = sjpSharedService.selectedJd.Title;

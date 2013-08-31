@@ -61,11 +61,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ISjpIndex.cs" />
+    <Compile Include="Scrapers\SjpBizibleScraper.cs" />
+    <Compile Include="Scrapers\SjpJobscoreScraperBase.cs" />
+    <Compile Include="Scrapers\SjpLumoScraper.cs" />
+    <Compile Include="Scrapers\SjpSnupiScraper.cs" />
+    <Compile Include="Scrapers\SjpUnionBayNetworksScraper.cs" />
     <Compile Include="Storage\ISjpStorage.cs" />
     <Compile Include="JobDescription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scrapers\ISjpScraper.cs" />
-    <Compile Include="Scrapers\Sjp2ndWatch.cs" />
+    <Compile Include="Scrapers\Sjp2ndWatchScraper.cs" />
     <Compile Include="Scrapers\SjpAdReadyScraper.cs" />
     <Compile Include="Scrapers\SjpAnimotoScraper.cs" />
     <Compile Include="Scrapers\SjpApptioScraper.cs" />

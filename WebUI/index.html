@@ -1,6 +1,6 @@
 <html ng-app="sjpApp">
 <head>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
   <!-- <script src="./local/angular.min.js"></script> -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <!-- <script src="./local/jquery-1.9.1.min.js"></script> -->
@@ -12,26 +12,30 @@
 </head>
 <body class="gradient">
 	<div ng-controller="ContentSelectionController" class="contentSelector">
-		<form ng-submit="searchJobs()" style="display:inline">
-			<table class="searchBox">
-				<tr>
-					<td style="width:100%">
-            <input style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string"></input>
-					</td>
-					<td><button>Search</button></td>
-				</tr>
-			</table>
-			<input type="checkbox" ng-model="searchString.caseInsensitive">Case-insensitive</input>
-			<input type="checkbox" ng-model="searchString.global">Global</input>
-			<input type="checkbox" ng-model="searchString.multiline">Multi-line</input>
-      <input type="checkbox" ng-model="searchString.searchTitles">Search Titles</input>
-      <input type="checkbox" ng-model="searchString.searchDescriptions">Search Descriptions</input><br />
-		</form>
-		<i>
-			For info on regular expressions, see 
-			<a href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">this reference</a>
-		</i>
-    <br />
+    <div class="searchBox">
+      <form ng-submit="searchJobs()" style="display:inline">
+        <table>
+          <tr>
+            <td style="width:100%">
+              <input style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string"></input>
+            </td>
+            <td>
+              <button>Search</button>
+            </td>
+          </tr>
+        </table>
+        <input type="checkbox" ng-model="searchString.caseInsensitive">Case-insensitive</input>
+        <input type="checkbox" ng-model="searchString.global">Global</input>
+        <input type="checkbox" ng-model="searchString.multiline">Multi-line</input>
+        <input type="checkbox" ng-model="searchString.searchTitles">Search Titles</input>
+        <input type="checkbox" ng-model="searchString.searchDescriptions">Search Descriptions</input>
+      </form>
+      <br />
+      <i>
+        For info on regular expressions, see
+        <a href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">this reference</a>
+      </i>
+    </div>
     <br />
     <button ng-click="toggleAllCompanyJobListViews()">{{ { true: 'Expand All', false: 'Collapse All' }[toggleAllCausesExpansion] }}</button>
 		<ul>
@@ -40,7 +44,7 @@
 					{{ company.name }}
 				</a>
 				<ul ng-show="company.expanded">
-					<li ng-repeat="job in company.jobs | orderBy:'Title'" ng-show="job.visible">
+					<li ng-repeat="job in company.jobs" ng-show="job.visible">
 						<a ng-href="javascript:void(0);" ng-click="selectJd($parent.$index, $index)">
 							{{ job.Title }}
 						</a>
@@ -48,12 +52,14 @@
 				</ul>
 			</li>
 		</ul>
+    <br />
 	</div>
 	<div ng-controller="ContentDisplayController" class="contentDisplay">
 		<h1>{{ company }}</h1>
 		<h2>{{ title }}</h2>
 		<a ng-href="{{ sourceUri }}">Link to Original</a><br /><br />
 		<div ng-bind-html-unsafe="fullHtmlDescription"></div><br />
+    <br />
 	</div>
   <div class="footer">
     &#169; 2013 Madrona Venture Group, LLC. 206-674-3000. <a href="mailto:information@madrona.com">information@madrona.com</a>.

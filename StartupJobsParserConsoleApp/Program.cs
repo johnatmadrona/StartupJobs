@@ -64,6 +64,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpAdReadyScraper(storage, index));
             scrapers.Add(new SjpApptioScraper(storage, index));
             scrapers.Add(new SjpAnimotoScraper(storage, index));
+            scrapers.Add(new SjpBizibleScraper(storage, index));
             scrapers.Add(new SjpBuuteeqScraper(storage, index));
             scrapers.Add(new SjpCheezburgerScraper(storage, index));
             scrapers.Add(new SjpContextRelevantScraper(storage, index));
@@ -72,6 +73,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpImpinjScraper(storage, index));
             scrapers.Add(new SjpIndochinoScraper(storage, index));
             scrapers.Add(new SjpIntrepidLearningScraper(storage, index));
+            scrapers.Add(new SjpLumoScraper(storage, index));
             scrapers.Add(new SjpMozScraper(storage, index));
             scrapers.Add(new SjpMixpoScraper(storage, index));
             scrapers.Add(new SjpPayscaleScraper(storage, index));
@@ -80,8 +82,10 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpRedfinScraper(storage, index));
             scrapers.Add(new SjpRoverScraper(storage, index));
             scrapers.Add(new SjpSkytapScraper(storage, index));
+            scrapers.Add(new SjpSnupiScraper(storage, index));
             scrapers.Add(new SjpSmartsheetScraper(storage, index));
             scrapers.Add(new SjpTier3Scraper(storage, index));
+            scrapers.Add(new SjpUnionBayNetworksScraper(storage, index));
             scrapers.Add(new SjpWildTangentScraper(storage, index));
             scrapers.Add(new SjpZ2LiveScraper(storage, index));
 
