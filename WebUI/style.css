@@ -1,4 +1,5 @@
 html {
+	font-size: 150%;
 	min-height: 100%;
 	min-width: 100%;
 }
@@ -15,15 +16,21 @@ html {
 	-webkit-background-clip: padding-box;
 	background-clip: padding-box;
 }
-	
+
+.searchBox {
+	width: 100%;
+	margin-right: auto;
+	border-collapse: collapse;
+}
+
 div.contentSelector {
-	width: 50%;
-	float: left;
+	width: 100%;
+	float: none;
 }
 
 div.contentDisplay {
-	width: 50%;
-	float: left;
+	width: 100%;
+	float: none;
 }
 
 div.footer {
@@ -35,13 +42,28 @@ div.footer {
 	text-align: center;
 }
 
-.searchBox {
-	width: 80%;
-	margin-right: auto;
-	border-collapse: collapse;
+@media all and (min-width: 600px) {
+	html {
+		font-size: 100%;
+	}
+
+	.searchBox {
+		width: 80%;
+	}
+
+	div.contentSelector {
+		width: 50%;
+		float: left;
+	}
+
+	div.contentDisplay {
+		width: 50%;
+		float: left;
+	}
 }
 
 .highlighted {
 	background-color: #ffff00;
 }
 
+// Change view at 600px
