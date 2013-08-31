@@ -46,6 +46,7 @@ sjpAppModule.controller(
 					} else if (jd.Company < company.name) {
 						$scope.companies.splice(i, 0, {
 							"name": jd.Company,
+							"visible": true,
 							"expanded": false,
 							"jobs": [jd]
 						});
@@ -54,6 +55,7 @@ sjpAppModule.controller(
 				}
 				$scope.companies.push({
 					"name": jd.Company,
+					"visible": true,
 					"expanded": false,
 					"jobs": [jd]
 				});
@@ -156,6 +158,7 @@ sjpAppModule.controller(
 
 		$scope.searchJobs = function() {
 			for (var i = 0; i < $scope.companies.length; i++) {
+				$scope.companies[i].visible = false;
 				for (var j = 0; j < $scope.companies[i].jobs.length; j++) {
 					var visible = false;
 					var exp = createRegExpFromSearchString($scope.searchString);
@@ -171,6 +174,9 @@ sjpAppModule.controller(
 						}
 					}
 					$scope.companies[i].jobs[j].visible = visible;
+					if (visible) {
+						$scope.companies[i].visible = true;
+					}
 				}
 			}
 		};
