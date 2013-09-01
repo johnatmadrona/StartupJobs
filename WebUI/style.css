@@ -1,9 +1,3 @@
-html {
-	font-size: 150%;
-	min-height: 100%;
-	min-width: 100%;
-}
-
 .gradient {
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#F9FDFF', endColorstr = '#i75D6FF');
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr = '#F9FDFF', endColorstr = '#75D6FF')";
@@ -17,10 +11,41 @@ html {
 	background-clip: padding-box;
 }
 
-.searchBox {
+html {
+	font: 250% arial, sans-serif;
+	min-height: 100%;
+	min-width: 100%;
+	overflow-y: visible;
+}
+
+div.searchInputContainer {
 	width: 100%;
 	margin-right: auto;
 	border-collapse: collapse;
+	font-size: inherit;
+}
+
+table {
+	font-size: inherit;
+	border-collapse: collapse;
+}
+
+input {
+	font-size: inherit;
+}
+
+.rspvCheckbox {
+    background-color: #dddddd;
+    border: solid 1px #000000;
+    display: inline-block;
+    line-height: 1em;
+    height:0.8em;
+    width:0.8em;
+    font-size: 75%;
+}
+
+.rspvCheckbox:before {
+	content: "\2714";
 }
 
 div.contentSelector {
@@ -35,19 +60,24 @@ div.contentDisplay {
 
 div.footer {
 	width: 100%;
-	position: fixed;
+	position: static;
 	bottom: 0px;
 	background-color: rgb(255, 255, 255);
 	background-color: rgba(255, 255, 255, 0.7);
 	text-align: center;
 }
 
-@media all and (min-width: 600px) {
+.highlighted {
+	background-color: #ffff00;
+}
+
+@media all and (min-device-width: 600px) and (min-width: 600px) {
 	html {
 		font-size: 100%;
+		overflow-y: scroll;
 	}
 
-	.searchBox {
+	div.searchInputContainer {
 		width: 80%;
 	}
 
@@ -60,10 +90,9 @@ div.footer {
 		width: 50%;
 		float: left;
 	}
+
+	div.footer {
+		position: fixed;
+	}
 }
 
-.highlighted {
-	background-color: #ffff00;
-}
-
-// Change view at 600px

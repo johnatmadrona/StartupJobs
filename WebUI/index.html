@@ -10,6 +10,7 @@
   <!-- Great site for creating icon files: http://convertico.org/ -->
   <link rel="shortcut icon" href="images/madrona_logo.ico" type="image/x-icon"/>
   <script>
+    /// Google Analytics ///
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -17,26 +18,56 @@
     ga('create', 'UA-43671451-1', 'madrona-sjp.s3.amazonaws.com');
     ga('send', 'pageview');
   </script>
+  <script>
+    function toggleRspvCheckbox(elem) {
+      var s = elem.getElementsByClassName('rspvCheckbox')[0].style;
+      if (s.color === "rgb(221, 221, 221)") {
+        s.color = "rgb(0, 0, 0)";
+      } else {
+        s.color = "rgb(221, 221, 221)";
+      }
+    }
+  </script>
 </head>
 <body class="gradient">
 	<div ng-controller="ContentSelectionController" class="contentSelector">
-    <div class="searchBox">
+    <div class="searchInputContainer">
       <form ng-submit="searchJobs()" style="display:inline">
         <table>
           <tr>
             <td style="width:100%">
-              <input style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string"></input>
+              <input type="text" style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string"></input>
             </td>
-            <td>
-              <button>Search</button>
+            <td style="padding-left: 3px;">
+              <input type="submit" value="Search"></input>
             </td>
           </tr>
         </table>
-        <input type="checkbox" ng-model="searchString.caseInsensitive">Case-insensitive</input>
-        <input type="checkbox" ng-model="searchString.global">Global</input>
-        <input type="checkbox" ng-model="searchString.multiline">Multi-line</input>
-        <input type="checkbox" ng-model="searchString.searchTitles">Search Titles</input>
-        <input type="checkbox" ng-model="searchString.searchDescriptions">Search Descriptions</input>
+        <span ng-model="searchString.caseInsensitive"
+             ng-click="searchString.caseInsensitive = !searchString.caseInsensitive"
+              onclick="toggleRspvCheckbox(this);">
+          <span class="rspvCheckbox"></span>&nbsp;Case-insensitive
+        </span>
+        <span ng-model="searchString.global"
+             ng-click="searchString.global = !searchString.global"
+              onclick="toggleRspvCheckbox(this);">
+          <span class="rspvCheckbox"></span>&nbsp;Global
+        </span>
+        <span ng-model="searchString.multiline"
+             ng-click="searchString.multiline = !searchString.multiline"
+              onclick="toggleRspvCheckbox(this);">
+          <span class="rspvCheckbox"></span>&nbsp;Multi-line
+        </span>
+        <span ng-model="searchString.searchTitles"
+             ng-click="searchString.searchTitles = !searchString.searchTitles"
+              onclick="toggleRspvCheckbox(this);">
+          <span class="rspvCheckbox"></span>&nbsp;Search Titles
+        </span>
+        <span ng-model="searchString.searchDescriptions"
+             ng-click="searchString.searchDescriptions = !searchString.searchDescriptions"
+              onclick="toggleRspvCheckbox(this);">
+          <span class="rspvCheckbox"></span>&nbsp;Search Descriptions
+        </span>
       </form>
       <br />
       <i>
@@ -45,7 +76,7 @@
       </i>
     </div>
     <br />
-    <button ng-click="toggleAllCompanyJobListViews()">{{ { true: 'Expand All', false: 'Collapse All' }[toggleAllCausesExpansion] }}</button>
+    <input type="button" ng-click="toggleAllCompanyJobListViews()" value="{{ { true: 'Expand All', false: 'Collapse All' }[toggleAllCausesExpansion] }}"></input>
 		<ul>
 			<li ng-repeat="company in companies" ng-show="company.visible">
 				<a href="javascript:void(0)" ng-click="toggleJobListView(company)">
