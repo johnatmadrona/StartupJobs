@@ -64,6 +64,7 @@
     <Compile Include="Scrapers\SjpBizibleScraper.cs" />
     <Compile Include="Scrapers\SjpJobscoreScraperBase.cs" />
     <Compile Include="Scrapers\SjpLumoScraper.cs" />
+    <Compile Include="Scrapers\SjpSeeqScraper.cs" />
     <Compile Include="Scrapers\SjpSnupiScraper.cs" />
     <Compile Include="Scrapers\SjpUnionBayNetworksScraper.cs" />
     <Compile Include="Storage\ISjpStorage.cs" />

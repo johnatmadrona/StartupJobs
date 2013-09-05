@@ -81,6 +81,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpQumuloScraper(storage, index));
             scrapers.Add(new SjpRedfinScraper(storage, index));
             scrapers.Add(new SjpRoverScraper(storage, index));
+            scrapers.Add(new SjpSeeqScraper(storage, index));
             scrapers.Add(new SjpSkytapScraper(storage, index));
             scrapers.Add(new SjpSnupiScraper(storage, index));
             scrapers.Add(new SjpSmartsheetScraper(storage, index));
