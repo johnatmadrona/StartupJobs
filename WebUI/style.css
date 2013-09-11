@@ -28,10 +28,41 @@ div.searchInputContainer {
 table {
 	font-size: inherit;
 	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 input {
 	font-size: inherit;
+}
+
+#inlineSearchButton {
+	display: block;
+	width: 100%;
+}
+
+#adjacentSearchButton {
+	display: none;
+}
+
+.optionsBox {
+	margin: 0, auto;
+	border: 1px solid rgb(0, 0, 0);
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	padding: 5px;
+	background-color: rgb(230, 240, 255);
+	background-color: rgba(150, 150, 150, 0.1);
+}
+
+.optionsBoxLabel {
+	text-align: center;
+}
+
+.optionsBoxLabel a:link, .optionsBoxLabel a:visited {
+	text-decoration: none;
+}
+
+.optionsBoxContent {
+	display: none;
 }
 
 .rspvCheckbox {
@@ -46,6 +77,28 @@ input {
 
 .rspvCheckbox:before {
 	content: "\2714";
+}
+
+.downChevrons {
+	display:inline-block;
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+
+.upChevrons {
+	display:inline-block;
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+}
+
+.downChevrons:before, .upChevrons:before {
+	content: "\00bb";
 }
 
 div.contentSelector {
@@ -79,6 +132,14 @@ div.footer {
 
 	div.searchInputContainer {
 		width: 80%;
+	}
+
+	#inlineSearchButton {
+		display: none;
+	}
+
+	#adjacentSearchButton {
+		display: block;
 	}
 
 	div.contentSelector {

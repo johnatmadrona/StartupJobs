@@ -27,6 +27,25 @@
         s.color = "rgb(221, 221, 221)";
       }
     }
+    
+    function toggleOptionsDisplay(elem) {
+      var contentDisplay = $(elem).siblings(".optionsBoxContent");
+      if (contentDisplay.is(":visible")) {
+        contentDisplay.slideUp(500, function() {
+          var chev = $(elem).find(".upChevrons");
+          chev.removeClass("upChevrons");
+          chev.addClass("downChevrons");
+        });
+      } else {
+        contentDisplay.slideDown(500, function() {
+          var chev = $(elem).find(".downChevrons");
+          chev.removeClass("downChevrons");
+          chev.addClass("upChevrons");
+        });
+      }
+    }
+    
+    $(".optionsBoxLabelText").click(function(evt) { evt.preventDefault(); });
   </script>
 </head>
 <body class="gradient">
@@ -37,39 +56,53 @@
           <tr>
             <td style="width:100%">
               <input type="text" style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string"></input>
+              <input type="submit" value="Search" id="inlineSearchButton"></input>
             </td>
             <td style="padding-left: 3px;">
-              <input type="submit" value="Search"></input>
+              <input type="submit" id="adjacentSearchButton" value="Search"></input>
             </td>
           </tr>
         </table>
-        <span ng-model="searchString.caseInsensitive"
-             ng-click="searchString.caseInsensitive = !searchString.caseInsensitive"
-              onclick="toggleRspvCheckbox(this);">
-          <span class="rspvCheckbox"></span>&nbsp;Case-insensitive
-        </span>
-        <span ng-model="searchString.global"
-             ng-click="searchString.global = !searchString.global"
-              onclick="toggleRspvCheckbox(this);">
-          <span class="rspvCheckbox"></span>&nbsp;Global
-        </span>
-        <span ng-model="searchString.multiline"
-             ng-click="searchString.multiline = !searchString.multiline"
-              onclick="toggleRspvCheckbox(this);">
-          <span class="rspvCheckbox"></span>&nbsp;Multi-line
-        </span>
-        <span ng-model="searchString.searchTitles"
-             ng-click="searchString.searchTitles = !searchString.searchTitles"
-              onclick="toggleRspvCheckbox(this);">
-          <span class="rspvCheckbox"></span>&nbsp;Search Titles
-        </span>
-        <span ng-model="searchString.searchDescriptions"
-             ng-click="searchString.searchDescriptions = !searchString.searchDescriptions"
-              onclick="toggleRspvCheckbox(this);">
-          <span class="rspvCheckbox"></span>&nbsp;Search Descriptions
-        </span>
+        <div class="optionsBox">
+          <div class="optionsBoxLabel" onclick="toggleOptionsDisplay(this);">
+            <a class="optionsBoxLabelText">Options <div class="downChevrons"></div></a>
+          </div>
+          <div class="optionsBoxContent">
+            <br />
+            <span ng-model="searchString.caseInsensitive"
+                 ng-click="searchString.caseInsensitive = !searchString.caseInsensitive"
+                  onclick="toggleRspvCheckbox(this);">
+              <span class="rspvCheckbox"></span>&nbsp;Case-insensitive
+            </span>
+            <br />
+            <span ng-model="searchString.global"
+                 ng-click="searchString.global = !searchString.global"
+                  onclick="toggleRspvCheckbox(this);">
+              <span class="rspvCheckbox"></span>&nbsp;Global
+            </span>
+            <br />
+            <span ng-model="searchString.multiline"
+                 ng-click="searchString.multiline = !searchString.multiline"
+                  onclick="toggleRspvCheckbox(this);">
+              <span class="rspvCheckbox"></span>&nbsp;Multi-line
+            </span>
+            <br />
+            <span ng-model="searchString.searchTitles"
+                 ng-click="searchString.searchTitles = !searchString.searchTitles"
+                  onclick="toggleRspvCheckbox(this);">
+              <span class="rspvCheckbox"></span>&nbsp;Search Titles
+            </span>
+            <br />
+            <span ng-model="searchString.searchDescriptions"
+                 ng-click="searchString.searchDescriptions = !searchString.searchDescriptions"
+                  onclick="toggleRspvCheckbox(this);">
+              <span class="rspvCheckbox"></span>&nbsp;Search Descriptions
+            </span>
+            <br />
+            <br />
+          </div>
+        </div>
       </form>
-      <br />
       <i>
         For info on regular expressions, see
         <a href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">this reference</a>
