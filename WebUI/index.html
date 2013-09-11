@@ -65,7 +65,7 @@
         </table>
         <div class="optionsBox">
           <div class="optionsBoxLabel" onclick="toggleOptionsDisplay(this);">
-            <a class="optionsBoxLabelText">Options <div class="downChevrons"></div></a>
+            <a href="#" class="optionsBoxLabelText">Options <div class="downChevrons"></div></a>
           </div>
           <div class="optionsBoxContent">
             <br />
@@ -100,13 +100,13 @@
             </span>
             <br />
             <br />
+            <i>
+              For info on regular expressions, see
+              <a href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">this reference</a>
+            </i>
           </div>
         </div>
       </form>
-      <i>
-        For info on regular expressions, see
-        <a href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">this reference</a>
-      </i>
     </div>
     <br />
     <input type="button" ng-click="toggleAllCompanyJobListViews()" value="{{ { true: 'Expand All', false: 'Collapse All' }[toggleAllCausesExpansion] }}"></input>
