@@ -44,8 +44,6 @@
         });
       }
     }
-    
-    $(".optionsBoxLabelText").click(function(evt) { evt.preventDefault(); });
   </script>
 </head>
 <body class="gradient">
@@ -56,7 +54,6 @@
           <tr>
             <td style="width:100%">
               <input type="text" style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string"></input>
-              <input type="submit" value="Search" id="inlineSearchButton"></input>
             </td>
             <td style="padding-left: 3px;">
               <input type="submit" id="adjacentSearchButton" value="Search"></input>
@@ -65,7 +62,7 @@
         </table>
         <div class="optionsBox">
           <div class="optionsBoxLabel" onclick="toggleOptionsDisplay(this);">
-            <a href="#" class="optionsBoxLabelText">Options <div class="downChevrons"></div></a>
+            <a href="javascript:void(0)">Options <div class="downChevrons"></div></a>
           </div>
           <div class="optionsBoxContent">
             <br />
@@ -106,6 +103,7 @@
             </i>
           </div>
         </div>
+        <input type="submit" value="Search" id="inlineSearchButton"></input>
       </form>
     </div>
     <br />
@@ -117,7 +115,7 @@
 				</a>
 				<ul ng-show="company.expanded">
 					<li ng-repeat="job in company.jobs" ng-show="job.visible">
-						<a ng-href="javascript:void(0);" ng-click="selectJd($parent.$index, $index)">
+						<a href="javascript:void(0);" ng-click="selectJd($parent.$index, $index)">
 							{{ job.Title }}
 						</a>
 					</li>
