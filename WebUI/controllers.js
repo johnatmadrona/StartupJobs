@@ -36,14 +36,14 @@ sjpAppModule.controller(
 						// TODO: Investigate whether this can be addressed 
 						// in Angular instead of here
 						for (var j = 0; j < company.jobs.length; j++) {
-							if (jd.Title < company.jobs[j].Title) {
+							if (jd.Title.toUpperCase() < company.jobs[j].Title.toUpperCase()) {
 								company.jobs.splice(j, 0, jd);
 								return;
 							}
 						}
 						company.jobs.push(jd);
 						return;
-					} else if (jd.Company < company.name) {
+					} else if (jd.Company.toUpperCase() < company.name.toUpperCase()) {
 						$scope.companies.splice(i, 0, {
 							"name": jd.Company,
 							"visible": true,
