@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="ISjpIndex.cs" />
     <Compile Include="Scrapers\SjpBizibleScraper.cs" />
+    <Compile Include="Scrapers\SjpJamaScraper.cs" />
     <Compile Include="Scrapers\SjpJobscoreScraperBase.cs" />
     <Compile Include="Scrapers\SjpLumoScraper.cs" />
     <Compile Include="Scrapers\SjpSeeqScraper.cs" />
