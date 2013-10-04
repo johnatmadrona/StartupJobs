@@ -7,7 +7,7 @@ namespace StartupJobsParser
 {
     public class SjpBuuteeqScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://jobs.buuteeq.me/promotions.htm");
+        private Uri _defaultUri = new Uri("http://jobs.buuteeq.me/current-openings/current-openings.htm");
         public override string CompanyName { get { return "buuteeq"; } }
         public override Uri DefaultUri
         {
@@ -22,19 +22,7 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode categoryLink in doc.DocumentNode.SelectNodes("//div[@id='sideBar']/div/ul/li/a"))
-            {
-                foreach (JobDescription jd in GetJdsFromCategory(new Uri(uri, categoryLink.Attributes["href"].Value)))
-                {
-                    yield return jd;
-                }
-            }
-        }
-
-        protected IEnumerable<JobDescription> GetJdsFromCategory(Uri uri)
-        {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//a[contains(@href, '/current-openings/')]"))
+            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//div[@class='artMainCon']//a[contains(@href, '/current-openings/')]"))
             {
                 yield return GetBuuteeqJd(new Uri(uri, jdLink.Attributes["href"].Value));
             }
