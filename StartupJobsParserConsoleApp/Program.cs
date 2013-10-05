@@ -74,6 +74,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpIndochinoScraper(storage, index));
             scrapers.Add(new SjpIntrepidLearningScraper(storage, index));
             scrapers.Add(new SjpJamaScraper(storage, index));
+            scrapers.Add(new SjpJobalineScraper(storage, index));
             scrapers.Add(new SjpLumoScraper(storage, index));
             scrapers.Add(new SjpMozScraper(storage, index));
             scrapers.Add(new SjpMixpoScraper(storage, index));
