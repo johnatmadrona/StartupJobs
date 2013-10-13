@@ -41,7 +41,7 @@ namespace StartupJobsParser
 
             return new JobDescription()
             {
-                SourceUri = uri.AbsoluteUri,
+                SourceUri = TryCreateTrackedLink(uri),
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = location,

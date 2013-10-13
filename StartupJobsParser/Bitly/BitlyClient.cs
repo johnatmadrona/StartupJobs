@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.Serialization.Json;
@@ -11,6 +12,8 @@ namespace StartupJobsParser
     {
         private HttpClient _client = new HttpClient();
         private string _accessToken;
+
+        private Hashtable _cache = new Hashtable(1024);
 
         public BitlyClient(string accessToken)
         {
@@ -41,7 +44,6 @@ namespace StartupJobsParser
         public string Shorten(string urlToShorten)
         {
             Task<string> async = ShortenAsync(urlToShorten);
-            async.RunSynchronously();
             async.Wait();
             return async.Result;
         }
@@ -49,16 +51,25 @@ namespace StartupJobsParser
         // TODO: Exception handling
         public async Task<string> ShortenAsync(string urlToShorten)
         {
+            if (_cache.ContainsKey(urlToShorten))
+            {
+                return (string)_cache[urlToShorten];
+            }
+
             string bitlyUrl = CreateBitlyUrl(urlToShorten);
             HttpResponseMessage msg = await _client.GetAsync(bitlyUrl);
 
+            string shortened;
             using (Stream content = await msg.Content.ReadAsStreamAsync())
             {
                 DataContractJsonSerializer ser =
                     new DataContractJsonSerializer(typeof(BitlyShortenResponse));
                 BitlyShortenResponse resp = ser.ReadObject(content) as BitlyShortenResponse;
-                return resp.data.url;
+                shortened = resp.data.url;
             }
+
+            _cache.Add(urlToShorten, shortened);
+            return shortened;
         }
 
         private string CreateBitlyUrl(string urlToShorten)

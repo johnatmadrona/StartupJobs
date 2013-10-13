@@ -11,18 +11,20 @@ namespace StartupJobsParser
     {
         protected ISjpStorage m_storage;
         protected ISjpIndex m_index;
+        protected ISjpLinkTracker m_linkTracker;
 
         public abstract string CompanyName { get; }
         public abstract Uri DefaultUri { get; }
 
         protected SjpScraper(SjpScraperParams scraperParams)
         {
-            if (scraperParams == null)
+            if (scraperParams == null || scraperParams.Storage == null)
             {
-                throw new ArgumentNullException("storage", "Storage cannot be null");
+                throw new ArgumentNullException("Must provide a storage object");
             }
             m_storage = scraperParams.Storage;
             m_index = scraperParams.Index;
+            m_linkTracker = scraperParams.LinkTracker;
         }
 
         public void Scrape()
@@ -132,5 +134,16 @@ namespace StartupJobsParser
         }
 
         protected abstract IEnumerable<JobDescription> GetJds(Uri uri);
+
+        protected string TryCreateTrackedLink(Uri uri)
+        {
+            if (m_linkTracker != null)
+            {
+                // TODO: Handle expetions
+                return m_linkTracker.CreateTrackedLink(uri.AbsoluteUri);
+            }
+
+            return uri.AbsoluteUri;
+        }
     }
 }

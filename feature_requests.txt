@@ -1,5 +1,6 @@
+Familiar search query syntax
+
 Symbol to indicate when lists are expanded
-Filter out company lists when all of their jobs are filtered out
 
 More flexible search semantics
 Scalable data access model
