@@ -12,16 +12,32 @@ namespace StartupJobsParserConsoleApp
     {
         static void Main(string[] args)
         {
-            if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["AWSAccessKey"]) ||
-                string.IsNullOrEmpty(ConfigurationManager.AppSettings["AWSSecretKey"]))
+            string bitlyAccessToken = ConfigurationManager.AppSettings["BitlyToken"];
+            string awsAccessKey = ConfigurationManager.AppSettings["AWSAccessKey"];
+            string awsSecretKey = ConfigurationManager.AppSettings["AWSSecretKey"];
+
+            if (string.IsNullOrEmpty(awsAccessKey) ||
+                string.IsNullOrEmpty(awsSecretKey) ||
+                string.IsNullOrEmpty(bitlyAccessToken))
             {
-                Console.WriteLine("ERROR: Must add values for AWSAccessKey and AWSSecretKey in application config");
+                Console.WriteLine("ERROR: Must add values for AWSAccessKey, AWSSecretKey, and BitlyToken in application config");
                 return;
             }
 
-            //SjpStorageDisk storage = new SjpStorageDisk(".\\data\\");
-            SjpStorageS3 storage = new SjpStorageS3(RegionEndpoint.USWest2, "madrona-sjp");
-            List<ISjpScraper> scrapers = GetScrapers(storage, GetIndex());
+            SjpScraperParams scraperParams = new SjpScraperParams()
+            {
+                //SjpStorageDisk storage = new SjpStorageDisk(".\\data\\");
+                Storage = (ISjpStorage)new SjpStorageS3(
+                    awsAccessKey,
+                    awsSecretKey,
+                    RegionEndpoint.USWest2,
+                    "madrona-sjp"
+                    ),
+                Index = GetIndex(),
+                LinkTracker = new BitlyClient(bitlyAccessToken)
+            };
+
+            List<ISjpScraper> scrapers = GetScrapers(scraperParams);
 
             List<KeyValuePair<Type, Exception>> errors = new List<KeyValuePair<Type,Exception>>();
             Parallel.ForEach(scrapers, scraper =>
@@ -56,41 +72,41 @@ namespace StartupJobsParserConsoleApp
             return null;// new SjpLocalDiskIndex(Path.GetFullPath(".\\index\\"));
         }
 
-        public static List<ISjpScraper> GetScrapers(ISjpStorage storage, ISjpIndex index)
+        public static List<ISjpScraper> GetScrapers(SjpScraperParams scraperParams)
         {
             List<ISjpScraper> scrapers = new List<ISjpScraper>();
 
-            scrapers.Add(new Sjp2ndWatchScraper(storage, index));
-            scrapers.Add(new SjpAdReadyScraper(storage, index));
-            scrapers.Add(new SjpApptioScraper(storage, index));
-            scrapers.Add(new SjpAnimotoScraper(storage, index));
-            scrapers.Add(new SjpBizibleScraper(storage, index));
-            scrapers.Add(new SjpBuuteeqScraper(storage, index));
-            scrapers.Add(new SjpCheezburgerScraper(storage, index));
-            scrapers.Add(new SjpContextRelevantScraper(storage, index));
-            scrapers.Add(new SjpExtraHopScraper(storage, index));
-            scrapers.Add(new SjpHaikuDeckScraper(storage, index));
-            scrapers.Add(new SjpImpinjScraper(storage, index));
-            scrapers.Add(new SjpIndochinoScraper(storage, index));
-            scrapers.Add(new SjpIntrepidLearningScraper(storage, index));
-            scrapers.Add(new SjpJamaScraper(storage, index));
-            scrapers.Add(new SjpJobalineScraper(storage, index));
-            scrapers.Add(new SjpLumoScraper(storage, index));
-            scrapers.Add(new SjpMozScraper(storage, index));
-            scrapers.Add(new SjpMixpoScraper(storage, index));
-            scrapers.Add(new SjpPayscaleScraper(storage, index));
-            scrapers.Add(new SjpPlacedScraper(storage, index));
-            scrapers.Add(new SjpQumuloScraper(storage, index));
-            scrapers.Add(new SjpRedfinScraper(storage, index));
-            scrapers.Add(new SjpRoverScraper(storage, index));
-            scrapers.Add(new SjpSeeqScraper(storage, index));
-            scrapers.Add(new SjpSkytapScraper(storage, index));
-            scrapers.Add(new SjpSnupiScraper(storage, index));
-            scrapers.Add(new SjpSmartsheetScraper(storage, index));
-            scrapers.Add(new SjpTier3Scraper(storage, index));
-            scrapers.Add(new SjpUnionBayNetworksScraper(storage, index));
-            scrapers.Add(new SjpWildTangentScraper(storage, index));
-            scrapers.Add(new SjpZ2LiveScraper(storage, index));
+            scrapers.Add(new Sjp2ndWatchScraper(scraperParams));
+            scrapers.Add(new SjpAdReadyScraper(scraperParams));
+            scrapers.Add(new SjpApptioScraper(scraperParams));
+            scrapers.Add(new SjpAnimotoScraper(scraperParams));
+            scrapers.Add(new SjpBizibleScraper(scraperParams));
+            scrapers.Add(new SjpBuuteeqScraper(scraperParams));
+            scrapers.Add(new SjpCheezburgerScraper(scraperParams));
+            scrapers.Add(new SjpContextRelevantScraper(scraperParams));
+            scrapers.Add(new SjpExtraHopScraper(scraperParams));
+            scrapers.Add(new SjpHaikuDeckScraper(scraperParams));
+            scrapers.Add(new SjpImpinjScraper(scraperParams));
+            scrapers.Add(new SjpIndochinoScraper(scraperParams));
+            scrapers.Add(new SjpIntrepidLearningScraper(scraperParams));
+            scrapers.Add(new SjpJamaScraper(scraperParams));
+            scrapers.Add(new SjpJobalineScraper(scraperParams));
+            scrapers.Add(new SjpLumoScraper(scraperParams));
+            scrapers.Add(new SjpMozScraper(scraperParams));
+            scrapers.Add(new SjpMixpoScraper(scraperParams));
+            scrapers.Add(new SjpPayscaleScraper(scraperParams));
+            scrapers.Add(new SjpPlacedScraper(scraperParams));
+            scrapers.Add(new SjpQumuloScraper(scraperParams));
+            scrapers.Add(new SjpRedfinScraper(scraperParams));
+            scrapers.Add(new SjpRoverScraper(scraperParams));
+            scrapers.Add(new SjpSeeqScraper(scraperParams));
+            scrapers.Add(new SjpSkytapScraper(scraperParams));
+            scrapers.Add(new SjpSnupiScraper(scraperParams));
+            scrapers.Add(new SjpSmartsheetScraper(scraperParams));
+            scrapers.Add(new SjpTier3Scraper(scraperParams));
+            scrapers.Add(new SjpUnionBayNetworksScraper(scraperParams));
+            scrapers.Add(new SjpWildTangentScraper(scraperParams));
+            scrapers.Add(new SjpZ2LiveScraper(scraperParams));
 
             return scrapers;
         }

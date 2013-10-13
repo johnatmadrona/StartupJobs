@@ -10,8 +10,8 @@ namespace StartupJobsParser
         public override string CompanyName { get { return "Redfin"; } }
         protected override string JobviteCompanyId { get { return "qf49Vfw7"; } }
 
-        public SjpRedfinScraper(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        public SjpRedfinScraper(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
 

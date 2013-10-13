@@ -8,8 +8,8 @@ namespace StartupJobsParser
     {
         public abstract Uri PublicUri { get; }
 
-        protected SjpJobscoreScraperBase(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        protected SjpJobscoreScraperBase(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
 

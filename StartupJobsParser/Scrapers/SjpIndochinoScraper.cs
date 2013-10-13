@@ -14,8 +14,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpIndochinoScraper(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        public SjpIndochinoScraper(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
 

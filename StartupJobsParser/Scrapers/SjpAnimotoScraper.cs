@@ -10,8 +10,8 @@ namespace StartupJobsParser
         public override string CompanyName { get { return "Animoto"; } }
         protected override string JobviteCompanyId { get { return "qBr9VfwQ"; } }
 
-        public SjpAnimotoScraper(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        public SjpAnimotoScraper(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
 

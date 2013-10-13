@@ -14,8 +14,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpHaikuDeckScraper(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        public SjpHaikuDeckScraper(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
 

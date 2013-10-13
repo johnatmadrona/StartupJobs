@@ -13,8 +13,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpZ2LiveScraper(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        public SjpZ2LiveScraper(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
 

@@ -14,8 +14,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpPayscaleScraper(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        public SjpPayscaleScraper(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
 

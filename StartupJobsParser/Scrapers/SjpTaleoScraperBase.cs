@@ -8,8 +8,8 @@ namespace StartupJobsParser
     {
         protected abstract string JdContentTableXPath { get; }
 
-        public SjpTaleoScraperBase(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        public SjpTaleoScraperBase(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
 

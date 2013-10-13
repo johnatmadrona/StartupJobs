@@ -10,8 +10,8 @@ namespace StartupJobsParser
         public override string CompanyName { get { return "Intrepid Learning"; } }
         protected override string JobviteCompanyId { get { return "q089VfwW"; } }
 
-        public SjpIntrepidLearningScraper(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        public SjpIntrepidLearningScraper(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
 

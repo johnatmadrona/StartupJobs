@@ -18,8 +18,8 @@ namespace StartupJobsParser
             get { return "//section[@id='main']/table"; }
         }
 
-        public SjpApptioScraper(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        public SjpApptioScraper(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
     }

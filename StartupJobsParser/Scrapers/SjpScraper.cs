@@ -15,14 +15,14 @@ namespace StartupJobsParser
         public abstract string CompanyName { get; }
         public abstract Uri DefaultUri { get; }
 
-        protected SjpScraper(ISjpStorage storage, ISjpIndex index)
+        protected SjpScraper(SjpScraperParams scraperParams)
         {
-            if (storage == null)
+            if (scraperParams == null)
             {
                 throw new ArgumentNullException("storage", "Storage cannot be null");
             }
-            m_storage = storage;
-            m_index = index;
+            m_storage = scraperParams.Storage;
+            m_index = scraperParams.Index;
         }
 
         public void Scrape()

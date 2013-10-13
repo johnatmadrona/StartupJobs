@@ -22,8 +22,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpExtraHopScraper(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        public SjpExtraHopScraper(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
     }

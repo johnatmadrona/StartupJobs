@@ -13,8 +13,8 @@ namespace StartupJobsParser
             get { return _defaultUri; }
         }
 
-        public SjpQumuloScraper(ISjpStorage storage, ISjpIndex index)
-            : base(storage, index)
+        public SjpQumuloScraper(SjpScraperParams scraperParams)
+            : base(scraperParams)
         {
         }
 

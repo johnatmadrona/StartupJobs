@@ -3,95 +3,98 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
 
-public class SjpStorageDisk : ISjpStorage
+namespace StartupJobsParser
 {
-    private string m_rootPath;
-
-    public SjpStorageDisk(string rootDirPath)
+    public class SjpStorageDisk : ISjpStorage
     {
-        // Use full path
-        m_rootPath = Path.GetFullPath(rootDirPath);
-        if (!m_rootPath.EndsWith("\\"))
+        private string m_rootPath;
+
+        public SjpStorageDisk(string rootDirPath)
         {
-            m_rootPath += "\\";
-        }
-        if (!Directory.Exists(m_rootPath))
-        {
-            Directory.CreateDirectory(m_rootPath);
-        }
-    }
-
-    private string PathFromKey(string key)
-    {
-        return m_rootPath + key;
-    }
-
-    private string KeyFromPath(string path)
-    {
-        return path.Substring(m_rootPath.Length);
-    }
-
-    public IEnumerable<string> List()
-    {
-        return List(null);
-    }
-
-    public IEnumerable<string> List(string prefix)
-    {
-        string dirPath = m_rootPath;
-        if (prefix != null)
-        {
-            dirPath += prefix;
-        }
-
-        if (Directory.Exists(dirPath))
-        {
-            foreach (string objPath in Directory.GetFiles(dirPath))
+            // Use full path
+            m_rootPath = Path.GetFullPath(rootDirPath);
+            if (!m_rootPath.EndsWith("\\"))
             {
-                yield return KeyFromPath(objPath);
+                m_rootPath += "\\";
+            }
+            if (!Directory.Exists(m_rootPath))
+            {
+                Directory.CreateDirectory(m_rootPath);
             }
         }
-    }
 
-    public void Add(string key, Type type, object obj)
-    {
-        string path = PathFromKey(key);
-
-        string dirPath = Path.GetDirectoryName(path);
-        if (!Directory.Exists(dirPath))
+        private string PathFromKey(string key)
         {
-            Directory.CreateDirectory(dirPath);
+            return m_rootPath + key;
         }
 
-        DataContractJsonSerializer ser = new DataContractJsonSerializer(type);
-        using (FileStream file = File.Create(path))
+        private string KeyFromPath(string path)
         {
-            ser.WriteObject(file, obj);
-        }
-    }
-
-    public bool Exists(string key)
-    {
-        return File.Exists(PathFromKey(key));
-    }
-
-    public object Get(string key, Type type)
-    {
-        string path = PathFromKey(key);
-        if (!File.Exists(path))
-        {
-            return null;
+            return path.Substring(m_rootPath.Length);
         }
 
-        DataContractJsonSerializer ser = new DataContractJsonSerializer(type);
-        using (FileStream file = File.OpenRead(path))
+        public IEnumerable<string> List()
         {
-            return ser.ReadObject(file);
+            return List(null);
         }
-    }
 
-    public void Delete(string key)
-    {
-        File.Delete(PathFromKey(key));
+        public IEnumerable<string> List(string prefix)
+        {
+            string dirPath = m_rootPath;
+            if (prefix != null)
+            {
+                dirPath += prefix;
+            }
+
+            if (Directory.Exists(dirPath))
+            {
+                foreach (string objPath in Directory.GetFiles(dirPath))
+                {
+                    yield return KeyFromPath(objPath);
+                }
+            }
+        }
+
+        public void Add(string key, Type type, object obj)
+        {
+            string path = PathFromKey(key);
+
+            string dirPath = Path.GetDirectoryName(path);
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(type);
+            using (FileStream file = File.Create(path))
+            {
+                ser.WriteObject(file, obj);
+            }
+        }
+
+        public bool Exists(string key)
+        {
+            return File.Exists(PathFromKey(key));
+        }
+
+        public object Get(string key, Type type)
+        {
+            string path = PathFromKey(key);
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(type);
+            using (FileStream file = File.OpenRead(path))
+            {
+                return ser.ReadObject(file);
+            }
+        }
+
+        public void Delete(string key)
+        {
+            File.Delete(PathFromKey(key));
+        }
     }
 }
