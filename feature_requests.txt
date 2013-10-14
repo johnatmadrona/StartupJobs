@@ -1,4 +1,6 @@
 Familiar search query syntax
+Put bitly links into bitly groups
+Review responsive design
 
 Symbol to indicate when lists are expanded
 
