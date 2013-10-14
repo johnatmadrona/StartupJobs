@@ -1,11 +1,12 @@
+<!DOCTYPE html>
 <html ng-app="sjpApp">
 <head>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
   <!-- <script src="./local/angular.min.js"></script> -->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <!-- <script src="./local/jquery-1.9.1.min.js"></script> -->
-	<script src="./controllers.js"></script>
-	<link rel="stylesheet" type="text/css" href="style.css" />
+  <script src="./controllers.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css" />
   <title>Madrona Jobs Search</title>
   <!-- Great site for creating icon files: http://convertico.org/ -->
   <link rel="shortcut icon" href="images/madrona_logo.ico" type="image/x-icon"/>
@@ -47,90 +48,100 @@
   </script>
 </head>
 <body class="gradient">
-	<div ng-controller="ContentSelectionController" class="contentSelector">
-    <div class="searchInputContainer">
-      <form ng-submit="searchJobs()" style="display:inline">
-        <table>
-          <tr>
-            <td style="width:100%">
-              <input type="text" style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string"></input>
-            </td>
-            <td style="padding-left: 3px;">
-              <input type="submit" id="adjacentSearchButton" value="Search"></input>
-            </td>
-          </tr>
-        </table>
-        <div class="optionsBox">
-          <div class="optionsBoxLabel" onclick="toggleOptionsDisplay(this);">
-            <a href="javascript:void(0)">Options <div class="downChevrons"></div></a>
+  <div class="contentHeader">
+    <div class="contentHeaderImage"></div>
+  </div>
+  <div class="contentBody">
+    <div ng-controller="ContentSelectionController" class="contentSelector">
+      <div class="header">
+        <div style="background-image:url('images/madrona_logo_81x81.png');"></div>
+      </div>
+      <div class="searchInputContainer">
+        <form ng-submit="searchJobs()" style="display:inline">
+          <table>
+            <tr>
+              <td style="width:100%">
+                <input type="text" style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string"></input>
+              </td>
+              <td style="padding-left: 3px;">
+                <input type="submit" id="adjacentSearchButton" value="Search"></input>
+              </td>
+            </tr>
+          </table>
+          <div class="optionsBox">
+            <div class="optionsBoxLabel" onclick="toggleOptionsDisplay(this);">
+              <a href="javascript:void(0)">
+                Options <div class="downChevrons"></div>
+              </a>
+            </div>
+            <div class="optionsBoxContent">
+              <br />
+              <span ng-model="searchString.caseInsensitive"
+                   ng-click="searchString.caseInsensitive = !searchString.caseInsensitive"
+                    onclick="toggleRspvCheckbox(this);">
+                <span class="rspvCheckbox"></span>&nbsp;Case-insensitive
+              </span>
+              <br />
+              <span ng-model="searchString.global"
+                   ng-click="searchString.global = !searchString.global"
+                    onclick="toggleRspvCheckbox(this);">
+                <span class="rspvCheckbox"></span>&nbsp;Global
+              </span>
+              <br />
+              <span ng-model="searchString.multiline"
+                   ng-click="searchString.multiline = !searchString.multiline"
+                    onclick="toggleRspvCheckbox(this);">
+                <span class="rspvCheckbox"></span>&nbsp;Multi-line
+              </span>
+              <br />
+              <span ng-model="searchString.searchTitles"
+                   ng-click="searchString.searchTitles = !searchString.searchTitles"
+                    onclick="toggleRspvCheckbox(this);">
+                <span class="rspvCheckbox"></span>&nbsp;Search Titles
+              </span>
+              <br />
+              <span ng-model="searchString.searchDescriptions"
+                   ng-click="searchString.searchDescriptions = !searchString.searchDescriptions"
+                    onclick="toggleRspvCheckbox(this);">
+                <span class="rspvCheckbox"></span>&nbsp;Search Descriptions
+              </span>
+              <br />
+              <br />
+              <i>
+                For info on regular expressions, see
+                <a href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">this reference</a>
+              </i>
+            </div>
           </div>
-          <div class="optionsBoxContent">
-            <br />
-            <span ng-model="searchString.caseInsensitive"
-                 ng-click="searchString.caseInsensitive = !searchString.caseInsensitive"
-                  onclick="toggleRspvCheckbox(this);">
-              <span class="rspvCheckbox"></span>&nbsp;Case-insensitive
-            </span>
-            <br />
-            <span ng-model="searchString.global"
-                 ng-click="searchString.global = !searchString.global"
-                  onclick="toggleRspvCheckbox(this);">
-              <span class="rspvCheckbox"></span>&nbsp;Global
-            </span>
-            <br />
-            <span ng-model="searchString.multiline"
-                 ng-click="searchString.multiline = !searchString.multiline"
-                  onclick="toggleRspvCheckbox(this);">
-              <span class="rspvCheckbox"></span>&nbsp;Multi-line
-            </span>
-            <br />
-            <span ng-model="searchString.searchTitles"
-                 ng-click="searchString.searchTitles = !searchString.searchTitles"
-                  onclick="toggleRspvCheckbox(this);">
-              <span class="rspvCheckbox"></span>&nbsp;Search Titles
-            </span>
-            <br />
-            <span ng-model="searchString.searchDescriptions"
-                 ng-click="searchString.searchDescriptions = !searchString.searchDescriptions"
-                  onclick="toggleRspvCheckbox(this);">
-              <span class="rspvCheckbox"></span>&nbsp;Search Descriptions
-            </span>
-            <br />
-            <br />
-            <i>
-              For info on regular expressions, see
-              <a href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">this reference</a>
-            </i>
-          </div>
-        </div>
-        <input type="submit" value="Search" id="inlineSearchButton"></input>
-      </form>
+          <input type="submit" value="Search" id="inlineSearchButton"></input>
+        </form>
+      </div>
+      <br />
+      <input type="button" ng-click="toggleAllCompanyJobListViews()" value="{{ { true: 'Expand All', false: 'Collapse All' }[toggleAllCausesExpansion] }}"></input>
+      <ul>
+        <li ng-repeat="company in companies" ng-show="company.visible">
+          <a href="javascript:void(0)" ng-click="toggleJobListView(company)">
+            {{ company.name }}
+          </a>
+          <ul ng-show="company.expanded">
+            <li ng-repeat="job in company.jobs" ng-show="job.visible">
+              <a href="javascript:void(0);" ng-click="selectJd($parent.$index, $index)">
+                {{ job.Title }}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <br />
     </div>
+  </div>
+  <div ng-controller="ContentDisplayController" class="contentDisplay">
+    <h1>{{ company }}</h1>
+    <h2>{{ title }}</h2>
+    <a ng-href="{{ sourceUri }}" target="_blank">Link to Original</a><br /><br />
+    <div ng-bind-html-unsafe="fullHtmlDescription"></div><br />
     <br />
-    <input type="button" ng-click="toggleAllCompanyJobListViews()" value="{{ { true: 'Expand All', false: 'Collapse All' }[toggleAllCausesExpansion] }}"></input>
-		<ul>
-			<li ng-repeat="company in companies" ng-show="company.visible">
-				<a href="javascript:void(0)" ng-click="toggleJobListView(company)">
-					{{ company.name }}
-				</a>
-				<ul ng-show="company.expanded">
-					<li ng-repeat="job in company.jobs" ng-show="job.visible">
-						<a href="javascript:void(0);" ng-click="selectJd($parent.$index, $index)">
-							{{ job.Title }}
-						</a>
-					</li>
-				</ul>
-			</li>
-		</ul>
-    <br />
-	</div>
-	<div ng-controller="ContentDisplayController" class="contentDisplay">
-		<h1>{{ company }}</h1>
-		<h2>{{ title }}</h2>
-		<a ng-href="{{ sourceUri }}" target="_blank">Link to Original</a><br /><br />
-		<div ng-bind-html-unsafe="fullHtmlDescription"></div><br />
-    <br />
-	</div>
+  </div>
   <div class="footer">
     &#169; 2013 Madrona Venture Group, LLC. 206-674-3000. <a href="mailto:information@madrona.com">information@madrona.com</a>.
   </div>

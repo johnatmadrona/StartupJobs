@@ -18,6 +18,31 @@ html {
 	overflow-y: visible;
 }
 
+body {
+	margin: 0px;
+}
+
+.contentHeader {
+	background-color: #fcffff;
+	border-bottom: 2px solid #66666F;
+	padding:8px 20px 10px 20px;
+	font: italic 20px arial,sans-serif;
+	color: #6F4629;
+	text-align: center;
+}
+
+.contentHeaderImage {
+	background-image:url('/images/madrona_header_300x81.png');
+	width: 300px;
+	height: 81px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.contentBody {
+	margin: 10px;
+}
+
 div.searchInputContainer {
 	width: 100%;
 	margin-right: auto;
