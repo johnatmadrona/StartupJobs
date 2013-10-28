@@ -6,12 +6,11 @@ namespace StartupJobsParser
 {
     public class SjpZ2LiveScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://www.z2.com/careers");
+        private static readonly Uri _defaultUri = new Uri("http://www.z2.com/careers");
+
         public override string CompanyName { get { return "Z2Live"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _defaultUri; } }
 
         public SjpZ2LiveScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

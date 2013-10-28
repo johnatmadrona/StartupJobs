@@ -9,8 +9,6 @@ namespace StartupJobsParser
 {
     public abstract class SjpResumatorScraperBase : SjpScraper
     {
-        public abstract Uri PublicUri { get; }
-
         protected SjpResumatorScraperBase(SjpScraperParams scraperParams)
             : base(scraperParams)
         {

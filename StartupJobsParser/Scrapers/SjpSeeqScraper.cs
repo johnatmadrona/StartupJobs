@@ -6,12 +6,12 @@ namespace StartupJobsParser
 {
     public class SjpSeeqScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("https://seeq.recruiterbox.com/");
+        private static readonly Uri _defaultScrapeUri = new Uri("https://seeq.recruiterbox.com/");
+        private static readonly Uri _publicUri = new Uri("https://seeq.com/index.php/company/careers");
+
         public override string CompanyName { get { return "Seeq"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultScrapeUri; } }
+        public override Uri PublicUri { get { return _publicUri; } }
 
         public SjpSeeqScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

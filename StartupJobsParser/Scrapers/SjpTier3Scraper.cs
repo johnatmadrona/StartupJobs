@@ -7,12 +7,11 @@ namespace StartupJobsParser
 {
     public class SjpTier3Scraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://www.tier3.com/careers");
+        private static readonly Uri _defaultUri = new Uri("http://www.tier3.com/careers");
+
         public override string CompanyName { get { return "Tier 3"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _defaultUri; } }
 
         public SjpTier3Scraper(SjpScraperParams scraperParams)
             : base(scraperParams)

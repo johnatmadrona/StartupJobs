@@ -6,12 +6,12 @@ namespace StartupJobsParser
 {
     public class SjpQumuloScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://qumulo.catsone.com/careers/");
+        private static readonly Uri _defaultScrapeUri = new Uri("http://qumulo.catsone.com/careers/");
+        private static readonly Uri _publicUri = new Uri("http://www.qumulo.com/#/qumulo_jobs");
+
         public override string CompanyName { get { return "Qumulo"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultScrapeUri; } }
+        public override Uri PublicUri { get { return _publicUri; } }
 
         public SjpQumuloScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

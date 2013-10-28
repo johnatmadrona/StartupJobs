@@ -7,12 +7,11 @@ namespace StartupJobsParser
 {
     public class SjpPlacedScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://www.placed.com/about/careers");
+        private static readonly Uri _defaultUri = new Uri("http://www.placed.com/about/careers");
+
         public override string CompanyName { get { return "Placed"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _defaultUri; } }
 
         public SjpPlacedScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

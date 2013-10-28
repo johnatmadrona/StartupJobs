@@ -11,13 +11,13 @@ namespace StartupJobsParser
 
         protected abstract string JobviteCompanyId { get; }
 
-        private Uri _defaultUri = null;
-        public override Uri DefaultUri { get { return _defaultUri; } }
+        private Uri _defaultScrapeUri = null;
+        public override Uri DefaultScrapeUri { get { return _defaultScrapeUri; } }
 
         public SjpJobviteScraperBase(SjpScraperParams scraperParams)
             : base(scraperParams)
         {
-            _defaultUri = new Uri(string.Format(_listUriFormat, JobviteCompanyId));
+            _defaultScrapeUri = new Uri(string.Format(_listUriFormat, JobviteCompanyId));
         }
 
         protected Uri GetItemUri(string jobId)

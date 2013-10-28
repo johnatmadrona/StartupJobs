@@ -7,12 +7,11 @@ namespace StartupJobsParser
 {
     public class SjpMixpoScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://dynamicvideoad.mixpo.com/about/careers/");
+        private static readonly Uri _defaultUri = new Uri("http://dynamicvideoad.mixpo.com/about/careers/");
+
         public override string CompanyName { get { return "Mixpo"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _defaultUri; } }
 
         public SjpMixpoScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

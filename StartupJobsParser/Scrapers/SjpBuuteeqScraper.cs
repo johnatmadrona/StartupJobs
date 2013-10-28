@@ -7,12 +7,11 @@ namespace StartupJobsParser
 {
     public class SjpBuuteeqScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://jobs.buuteeq.me/current-openings/current-openings.htm");
+        private static readonly Uri _defaultUri = new Uri("http://jobs.buuteeq.me/current-openings/current-openings.htm");
+
         public override string CompanyName { get { return "buuteeq"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _defaultUri; } }
 
         public SjpBuuteeqScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

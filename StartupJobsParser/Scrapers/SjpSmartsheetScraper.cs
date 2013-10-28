@@ -8,12 +8,11 @@ namespace StartupJobsParser
 {
     public class SjpSmartsheetScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://www.smartsheet.com/careers");
+        private static readonly Uri _defaultUri = new Uri("http://www.smartsheet.com/careers");
+
         public override string CompanyName { get { return "Smartsheet"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _defaultUri; } }
 
         public SjpSmartsheetScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

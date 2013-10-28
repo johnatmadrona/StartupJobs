@@ -7,12 +7,11 @@ namespace StartupJobsParser
 {
     public class SjpHaikuDeckScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://www.haikudeck.com/jobs");
+        private static readonly Uri _defaultUri = new Uri("http://www.haikudeck.com/jobs");
+
         public override string CompanyName { get { return "Haiku Deck"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _defaultUri; } }
 
         public SjpHaikuDeckScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

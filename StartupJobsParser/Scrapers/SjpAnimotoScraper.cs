@@ -7,8 +7,12 @@ namespace StartupJobsParser
 {
     public class SjpAnimotoScraper : SjpJobviteScraperBase
     {
+        private static readonly Uri _publicUri = new Uri("http://animoto.com/about/careers");
+
         public override string CompanyName { get { return "Animoto"; } }
         protected override string JobviteCompanyId { get { return "qBr9VfwQ"; } }
+
+        public override Uri PublicUri { get { return _publicUri; } }
 
         public SjpAnimotoScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

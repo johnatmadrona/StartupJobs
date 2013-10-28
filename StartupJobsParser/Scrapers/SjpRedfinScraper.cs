@@ -7,8 +7,11 @@ namespace StartupJobsParser
 {
     public class SjpRedfinScraper : SjpJobviteScraperBase
     {
+        private static readonly Uri _publicUri = new Uri("http://www.redfin.com/about/jobs");
+
         public override string CompanyName { get { return "Redfin"; } }
         protected override string JobviteCompanyId { get { return "qf49Vfw7"; } }
+        public override Uri PublicUri { get { return _publicUri; } }
 
         public SjpRedfinScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

@@ -7,12 +7,11 @@ namespace StartupJobsParser
 {
     public class SjpPayscaleScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://www.payscale.com/about/jobs");
+        private static readonly Uri _defaultUri = new Uri("http://www.payscale.com/about/jobs");
+
         public override string CompanyName { get { return "Payscale"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _defaultUri; } }
 
         public SjpPayscaleScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

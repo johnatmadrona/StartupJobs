@@ -4,23 +4,12 @@ namespace StartupJobsParser
 {
     public class SjpMozScraper : SjpResumatorScraperBase
     {
-        private Uri _publicUri = new Uri("http://moz.com/about/jobs");
-        private Uri _defaultUri = new Uri("http://app.theresumator.com/widgets/basic/create/moz");
+        private static readonly Uri _publicUri = new Uri("http://moz.com/about/jobs");
+        private static readonly Uri _defaultScrapeUri = new Uri("http://app.theresumator.com/widgets/basic/create/moz");
 
         public override string CompanyName { get { return "Moz"; } }
-
-        public override Uri PublicUri
-        {
-            get
-            {
-                return _publicUri;
-            }
-        }
-
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri PublicUri { get { return _publicUri; } }
+        public override Uri DefaultScrapeUri { get { return _defaultScrapeUri; } }
 
         public SjpMozScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

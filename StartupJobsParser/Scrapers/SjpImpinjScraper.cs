@@ -7,12 +7,12 @@ namespace StartupJobsParser
 {
     public class SjpImpinjScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://www.hirebridge.com/jobseeker2/Searchjobresults.asp?cid=6387");
+        private static readonly Uri _defaultScrapeUri = new Uri("http://www.hirebridge.com/jobseeker2/Searchjobresults.asp?cid=6387");
+        private static readonly Uri _publicUri = new Uri("http://www.impinj.com/careers/");
+
         public override string CompanyName { get { return "Impinj"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultScrapeUri; } }
+        public override Uri PublicUri { get { return _publicUri; } }
 
         public SjpImpinjScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

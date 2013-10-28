@@ -7,7 +7,8 @@ namespace StartupJobsParser
 {
     public interface ISjpScraper
     {
-        Uri DefaultUri { get; }
+        Uri DefaultScrapeUri { get; }
+        Uri PublicUri { get; }
         void Scrape();
         void Scrape(Uri uri);
     }

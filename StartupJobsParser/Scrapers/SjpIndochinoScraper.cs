@@ -7,12 +7,11 @@ namespace StartupJobsParser
 {
     public class SjpIndochinoScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://www.indochino.com/about/careers");
+        private static readonly Uri _defaultUri = new Uri("http://www.indochino.com/about/careers");
+
         public override string CompanyName { get { return "Indochino"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _defaultUri; } }
 
         public SjpIndochinoScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

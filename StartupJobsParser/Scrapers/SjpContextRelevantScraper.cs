@@ -7,12 +7,11 @@ namespace StartupJobsParser
 {
     public class SjpContextRelevantScraper : SjpScraper
     {
-        private Uri _defaultUri = new Uri("http://contextrelevant.mytribehr.com/careers");
+        private static readonly Uri _defaultUri = new Uri("http://contextrelevant.mytribehr.com/careers");
+
         public override string CompanyName { get { return "Context Relevant"; } }
-        public override Uri DefaultUri
-        {
-            get { return _defaultUri; }
-        }
+        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _defaultUri; } }
 
         public SjpContextRelevantScraper(SjpScraperParams scraperParams)
             : base(scraperParams)

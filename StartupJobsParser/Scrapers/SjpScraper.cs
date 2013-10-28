@@ -9,27 +9,41 @@ namespace StartupJobsParser
 {
     public abstract class SjpScraper : ISjpScraper
     {
-        protected ISjpStorage m_storage;
-        protected ISjpIndex m_index;
-        protected ISjpLinkTracker m_linkTracker;
+        protected ISjpStorage _storage;
+        protected ISjpIndex _index;
+        protected ISjpLinkTracker _linkTracker;
 
+        public string UriTag { get { return "?rs=sjp"; } }
         public abstract string CompanyName { get; }
-        public abstract Uri DefaultUri { get; }
+        public abstract Uri DefaultScrapeUri { get; }
+        public abstract Uri PublicUri { get; }
+
+        public Uri PublicTaggedUri
+        {
+            get
+            {
+                return new Uri(PublicUri.AbsoluteUri + UriTag);
+            }
+        }
 
         protected SjpScraper(SjpScraperParams scraperParams)
         {
-            if (scraperParams == null || scraperParams.Storage == null)
+            if (scraperParams == null)
+            {
+                throw new ArgumentNullException("Must provide params");
+            }
+            else if (scraperParams.Storage == null)
             {
                 throw new ArgumentNullException("Must provide a storage object");
             }
-            m_storage = scraperParams.Storage;
-            m_index = scraperParams.Index;
-            m_linkTracker = scraperParams.LinkTracker;
+            _storage = scraperParams.Storage;
+            _index = scraperParams.Index;
+            _linkTracker = scraperParams.LinkTracker;
         }
 
         public void Scrape()
         {
-            Scrape(DefaultUri);
+            Scrape(DefaultScrapeUri);
         }
 
         public void Scrape(Uri uri)
@@ -69,31 +83,31 @@ namespace StartupJobsParser
             foreach (string obsoleteJd in obsoleteJds)
             {
                 SjpLogger.Log("JD Removed: " + obsoleteJd);
-                if (m_index != null)
+                if (_index != null)
                 {
-                    m_index.RemoveFromIndex(obsoleteJd);
+                    _index.RemoveFromIndex(obsoleteJd);
                 }
-                m_storage.Delete(obsoleteJd);
+                _storage.Delete(obsoleteJd);
             }
         }
 
         private List<string> StoreNewJdsAndGetObsoleteJds(List<JobDescription> newJds)
         {
             // Create a list of previously discovered JDs to identify obsolete JDs
-            List<string> obsoleteJds = new List<string>(m_storage.List(GetJdStoragePrefix()));
+            List<string> obsoleteJds = new List<string>(_storage.List(GetJdStoragePrefix()));
 
 
             // Add new JDs to storage and refine the list of obsolete JDs
             foreach (JobDescription jd in newJds)
             {
                 string key = GetJdStorageKey(jd);
-                if (!m_storage.Exists(key))
+                if (!_storage.Exists(key))
                 {
                     SjpLogger.Log("New JD: " + jd.Title);
-                    m_storage.Add(key, typeof(JobDescription), jd);
-                    if (m_index != null)
+                    _storage.Add(key, typeof(JobDescription), jd);
+                    if (_index != null)
                     {
-                        m_index.AddToIndex(jd);
+                        _index.AddToIndex(jd);
                     }
                 }
                 else
@@ -113,11 +127,11 @@ namespace StartupJobsParser
             {
                 SjpLogger.Log("JD Removed: " + obsoleteJd);
                 string uid = Path.GetFileNameWithoutExtension(obsoleteJd);
-                if (m_index != null)
+                if (_index != null)
                 {
-                    m_index.RemoveFromIndex(uid);
+                    _index.RemoveFromIndex(uid);
                 }
-                m_storage.Delete(obsoleteJd);
+                _storage.Delete(obsoleteJd);
             }
         }
 
@@ -137,10 +151,10 @@ namespace StartupJobsParser
 
         protected string TryCreateTrackedLink(Uri uri)
         {
-            if (m_linkTracker != null)
+            if (_linkTracker != null)
             {
                 // TODO: Handle expetions
-                return m_linkTracker.CreateTrackedLink(uri.AbsoluteUri);
+                return _linkTracker.CreateTrackedLink(uri.AbsoluteUri);
             }
 
             return uri.AbsoluteUri;
