@@ -25,6 +25,12 @@ sjpAppModule.controller(
 			searchDescriptions: true
 		};
 
+		function parseJds(jds) {
+			for (var i = 0; i < jds.length; i++) {
+				parseJd(jds[i]);
+			}
+		}
+
 		function parseJd(jd) {
 			jd.visible = true;
 			$scope.$apply(function() {
@@ -87,7 +93,7 @@ sjpAppModule.controller(
 				alert("Status: " + status + "\nError: " + error);
 			});
 		}
-
+		
 		function iterateLocalDir(path, callback) {
 			if (path.charAt(path.length - 1) != '/') {
 				path += "/";
@@ -168,7 +174,7 @@ sjpAppModule.controller(
 						if ($scope.searchString.searchTitles && 
 							exp.exec($scope.companies[i].jobs[j].Title) != null) {
 							visible = true;
-						} else  if ($scope.searchString.searchDescriptions && 
+						} else if ($scope.searchString.searchDescriptions && 
 							exp.exec($scope.companies[i].jobs[j].FullTextDescription) != null) {
 							visible = true;
 						}
@@ -194,7 +200,7 @@ sjpAppModule.controller(
 	function($scope, sjpSharedService) {
 		$scope.company = "Madrona Venture Group";
 		$scope.title = "Startup Job Search";
-		$scope.sourceUri = "#";
+		$scope.sourceUri = "http://j.mp/19Oa1F8";
 		$scope.fullHtmlDescription = "Use the search box and the navigation tree to explore startup jobs";
 		$scope.$on("jdSelected", function() {
 			$scope.company = sjpSharedService.selectedJd.Company;

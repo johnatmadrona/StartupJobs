@@ -39,18 +39,39 @@ namespace StartupJobsParserConsoleApp
 
             List<ISjpScraper> scrapers = GetScrapers(scraperParams);
 
+            ScrapeResult aggregateScrapeResult = new ScrapeResult();
+
             List<KeyValuePair<Type, Exception>> errors = new List<KeyValuePair<Type,Exception>>();
             Parallel.ForEach(scrapers, scraper =>
             {
                 try
                 {
-                    scraper.Scrape();
+                    aggregateScrapeResult.Merge(scraper.Scrape());
                 }
                 catch (Exception ex)
                 {
                     errors.Add(new KeyValuePair<Type,Exception>(scraper.GetType(), ex));
                 }
             });
+
+            try
+            {
+                string aggregateJdListKey = SjpScraper.StoragePathRoot + "aggregate";
+
+                JobDescription[] allJds = aggregateScrapeResult.AllActiveJdsToArray();
+                if (scraperParams.Storage.Exists(aggregateJdListKey))
+                {
+                    scraperParams.Storage.Delete(aggregateJdListKey);
+                }
+                scraperParams.Storage.Add(aggregateJdListKey, allJds.GetType(), allJds);
+            }
+            catch (Exception ex)
+            {
+                errors.Add(new KeyValuePair<Type, Exception>(
+                    typeof(JobDescription[]),
+                    new Exception(string.Format("Error while storing aggregate: {0}", ex), ex)
+                    ));
+            }
 
             if (errors.Count > 0)
             {

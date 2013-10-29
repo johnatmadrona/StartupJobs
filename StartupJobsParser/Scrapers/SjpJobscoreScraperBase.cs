@@ -44,7 +44,7 @@ namespace StartupJobsParser
 
             return new JobDescription()
             {
-                SourceUri = TryCreateTrackedLink(jdUri),
+                SourceUri = TryCreateTrackedLink(PublicTaggedUri),
                 Company = CompanyName,
                 Title = jobTitle,
                 Location = jobLocation,

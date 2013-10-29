@@ -68,6 +68,7 @@
     <Compile Include="Bitly\BitlyShortenResponseData.cs" />
     <Compile Include="ISjpLinkTracker.cs" />
     <Compile Include="ISjpIndex.cs" />
+    <Compile Include="ScrapeResult.cs" />
     <Compile Include="Scrapers\SjpBizibleScraper.cs" />
     <Compile Include="Scrapers\SjpJamaScraper.cs" />
     <Compile Include="Scrapers\SjpJobalineScraper.cs" />

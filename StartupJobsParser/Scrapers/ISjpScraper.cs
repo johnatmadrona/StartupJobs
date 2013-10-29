@@ -9,7 +9,7 @@ namespace StartupJobsParser
     {
         Uri DefaultScrapeUri { get; }
         Uri PublicUri { get; }
-        void Scrape();
-        void Scrape(Uri uri);
+        ScrapeResult Scrape();
+        ScrapeResult Scrape(Uri uri);
     }
 }
