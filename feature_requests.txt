@@ -1,9 +1,11 @@
+Strip links and buttons from pages
 Familiar search query syntax
-Put bitly links into bitly groups
 Review responsive design
 
 Symbol to indicate when lists are expanded
 
 More flexible search semantics
 Scalable data access model
+
+Clean up results of PDF parsing
 
