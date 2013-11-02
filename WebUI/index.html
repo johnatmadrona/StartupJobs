@@ -5,6 +5,7 @@
   <!-- <script src="./local/angular.min.js"></script> -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <!-- <script src="./local/jquery-1.9.1.min.js"></script> -->
+  <script src="./booleanSearch.js"></script>
   <script src="./controllers.js"></script>
   <link rel="stylesheet" type="text/css" href="style.css" />
   <title>Madrona Jobs Search</title>
@@ -82,18 +83,6 @@
                 <span class="rspvCheckbox"></span>&nbsp;Case-insensitive
               </span>
               <br />
-              <span ng-model="searchString.global"
-                   ng-click="searchString.global = !searchString.global"
-                    onclick="toggleRspvCheckbox(this);">
-                <span class="rspvCheckbox"></span>&nbsp;Global
-              </span>
-              <br />
-              <span ng-model="searchString.multiline"
-                   ng-click="searchString.multiline = !searchString.multiline"
-                    onclick="toggleRspvCheckbox(this);">
-                <span class="rspvCheckbox"></span>&nbsp;Multi-line
-              </span>
-              <br />
               <span ng-model="searchString.searchTitles"
                    ng-click="searchString.searchTitles = !searchString.searchTitles"
                     onclick="toggleRspvCheckbox(this);">
@@ -107,10 +96,6 @@
               </span>
               <br />
               <br />
-              <i>
-                For info on regular expressions, see
-                <a href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">this reference</a>
-              </i>
             </div>
           </div>
           <input type="submit" value="Search" id="inlineSearchButton"></input>

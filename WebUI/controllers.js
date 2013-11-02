@@ -2,11 +2,15 @@ var sjpAppModule = angular.module("sjpApp", []);
 
 sjpAppModule.factory("sjpSharedService", function($rootScope) {
 	var sharedService = {};
-	sharedService.selectedJd = {};
-	sharedService.searchRegExp = {};
-	sharedService.selectJd = function(jd, searchRegExp) {
-		this.selectedJd = jd;
-		this.searchRegExp = searchRegExp;
+	sharedService.selectedCompany = "";
+	sharedService.selectedTitle = "";
+	sharedService.selectedSourceUri = "";
+	sharedService.selectedFullDescription = "";
+	sharedService.selectJd = function(jd, transformedFullDescription) {
+		this.selectedCompany = jd.Company;
+		this.selectedTitle = jd.Title;
+		this.selectedSourceUri = jd.SourceUri;
+		this.selectedFullDescription = transformedFullDescription;
 		$rootScope.$broadcast("jdSelected");
 	};
 
@@ -19,8 +23,6 @@ sjpAppModule.controller(
 		$scope.searchString = {
 			text: "",
 			caseInsensitive: true,
-			global: true,
-			multiline: true,
 			searchTitles: true,
 			searchDescriptions: true
 		};
@@ -143,41 +145,26 @@ sjpAppModule.controller(
 			$scope.toggleAllCausesExpansion = !$scope.toggleAllCausesExpansion;
 		};
 
-		function createRegExpFromSearchString(searchString) {
-			if ($scope.searchString.text.length < 1) {
-				return null;
-			}
-
-			var options = "";
-			if (searchString.caseInsensitive) {
-				options += "i";
-			}
-			if (searchString.global) {
-				options += "g";
-			}
-			if (searchString.multiline) {
-				options += "m";
-			}
-
-			return new RegExp(searchString.text, options);
-		}
-
 		$scope.searchJobs = function() {
 			for (var i = 0; i < $scope.companies.length; i++) {
 				$scope.companies[i].visible = false;
 				for (var j = 0; j < $scope.companies[i].jobs.length; j++) {
 					var visible = false;
-					var exp = createRegExpFromSearchString($scope.searchString);
-					if (exp == null) {
-						visible = true;
-					} else {
-						if ($scope.searchString.searchTitles && 
-							exp.exec($scope.companies[i].jobs[j].Title) != null) {
-							visible = true;
-						} else if ($scope.searchString.searchDescriptions && 
-							exp.exec($scope.companies[i].jobs[j].FullTextDescription) != null) {
-							visible = true;
-						}
+					if ($scope.searchString.searchTitles) {
+						var matched = window.common.booleanSearch.match(
+							$scope.searchString.text,
+							$scope.companies[i].jobs[j].Title,
+							$scope.searchString.caseInsensitive
+							);
+						visible = matched != null;
+					}
+					if (!visible && $scope.searchString.searchDescriptions) {
+						var matched = window.common.booleanSearch.match(
+							$scope.searchString.text,
+							$scope.companies[i].jobs[j].FullTextDescription,
+							$scope.searchString.caseInsensitive
+							);
+						visible = matched != null;
 					}
 					$scope.companies[i].jobs[j].visible = visible;
 					if (visible) {
@@ -188,9 +175,15 @@ sjpAppModule.controller(
 		};
 
 		$scope.selectJd = function(company, job) {
-			sjpSharedService.selectJd(
-					$scope.companies[company].jobs[job],
-					createRegExpFromSearchString($scope.searchString));
+			var jd = $scope.companies[company].jobs[job];
+			var transformedDescription = window.common.booleanSearch.match(
+				$scope.searchString.text,
+				jd.FullHtmlDescription,
+				$scope.searchString.caseInsensitive,
+				"<span class='highlighted'>",
+				"</span>"
+				) || jd.FullHtmlDescription;
+			sjpSharedService.selectJd(jd, transformedDescription);
 		};
 	}
 );
@@ -203,16 +196,10 @@ sjpAppModule.controller(
 		$scope.sourceUri = "http://j.mp/19Oa1F8";
 		$scope.fullHtmlDescription = "Use the search box and the navigation tree to explore startup jobs";
 		$scope.$on("jdSelected", function() {
-			$scope.company = sjpSharedService.selectedJd.Company;
-			$scope.title = sjpSharedService.selectedJd.Title;
-			$scope.sourceUri = sjpSharedService.selectedJd.SourceUri;
-
-			$scope.fullHtmlDescription = 
-				sjpSharedService.selectedJd.FullHtmlDescription.replace(
-					sjpSharedService.searchRegExp,
-					function(val) {
-						return "<span class='highlighted'>" + val + "</span>";
-					});
+			$scope.company = sjpSharedService.selectedCompany;
+			$scope.title = sjpSharedService.selectedTitle;
+			$scope.sourceUri = sjpSharedService.selectecSourceUri;
+			$scope.fullHtmlDescription = sjpSharedService.selectedFullDescription;
 		});
 	}
 );

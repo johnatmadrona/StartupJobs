@@ -1,11 +1,9 @@
 Strip links and buttons from pages
-Familiar search query syntax
 Review responsive design
+Scalable data access model
 
 Symbol to indicate when lists are expanded
-
 More flexible search semantics
-Scalable data access model
 
 Clean up results of PDF parsing
 
