@@ -150,21 +150,26 @@ sjpAppModule.controller(
 				$scope.companies[i].visible = false;
 				for (var j = 0; j < $scope.companies[i].jobs.length; j++) {
 					var visible = false;
-					if ($scope.searchString.searchTitles) {
-						var matched = window.common.booleanSearch.match(
-							$scope.searchString.text,
-							$scope.companies[i].jobs[j].Title,
-							$scope.searchString.caseInsensitive
-							);
-						visible = matched != null;
-					}
-					if (!visible && $scope.searchString.searchDescriptions) {
-						var matched = window.common.booleanSearch.match(
-							$scope.searchString.text,
-							$scope.companies[i].jobs[j].FullTextDescription,
-							$scope.searchString.caseInsensitive
-							);
-						visible = matched != null;
+					if ($scope.searchString.text.length < 1) {
+						// If there is no search text, show everything
+						visible = true;
+					} else {
+						if ($scope.searchString.searchTitles) {
+							var matched = window.common.booleanSearch.match(
+								$scope.searchString.text,
+								$scope.companies[i].jobs[j].Title,
+								$scope.searchString.caseInsensitive
+								);
+							visible = matched != null;
+						}
+						if (!visible && $scope.searchString.searchDescriptions) {
+							var matched = window.common.booleanSearch.match(
+								$scope.searchString.text,
+								$scope.companies[i].jobs[j].FullTextDescription,
+								$scope.searchString.caseInsensitive
+								);
+							visible = matched != null;
+						}
 					}
 					$scope.companies[i].jobs[j].visible = visible;
 					if (visible) {
