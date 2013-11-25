@@ -1,3 +1,9 @@
+When selecting a job, highlight company and job
+
+Need to exclude html tags from search highlighting
+
+Add AND and OR logic to boolean search
+
 Strip links and buttons from pages
 Review responsive design
 Scalable data access model

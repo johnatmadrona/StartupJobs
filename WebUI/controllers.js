@@ -22,7 +22,6 @@ sjpAppModule.controller(
 	function($scope, sjpSharedService) {
 		$scope.searchString = {
 			text: "",
-			caseInsensitive: true,
 			searchTitles: true,
 			searchDescriptions: true
 		};
@@ -155,20 +154,16 @@ sjpAppModule.controller(
 						visible = true;
 					} else {
 						if ($scope.searchString.searchTitles) {
-							var matched = window.common.booleanSearch.match(
+							visible = window.common.evaluateBooleanQuery(
 								$scope.searchString.text,
-								$scope.companies[i].jobs[j].Title,
-								$scope.searchString.caseInsensitive
+								$scope.companies[i].jobs[j].Title
 								);
-							visible = matched != null;
 						}
 						if (!visible && $scope.searchString.searchDescriptions) {
-							var matched = window.common.booleanSearch.match(
+							visible = window.common.evaluateBooleanQuery(
 								$scope.searchString.text,
-								$scope.companies[i].jobs[j].FullTextDescription,
-								$scope.searchString.caseInsensitive
+								$scope.companies[i].jobs[j].FullTextDescription
 								);
-							visible = matched != null;
 						}
 					}
 					$scope.companies[i].jobs[j].visible = visible;
@@ -179,16 +174,22 @@ sjpAppModule.controller(
 			}
 		};
 
-		$scope.selectJd = function(company, job) {
-			var jd = $scope.companies[company].jobs[job];
-			var transformedDescription = window.common.booleanSearch.match(
+		$scope.selectJd = function(companyIndex, jobIndex) {
+			var company = $scope.companies[companyIndex];
+			var jd = company.jobs[jobIndex];
+
+			company.selected = true;
+			jd.selected = true;
+
+			// TODO: Update highlighting
+			/*var transformedDescription = window.common.booleanSearch.match(
 				$scope.searchString.text,
 				jd.FullHtmlDescription,
-				$scope.searchString.caseInsensitive,
 				"<span class='highlighted'>",
 				"</span>"
 				) || jd.FullHtmlDescription;
-			sjpSharedService.selectJd(jd, transformedDescription);
+			sjpSharedService.selectJd(jd, transformedDescription);*/
+			sjpSharedService.selectJd(jd, jd.FullHtmlDescription);
 		};
 	}
 );

@@ -62,7 +62,7 @@
           <table>
             <tr>
               <td style="width:100%">
-                <input type="text" style="width:100%" ng-model="searchString.text" placeholder="Enter regular expression search string"></input>
+                <input type="text" style="width:100%" ng-model="searchString.text" placeholder="Enter search string"></input>
               </td>
               <td style="padding-left: 3px;">
                 <input type="submit" id="adjacentSearchButton" value="Search"></input>
@@ -77,12 +77,6 @@
             </div>
             <div class="optionsBoxContent">
               <br />
-              <span ng-model="searchString.caseInsensitive"
-                   ng-click="searchString.caseInsensitive = !searchString.caseInsensitive"
-                    onclick="toggleRspvCheckbox(this);">
-                <span class="rspvCheckbox"></span>&nbsp;Case-insensitive
-              </span>
-              <br />
               <span ng-model="searchString.searchTitles"
                    ng-click="searchString.searchTitles = !searchString.searchTitles"
                     onclick="toggleRspvCheckbox(this);">
@@ -95,7 +89,13 @@
                 <span class="rspvCheckbox"></span>&nbsp;Search Descriptions
               </span>
               <br />
-              <br />
+							<br />
+							<i>The syntax for searching allows the use of keywords "AND" and "OR" 
+							for logical expression and "(" and ")" for grouping terms.
+							Because "AND" is the default operator, you do not need to explicitly 
+							use it. You can also use "|" as a pseudonym for "OR".</i>
+							<br />
+							<br />
             </div>
           </div>
           <input type="submit" value="Search" id="inlineSearchButton"></input>

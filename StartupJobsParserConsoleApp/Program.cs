@@ -26,7 +26,7 @@ namespace StartupJobsParserConsoleApp
 
             SjpScraperParams scraperParams = new SjpScraperParams()
             {
-                //SjpStorageDisk storage = new SjpStorageDisk(".\\data\\");
+                //Storage = new SjpStorageDisk(".\\"),
                 Storage = (ISjpStorage)new SjpStorageS3(
                     awsAccessKey,
                     awsSecretKey,
@@ -123,7 +123,6 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpSkytapScraper(scraperParams));
             scrapers.Add(new SjpSnupiScraper(scraperParams));
             scrapers.Add(new SjpSmartsheetScraper(scraperParams));
-            scrapers.Add(new SjpTier3Scraper(scraperParams));
             scrapers.Add(new SjpUnionBayNetworksScraper(scraperParams));
             scrapers.Add(new SjpWildTangentScraper(scraperParams));
             scrapers.Add(new SjpZ2LiveScraper(scraperParams));

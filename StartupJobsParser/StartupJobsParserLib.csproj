@@ -105,7 +105,6 @@
     <Compile Include="Scrapers\SjpSkytapScraper.cs" />
     <Compile Include="Scrapers\SjpSmartsheetScraper.cs" />
     <Compile Include="Scrapers\SjpTaleoScraperBase.cs" />
-    <Compile Include="Scrapers\SjpTier3Scraper.cs" />
     <Compile Include="Scrapers\SjpWildTangentScraper.cs" />
     <Compile Include="Scrapers\SjpZ2LiveScraper.cs" />
     <Compile Include="SjpLocalDiskIndex.cs" />
