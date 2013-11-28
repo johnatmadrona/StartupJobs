@@ -83,8 +83,7 @@ namespace StartupJobsParserConsoleApp
                 }
             }
 
-            Console.WriteLine("Done. Press <enter>.");
-            Console.ReadLine();
+            Console.WriteLine("Done");
         }
 
         public static ISjpIndex GetIndex()

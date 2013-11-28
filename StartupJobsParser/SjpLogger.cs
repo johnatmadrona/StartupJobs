@@ -11,7 +11,7 @@ namespace StartupJobsParser
         {
             string text = string.Format(format, args);
             string output = string.Format(
-                "{0:yyyy-MM-dd HH:mm:ss.fff}: {1}\n",
+                "{0:yyyy-MM-dd HH:mm:ss.fff}: {1}\r\n",
                 DateTime.UtcNow,
                 text
                 );
