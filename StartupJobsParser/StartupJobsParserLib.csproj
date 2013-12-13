@@ -77,6 +77,7 @@
     <Compile Include="Scrapers\SjpSeeqScraper.cs" />
     <Compile Include="Scrapers\SjpSnupiScraper.cs" />
     <Compile Include="Scrapers\SjpUnionBayNetworksScraper.cs" />
+    <Compile Include="Scrapers\SjpYieldexScraper.cs" />
     <Compile Include="SjpScraperParams.cs" />
     <Compile Include="Storage\ISjpStorage.cs" />
     <Compile Include="JobDescription.cs" />
