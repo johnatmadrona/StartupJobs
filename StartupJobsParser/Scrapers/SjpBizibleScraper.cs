@@ -22,10 +22,13 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//a[contains(@title, 'job description') and starts-with(@href,'/jobs/')]"))
-            {
-                Uri jdUri = new Uri(uri, jdLink.Attributes["href"].Value);
-                yield return GetBizibleJd(jdUri);
+            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//a[contains(@title, 'job description') and starts-with(@href,'/jobs/')]");
+            if (nodes != null && nodes.Count > 0) {
+                foreach (HtmlNode jdLink in nodes)
+                {
+                    Uri jdUri = new Uri(uri, jdLink.Attributes["href"].Value);
+                    yield return GetBizibleJd(jdUri);
+                }
             }
         }
 

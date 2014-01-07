@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace StartupJobsParser
 {
@@ -77,7 +78,7 @@ namespace StartupJobsParser
 
             // Iterate over nodes until we find the end of the text
             while (next != null &&
-                !next.InnerText.Trim().Equals("Apply for this job!", StringComparison.OrdinalIgnoreCase))
+                !Regex.Replace(next.InnerText, @"\s+", " ").Trim().Equals("Apply for this job!", StringComparison.OrdinalIgnoreCase))
             {
                 if (next.HasChildNodes)
                 {
@@ -106,14 +107,17 @@ namespace StartupJobsParser
             }
 
             // Remove the 'apply' node and all other following nodes
-            remove = next;
-            next = GetNextSiblingOrAncestralSibling(next);
-            remove.ParentNode.RemoveChild(remove, false);
-            while (next != null)
+            if (next != null)
             {
                 remove = next;
                 next = GetNextSiblingOrAncestralSibling(next);
                 remove.ParentNode.RemoveChild(remove, false);
+                while (next != null)
+                {
+                    remove = next;
+                    next = GetNextSiblingOrAncestralSibling(next);
+                    remove.ParentNode.RemoveChild(remove, false);
+                }
             }
 
             HtmlDocument doc = new HtmlDocument();

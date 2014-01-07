@@ -27,7 +27,13 @@ namespace StartupJobsParser
 
         protected Uri ExtractJdUriFromGoToPageLink(HtmlNode anchorNode)
         {
-            string jobRoute = anchorNode.Attributes["onclick"].Value;
+            HtmlAttribute attr = anchorNode.Attributes["onclick"];
+            if (attr == null)
+            {
+                attr = anchorNode.Attributes["href"];
+            }
+
+            string jobRoute = attr.Value;
             int idEnd = jobRoute.LastIndexOf('\'');
             int idStart = jobRoute.LastIndexOf('\'', idEnd - 1) + 1;
             string jobId = jobRoute.Substring(idStart, idEnd - idStart) + ",Job";

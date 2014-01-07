@@ -5,13 +5,13 @@ using System.Net;
 
 namespace StartupJobsParser
 {
-    public class SjpImpinjScraper : SjpScraper
+    public class SjpImpinjScraper : SjpJobviteScraperBase
     {
-        private static readonly Uri _defaultScrapeUri = new Uri("http://www.hirebridge.com/jobseeker2/Searchjobresults.asp?cid=6387");
         private static readonly Uri _publicUri = new Uri("http://www.impinj.com/careers/");
 
         public override string CompanyName { get { return "Impinj"; } }
-        public override Uri DefaultScrapeUri { get { return _defaultScrapeUri; } }
+        protected override string JobviteCompanyId { get { return "qPD9Vfwg"; } }
+
         public override Uri PublicUri { get { return _publicUri; } }
 
         public SjpImpinjScraper(SjpScraperParams scraperParams)
@@ -22,45 +22,40 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//td[@class='SearchResultRow']/a"))
+            foreach (HtmlNode jdUriNode in doc.DocumentNode.SelectNodes("//div[@class='jobList']/ul/li/a[contains(@href,'jvGoToPage')]"))
             {
-                yield return GetImpinjJd(new Uri(uri, jdLink.Attributes["href"].Value));
+                yield return GetImpinjJd(ExtractJdUriFromGoToPageLink(jdUriNode));
             }
         }
 
-        private JobDescription GetImpinjJd(Uri uri)
+        private JobDescription GetImpinjJd(Uri jdUri)
         {
-            HtmlNode jdNode = SjpUtils.GetHtmlDoc(uri).DocumentNode;
+            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
 
-            HtmlNode titleNode = jdNode.SelectSingleNode("html/body/table/tr/td[@class='InteriorHeader']");
-            
-            HtmlNode locationNode = null;
-            foreach (HtmlNode entry in jdNode.SelectNodes("//table[@class='InteriorTable']/tr/td"))
+            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//div[@class='title_jobdesc']/h2");
+
+            HtmlNode locationNode = titleNode.NextSibling;
+            string location = null;
+            while (location == null)
             {
-                if (entry.InnerText.Trim().StartsWith("Location:", StringComparison.OrdinalIgnoreCase))
+                if (locationNode.InnerText.Contains("|"))
                 {
-                    HtmlNode next = entry.NextSibling;
-                    while (!next.OriginalName.Equals("td", StringComparison.OrdinalIgnoreCase))
-                    {
-                        next = next.NextSibling;
-                    }
-                    locationNode = next;
-                    break;
+                    location = locationNode.InnerText.Split('|')[1];
+                }
+                else
+                {
+                    locationNode = locationNode.NextSibling;
                 }
             }
 
-            HtmlNode descriptionNode = jdNode.SelectSingleNode("//table[@class='InteriorPage']");
-            foreach (HtmlNode remove in descriptionNode.SelectNodes("//*[@class='button2']"))
-            {
-                remove.ParentNode.RemoveChild(remove, false);
-            }
+            HtmlNode descriptionNode = doc.DocumentNode.SelectSingleNode("//div[@class='jobDesc']");
 
             return new JobDescription()
             {
                 SourceUri = TryCreateTrackedLink(PublicTaggedUri),
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = SjpUtils.GetCleanTextFromHtml(locationNode),
+                Location = WebUtility.HtmlDecode(location).Trim(),
                 FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
                 FullHtmlDescription = descriptionNode.InnerHtml
             };
