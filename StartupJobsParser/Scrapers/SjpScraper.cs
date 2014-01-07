@@ -62,17 +62,17 @@ namespace StartupJobsParser
                     {
                         // If internal error, just skip this and retrieve 
                         // the data in a future run
-                        Console.WriteLine("WARNING: Skipping '{0}' scraper due to remote server error", CompanyName);
+                        SjpLogger.Log("WARNING: Skipping '{0}' scraper due to remote server error", CompanyName);
                         return null;
                     }
                     else
                     {
-                        Console.WriteLine("ERROR: Http request status {0}. {1}", httpStatusCode, ex);
+                        SjpLogger.Log("ERROR: Http request status {0}. {1}", httpStatusCode, ex);
                     }
                 }
                 else
                 {
-                    Console.WriteLine("ERROR: Web request status {0}. {1}", ex.Status, ex);
+                    SjpLogger.Log("ERROR: Web request status {0}. {1}", ex.Status, ex);
                 }
 
                 throw;

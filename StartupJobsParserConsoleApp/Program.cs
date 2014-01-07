@@ -12,6 +12,8 @@ namespace StartupJobsParserConsoleApp
     {
         static void Main(string[] args)
         {
+            SjpLogger.Log("Beginning run");
+
             string bitlyAccessToken = ConfigurationManager.AppSettings["BitlyToken"];
             string awsAccessKey = ConfigurationManager.AppSettings["AWSAccessKey"];
             string awsSecretKey = ConfigurationManager.AppSettings["AWSSecretKey"];
@@ -20,7 +22,7 @@ namespace StartupJobsParserConsoleApp
                 string.IsNullOrEmpty(awsSecretKey) ||
                 string.IsNullOrEmpty(bitlyAccessToken))
             {
-                Console.WriteLine("ERROR: Must add values for AWSAccessKey, AWSSecretKey, and BitlyToken in application config");
+                SjpLogger.Log("ERROR: Must add values for AWSAccessKey, AWSSecretKey, and BitlyToken in application config");
                 return;
             }
 
@@ -75,15 +77,15 @@ namespace StartupJobsParserConsoleApp
 
             if (errors.Count > 0)
             {
-                Console.WriteLine("\nERRORS:");
-                Console.WriteLine("=======\n");
+                SjpLogger.Log("\nERRORS:");
+                SjpLogger.Log("=======\n");
                 foreach (var error in errors)
                 {
-                    Console.WriteLine("{0}:\n{1}\n", error.Key, error.Value);
+                    SjpLogger.Log("{0}:\n{1}\n", error.Key, error.Value);
                 }
             }
 
-            Console.WriteLine("Done");
+            SjpLogger.Log("Run complete");
         }
 
         public static ISjpIndex GetIndex()

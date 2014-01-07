@@ -41,7 +41,7 @@ namespace StartupJobsParser
             }
             catch (WebException ex)
             {
-                Console.WriteLine("ERROR: Failed to retrieve URI '{0}' - {1}", jdUri, ex);
+                SjpLogger.Log("ERROR: Failed to retrieve URI '{0}' - {1}", jdUri, ex);
                 return null;
             }
 
