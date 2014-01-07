@@ -46,6 +46,13 @@ namespace StartupJobsParser
             string cleanTextDescription = description.Replace('\n', ' ').Replace('\r', ' ');
             cleanTextDescription = Regex.Replace(cleanTextDescription, "\\s+", " ");
 
+            string htmlDescription = WebUtility.HtmlEncode(description);
+            htmlDescription = htmlDescription
+                .Replace("\r", "")
+                .Replace("\n", "<br />")
+                .Replace("", "&#8226;");
+            htmlDescription = Regex.Replace(htmlDescription, @"\\u000a[A-Z\s]", "<br />");
+
             return new JobDescription()
             {
                 SourceUri = TryCreateTrackedLink(PublicTaggedUri),
@@ -53,7 +60,7 @@ namespace StartupJobsParser
                 Title = title,
                 Location = location,
                 FullTextDescription = cleanTextDescription,
-                FullHtmlDescription = WebUtility.HtmlEncode(description)
+                FullHtmlDescription = htmlDescription
             };
         }
     }
