@@ -123,7 +123,11 @@
   <div ng-controller="ContentDisplayController" class="contentDisplay">
     <h1>{{ company }}</h1>
     <h2>{{ title }}</h2>
-    <a ng-href="{{ sourceUri }}" target="_blank">Learn More at {{ company }}'s Career Page</a><br /><br />
+		<i>Job Location: {{ location }}</i><br />
+		<br />
+    <a ng-href="{{ sourceUri }}" target="_blank">Learn More at {{ company }}'s Career Page</a><br />
+		<br />
+		<hr />
     <div ng-bind-html-unsafe="fullHtmlDescription"></div><br />
     <br />
   </div>

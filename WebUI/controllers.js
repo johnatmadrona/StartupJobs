@@ -4,11 +4,13 @@ sjpAppModule.factory("sjpSharedService", function($rootScope) {
 	var sharedService = {};
 	sharedService.selectedCompany = "";
 	sharedService.selectedTitle = "";
+	sharedService.selectedLocation = "";
 	sharedService.selectedSourceUri = "";
 	sharedService.selectedFullDescription = "";
 	sharedService.selectJd = function(jd, transformedFullDescription) {
 		this.selectedCompany = jd.Company;
 		this.selectedTitle = jd.Title;
+		this.selectedLocation = jd.Location;
 		this.selectedSourceUri = jd.SourceUri;
 		this.selectedFullDescription = transformedFullDescription;
 		$rootScope.$broadcast("jdSelected");
@@ -199,11 +201,13 @@ sjpAppModule.controller(
 	function($scope, sjpSharedService) {
 		$scope.company = "Madrona Venture Group";
 		$scope.title = "Startup Job Search";
+		$scope.location = "Madrona Venture Group is a Seattle-based VC firm"
 		$scope.sourceUri = "http://j.mp/19Oa1F8";
 		$scope.fullHtmlDescription = "Use the search box and the navigation tree to explore startup jobs";
 		$scope.$on("jdSelected", function() {
 			$scope.company = sjpSharedService.selectedCompany;
 			$scope.title = sjpSharedService.selectedTitle;
+			$scope.location = sjpSharedService.selectedLocation;
 			$scope.sourceUri = sjpSharedService.selectecSourceUri;
 			$scope.fullHtmlDescription = sjpSharedService.selectedFullDescription;
 		});
