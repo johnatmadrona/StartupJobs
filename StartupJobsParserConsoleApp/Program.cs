@@ -105,6 +105,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpBuuteeqScraper(scraperParams));
             scrapers.Add(new SjpCheezburgerScraper(scraperParams));
             scrapers.Add(new SjpContextRelevantScraper(scraperParams));
+            scrapers.Add(new SjpEvocalizeScraper(scraperParams));
             scrapers.Add(new SjpExtraHopScraper(scraperParams));
             scrapers.Add(new SjpHaikuDeckScraper(scraperParams));
             scrapers.Add(new SjpImpinjScraper(scraperParams));
@@ -120,6 +121,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpPlacedScraper(scraperParams));
             scrapers.Add(new SjpQumuloScraper(scraperParams));
             scrapers.Add(new SjpRedfinScraper(scraperParams));
+            scrapers.Add(new SjpResolutionTubeScraper(scraperParams));
             scrapers.Add(new SjpRoverScraper(scraperParams));
             scrapers.Add(new SjpSeeqScraper(scraperParams));
             scrapers.Add(new SjpSkytapScraper(scraperParams));

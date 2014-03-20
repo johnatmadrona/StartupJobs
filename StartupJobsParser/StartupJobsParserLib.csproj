@@ -70,11 +70,13 @@
     <Compile Include="ISjpIndex.cs" />
     <Compile Include="ScrapeResult.cs" />
     <Compile Include="Scrapers\SjpBizibleScraper.cs" />
+    <Compile Include="Scrapers\SjpEvocalizeScraper.cs" />
     <Compile Include="Scrapers\SjpISpotTvScraper.cs" />
     <Compile Include="Scrapers\SjpJamaScraper.cs" />
     <Compile Include="Scrapers\SjpJobalineScraper.cs" />
     <Compile Include="Scrapers\SjpJobscoreScraperBase.cs" />
     <Compile Include="Scrapers\SjpLumoScraper.cs" />
+    <Compile Include="Scrapers\SjpResolutionTubeScraper.cs" />
     <Compile Include="Scrapers\SjpSeeqScraper.cs" />
     <Compile Include="Scrapers\SjpSnupiScraper.cs" />
     <Compile Include="Scrapers\SjpUnionBayNetworksScraper.cs" />
