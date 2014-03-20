@@ -76,6 +76,7 @@
     <Compile Include="Scrapers\SjpJobalineScraper.cs" />
     <Compile Include="Scrapers\SjpJobscoreScraperBase.cs" />
     <Compile Include="Scrapers\SjpLumoScraper.cs" />
+    <Compile Include="Scrapers\SjpMercentScraper.cs" />
     <Compile Include="Scrapers\SjpResolutionTubeScraper.cs" />
     <Compile Include="Scrapers\SjpSeeqScraper.cs" />
     <Compile Include="Scrapers\SjpSnupiScraper.cs" />
