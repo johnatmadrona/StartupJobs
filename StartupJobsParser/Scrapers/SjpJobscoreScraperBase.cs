@@ -14,14 +14,17 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdListing in doc.DocumentNode.SelectNodes("//tr[@class='job-listing']"))
+            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//td/a[starts-with(@href, 'http://www.jobscore.com/jobs2/')]"))
             {
-                HtmlNode titleAndLink = jdListing.SelectSingleNode("td[@class='job-title']/a");
-                HtmlNode location = jdListing.SelectSingleNode("td[@class='job-attribute']");
+                HtmlNode locationNode = jdLink.ParentNode.NextSibling;
+                while (locationNode.Name != "td")
+                {
+                    locationNode = locationNode.NextSibling;
+                }
                 yield return GetJobscoreJd(
-                    SjpUtils.GetCleanTextFromHtml(titleAndLink),
-                    SjpUtils.GetCleanTextFromHtml(location),
-                    new Uri(titleAndLink.Attributes["href"].Value)
+                    SjpUtils.GetCleanTextFromHtml(jdLink),
+                    SjpUtils.GetCleanTextFromHtml(locationNode),
+                    new Uri(jdLink.Attributes["href"].Value)
                     );
             }
         }
@@ -29,18 +32,7 @@ namespace StartupJobsParser
         protected JobDescription GetJobscoreJd(string jobTitle, string jobLocation, Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
-            HtmlNode descriptionNode =
-                doc.DocumentNode.SelectSingleNode(
-                    "//div[@class='main_container']/div[starts-with(@class, 'left')]"
-                    );
-
-            // .NET only supports XPath 1.0, so 'ends-with' is not available
-            // XPath substring operation starts with index of 1 instead 0
-            HtmlNode remove = descriptionNode.SelectSingleNode("div[substring(@class, string-length(@class) - 3)='_top']");
-            descriptionNode.RemoveChild(remove);
-                
-            remove = descriptionNode.SelectSingleNode("div[@class='dont_print']");
-            descriptionNode.RemoveChild(remove);
+            HtmlNode descriptionNode = doc.DocumentNode.SelectSingleNode("//div[@class='js-job-description']");
 
             return new JobDescription()
             {

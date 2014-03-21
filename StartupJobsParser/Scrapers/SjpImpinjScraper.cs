@@ -22,7 +22,7 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdUriNode in doc.DocumentNode.SelectNodes("//div[@class='jobList']/ul/li/a[contains(@href,'jvGoToPage')]"))
+            foreach (HtmlNode jdUriNode in doc.DocumentNode.SelectNodes("//div[@class='jobList']/ul/li/a[contains(@href,'?jvi=')]"))
             {
                 yield return GetImpinjJd(ExtractJdUriFromGoToPageLink(jdUriNode));
             }

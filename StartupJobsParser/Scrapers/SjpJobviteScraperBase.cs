@@ -34,8 +34,17 @@ namespace StartupJobsParser
             }
 
             string jobRoute = attr.Value;
+            int idStart = -1;
             int idEnd = jobRoute.LastIndexOf('\'');
-            int idStart = jobRoute.LastIndexOf('\'', idEnd - 1) + 1;
+            if (idEnd >= 0)
+            {
+                idStart = jobRoute.LastIndexOf('\'', idEnd - 1) + 1;
+            }
+            else
+            {
+                idStart = jobRoute.LastIndexOf("?jvi=") + 5;
+                idEnd = jobRoute.IndexOf(',', idStart);
+            }
             string jobId = jobRoute.Substring(idStart, idEnd - idStart) + ",Job";
             return GetItemUri(WebUtility.UrlEncode(jobId));
         }

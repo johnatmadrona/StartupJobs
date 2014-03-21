@@ -21,7 +21,7 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//div[@class='artMainCon']//a[contains(@href, '/current-openings/')]"))
+            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//div[@id='sideBar']/ul/li[@class!='navclick']/a[contains(@href, '/current-openings/')]"))
             {
                 yield return GetBuuteeqJd(new Uri(uri, jdLink.Attributes["href"].Value));
             }
@@ -30,8 +30,15 @@ namespace StartupJobsParser
         private JobDescription GetBuuteeqJd(Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
-            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//div[@class='artMainCon']/h1");
-            HtmlNode descriptionNode = doc.DocumentNode.SelectSingleNode("//div[@class='artMainCon']");
+
+            HtmlNode contentNode = doc.DocumentNode.SelectSingleNode("//div[@class='artMainCon']");
+            HtmlNode titleNode = contentNode.SelectSingleNode("h1");
+            HtmlNode descriptionNode = contentNode.SelectSingleNode("div");
+            HtmlNode applyNode = descriptionNode.SelectSingleNode(".//strong[contains(text(), '@buuteeq.com')]");
+            if (applyNode != null)
+            {
+                applyNode.Remove();
+            }
 
             return new JobDescription()
             {
