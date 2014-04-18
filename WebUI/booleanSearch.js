@@ -27,6 +27,8 @@
 	// 2. AND: Logical and (this is the default operator)
 	// TODO: Should we prioritize OR above other operators?
 	exports.evaluateBooleanStack = function(stack, fullText, terms, hitMap) {
+		// TODO: Handle empty terms
+
 		var result = true;
 		var applyOr = false;
 		var fullTextMatch = false;

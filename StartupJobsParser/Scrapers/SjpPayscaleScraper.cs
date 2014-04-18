@@ -143,7 +143,11 @@ namespace StartupJobsParser
             HtmlDocument nextTarget = GetNextTarget(jobsDoc.DocumentNode, targetInstance);
             while (nextTarget != null)
             {
-                yield return GetPayscaleJd(nextTarget, uri);
+                JobDescription jd = GetPayscaleJd(nextTarget, uri);
+                if (jd != null)
+                {
+                    yield return jd;
+                }
                 targetInstance++;
                 nextTarget = GetNextTarget(jobsDoc.DocumentNode, targetInstance);
             }
@@ -151,7 +155,21 @@ namespace StartupJobsParser
 
         private JobDescription GetPayscaleJd(HtmlDocument doc, Uri jdUri)
         {
-            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//span[@class='jobListHeader']");
+            HtmlNode titleNode = null;
+            do
+            {
+                titleNode = doc.DocumentNode.SelectSingleNode("//span[@class='jobListHeader']");
+                if (string.IsNullOrWhiteSpace(titleNode.InnerText))
+                {
+                    titleNode.Remove();
+                }
+            } while (titleNode != null && string.IsNullOrWhiteSpace(titleNode.InnerText));
+
+            if (titleNode == null)
+            {
+                // Skip non-conforming jobs
+                return null;
+            }
 
             return new JobDescription()
             {
