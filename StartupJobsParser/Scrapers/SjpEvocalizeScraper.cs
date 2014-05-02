@@ -6,7 +6,7 @@ namespace StartupJobsParser
 {
     public class SjpEvocalizeScraper : SjpScraper
     {
-        private static readonly Uri _defaultUri = new Uri("http://evocalize.com/contact/jobs");
+        private static readonly Uri _defaultUri = new Uri("http://evocalize.com/about/jobs");
         private string _defaultLocation = "Seattle, WA";
 
         public override string CompanyName { get { return "evocalize"; } }
