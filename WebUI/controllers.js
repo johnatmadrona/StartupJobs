@@ -208,7 +208,7 @@ sjpAppModule.controller(
 			$scope.company = sjpSharedService.selectedCompany;
 			$scope.title = sjpSharedService.selectedTitle;
 			$scope.location = sjpSharedService.selectedLocation;
-			$scope.sourceUri = sjpSharedService.selectecSourceUri;
+			$scope.sourceUri = sjpSharedService.selectedSourceUri;
 			$scope.fullHtmlDescription = sjpSharedService.selectedFullDescription;
 		});
 	}

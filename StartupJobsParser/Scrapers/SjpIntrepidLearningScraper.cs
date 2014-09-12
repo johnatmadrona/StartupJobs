@@ -59,7 +59,7 @@ namespace StartupJobsParser
 
             return new JobDescription()
             {
-                SourceUri = jdUri.AbsolutePath,
+                SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = WebUtility.HtmlDecode(location).Trim(),

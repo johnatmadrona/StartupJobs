@@ -42,7 +42,7 @@ namespace StartupJobsParser
                 {
                     yield return new JobDescription()
                     {
-                        SourceUri = uri.AbsolutePath,
+                        SourceUri = uri.AbsoluteUri,
                         Company = CompanyName,
                         Title = SjpUtils.GetCleanTextFromHtml(tn),
                         Location = _defaultLocation,
