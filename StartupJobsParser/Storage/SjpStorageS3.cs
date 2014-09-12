@@ -42,7 +42,7 @@ namespace StartupJobsParser
                 BucketName = m_bucketName
             };
 
-            if (!AmazonS3Util.DoesS3BucketExist(m_bucketName, m_client))
+            if (!AmazonS3Util.DoesS3BucketExist(m_client, m_bucketName))
             {
                 PutBucketRequest req = new PutBucketRequest()
                 {
@@ -92,18 +92,15 @@ namespace StartupJobsParser
                 req.Prefix = prefix;
             }
 
-            ListObjectsResponse res;
             bool more = true;
             while (more)
             {
-                using (res = m_client.ListObjects(req))
+                ListObjectsResponse res = m_client.ListObjects(req);
+                foreach (S3Object obj in res.S3Objects)
                 {
-                    foreach (S3Object obj in res.S3Objects)
-                    {
-                        yield return obj.Key;
-                    }
-                    more = res.IsTruncated;
+                    yield return obj.Key;
                 }
+                more = res.IsTruncated;
             }
         }
 
@@ -133,14 +130,12 @@ namespace StartupJobsParser
                 Prefix = key
             };
 
-            using (ListObjectsResponse res = m_client.ListObjects(req))
+            ListObjectsResponse res = m_client.ListObjects(req);
+            foreach (S3Object obj in res.S3Objects)
             {
-                foreach (S3Object obj in res.S3Objects)
+                if (obj.Key == key)
                 {
-                    if (obj.Key == key)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 

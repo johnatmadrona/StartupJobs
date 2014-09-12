@@ -21,9 +21,22 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//div[@id='sideBar']/ul/li[@class!='navclick']/a[contains(@href, '/current-openings/')]"))
+            foreach (HtmlNode geoLinkNode in doc.DocumentNode.SelectNodes("//a[contains(@href,'-office.htm')]"))
             {
-                yield return GetBuuteeqJd(new Uri(uri, jdLink.Attributes["href"].Value));
+                Uri geoLinkUri = new Uri(uri, geoLinkNode.Attributes["href"].Value);
+                string geoLinkPath = geoLinkUri.AbsolutePath;
+
+                HtmlDocument geoDoc = SjpUtils.GetHtmlDoc(geoLinkUri);
+
+                // Note: The html is bad at these pages. E.g. Has <li><li>...</li></li> instead of <li></li><li></li>
+                foreach (HtmlNode linkNode in geoDoc.DocumentNode.SelectNodes("//div[@id='sideBar']/ul[@class='middcont']//a"))
+                {
+                    string href = linkNode.Attributes["href"].Value;
+                    if (href.Length > geoLinkPath.Length && href.Substring(href.Length - geoLinkPath.Length) != geoLinkPath)
+                    {
+                        yield return GetBuuteeqJd(new Uri(uri, href));
+                    }
+                }
             }
         }
 
