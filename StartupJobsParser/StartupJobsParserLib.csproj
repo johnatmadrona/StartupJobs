@@ -77,6 +77,7 @@
     <Compile Include="Scrapers\SjpJamaScraper.cs" />
     <Compile Include="Scrapers\SjpJobalineScraper.cs" />
     <Compile Include="Scrapers\SjpJobscoreScraperBase.cs" />
+    <Compile Include="Scrapers\SjpJulepScraper.cs" />
     <Compile Include="Scrapers\SjpLumoScraper.cs" />
     <Compile Include="Scrapers\SjpMaxPointScraper.cs" />
     <Compile Include="Scrapers\SjpMercentScraper.cs" />
