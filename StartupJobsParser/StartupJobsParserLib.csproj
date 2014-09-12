@@ -102,7 +102,6 @@
     <Compile Include="Scrapers\SjpJobviteScraperBase.cs" />
     <Compile Include="Scrapers\SjpMixpoScraper.cs" />
     <Compile Include="Scrapers\SjpMozScraper.cs" />
-    <Compile Include="Scrapers\SjpPayscaleScraper.cs" />
     <Compile Include="Scrapers\SjpPlacedScraper.cs" />
     <Compile Include="Scrapers\SjpQumuloScraper.cs" />
     <Compile Include="Scrapers\SjpRedfinScraper.cs" />
