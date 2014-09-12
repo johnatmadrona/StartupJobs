@@ -82,7 +82,7 @@ namespace StartupJobsParser
 
             return new JobDescription()
             {
-                SourceUri = TryCreateTrackedLink(PublicTaggedUri),
+                SourceUri = jdUri.AbsolutePath,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = location,

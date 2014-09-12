@@ -26,9 +26,9 @@ namespace StartupJobsParser
             }
         }
 
-        private JobDescription GetZ2LiveJd(Uri uri)
+        private JobDescription GetZ2LiveJd(Uri jdUri)
         {
-            HtmlNode jdNode = SjpUtils.GetHtmlDoc(uri).DocumentNode;
+            HtmlNode jdNode = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
 
             HtmlNode titleNode = jdNode.SelectSingleNode("//h3[@class='career-listing-title']");
 
@@ -41,7 +41,7 @@ namespace StartupJobsParser
 
             return new JobDescription()
             {
-                SourceUri = TryCreateTrackedLink(PublicTaggedUri),
+                SourceUri = jdUri.AbsolutePath,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = SjpUtils.GetCleanTextFromHtmlEncodedText(location),

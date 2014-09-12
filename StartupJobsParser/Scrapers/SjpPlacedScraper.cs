@@ -27,16 +27,16 @@ namespace StartupJobsParser
             }
         }
 
-        private JobDescription GetPlacedJd(Uri uri)
+        private JobDescription GetPlacedJd(Uri jdUri)
         {
-            HtmlNode jdNode = SjpUtils.GetHtmlDoc(uri).DocumentNode;
+            HtmlNode jdNode = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
 
             HtmlNode titleNode = jdNode.SelectSingleNode("//h1[@class='banner_title']");
             HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[@id='content']");
 
             return new JobDescription()
             {
-                SourceUri = TryCreateTrackedLink(PublicTaggedUri),
+                SourceUri = jdUri.AbsolutePath,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = "Seattle, WA",

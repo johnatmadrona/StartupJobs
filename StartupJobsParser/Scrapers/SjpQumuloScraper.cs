@@ -27,16 +27,16 @@ namespace StartupJobsParser
             }
         }
 
-        private JobDescription GetQumuloJd(Uri uri)
+        private JobDescription GetQumuloJd(Uri jdUri)
         {
-            HtmlNode jdNode = SjpUtils.GetHtmlDoc(uri).DocumentNode;
+            HtmlNode jdNode = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
             HtmlNode titleNode = jdNode.SelectSingleNode("//h1[@id='jobTitle']");
             HtmlNode locationNode = jdNode.SelectSingleNode("//div[@id='jobDetailLocation']/strong");
             HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[@class='detailsJobDescription']");
 
             return new JobDescription()
             {
-                SourceUri = TryCreateTrackedLink(PublicTaggedUri),
+                SourceUri = jdUri.AbsolutePath,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = SjpUtils.GetCleanTextFromHtml(locationNode),

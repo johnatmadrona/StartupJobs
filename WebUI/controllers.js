@@ -202,7 +202,7 @@ sjpAppModule.controller(
 		$scope.company = "Madrona Venture Group";
 		$scope.title = "Startup Job Search";
 		$scope.location = "Madrona Venture Group is a Seattle-based VC firm"
-		$scope.sourceUri = "http://j.mp/19Oa1F8";
+		$scope.sourceUri = "//www.madrona.com";
 		$scope.fullHtmlDescription = "Use the search box and the navigation tree to explore startup jobs";
 		$scope.$on("jdSelected", function() {
 			$scope.company = sjpSharedService.selectedCompany;

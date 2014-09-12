@@ -34,9 +34,9 @@ namespace StartupJobsParser
             }
         }
 
-        private JobDescription GetSkytapJd(Uri uri)
+        private JobDescription GetSkytapJd(Uri jdUri)
         {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
+            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
 
             HtmlNode headerNode = doc.DocumentNode.SelectSingleNode("//div[@class='jvjobheader']");
             HtmlNode titleNode = headerNode.SelectSingleNode("h2");
@@ -51,7 +51,7 @@ namespace StartupJobsParser
 
             return new JobDescription()
             {
-                SourceUri = TryCreateTrackedLink(PublicTaggedUri),
+                SourceUri = jdUri.AbsolutePath,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = location,

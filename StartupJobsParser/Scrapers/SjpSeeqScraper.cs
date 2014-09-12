@@ -32,9 +32,9 @@ namespace StartupJobsParser
             }
         }
 
-        private JobDescription GetSeeqJd(Uri uri)
+        private JobDescription GetSeeqJd(Uri jdUri)
         {
-            HtmlNode jdNode = SjpUtils.GetHtmlDoc(uri).DocumentNode;
+            HtmlNode jdNode = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
 
             HtmlNode titleNode = jdNode.SelectSingleNode("//h1[@id='h1_opening_name']");
             HtmlNode locationNode = jdNode.SelectSingleNode("//h2[@id='h2_job_info']");
@@ -43,7 +43,7 @@ namespace StartupJobsParser
 
             return new JobDescription()
             {
-                SourceUri = TryCreateTrackedLink(PublicTaggedUri),
+                SourceUri = jdUri.AbsolutePath,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = SjpUtils.GetCleanTextFromHtml(locationNode),

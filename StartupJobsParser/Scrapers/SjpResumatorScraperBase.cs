@@ -48,7 +48,7 @@ namespace StartupJobsParser
                         {
                             HtmlDocument doc = new HtmlDocument();
                             doc.LoadHtml(text.Substring(offset, i - offset));
-                            yield return GetResumatorJd(doc.DocumentNode, PublicUri);
+                            yield return GetResumatorJd(doc.DocumentNode);
                             offset = text.IndexOf(SectionStartText, i);
                         }
                     }
@@ -56,7 +56,7 @@ namespace StartupJobsParser
             }
         }
 
-        protected JobDescription GetResumatorJd(HtmlNode jdNode, Uri uri)
+        protected JobDescription GetResumatorJd(HtmlNode jdNode)
         {
             HtmlNode titleNode = jdNode.SelectSingleNode("div[starts-with(@class, 'resumator-job-title')]");
 
@@ -69,7 +69,7 @@ namespace StartupJobsParser
 
             return new JobDescription()
             {
-                SourceUri = TryCreateTrackedLink(PublicTaggedUri),
+                SourceUri = PublicUri.AbsolutePath,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = location,

@@ -36,7 +36,7 @@ namespace StartupJobsParserConsoleApp
                     "madrona-sjp"
                     ),
                 Index = GetIndex(),
-                LinkTracker = new BitlyClient(bitlyAccessToken)
+                LinkTracker = null // new BitlyClient(bitlyAccessToken)
             };
 
             List<ISjpScraper> scrapers = GetScrapers(scraperParams);
