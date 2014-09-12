@@ -7,7 +7,7 @@ namespace StartupJobsParser
 {
     public class SjpYieldexScraper : SjpScraper
     {
-        private static readonly Uri _defaultUri = new Uri("http://www.yieldex.com/careers/");
+        private static readonly Uri _defaultUri = new Uri("http://www.yieldex.com/");
         private string _defaultLocation = "New York, NY";
 
         public override string CompanyName { get { return "Yieldex"; } }
@@ -22,54 +22,34 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//a[starts-with(@href,'/job/')]"))
+            foreach (HtmlNode jdNode in doc.DocumentNode.SelectNodes("//div[@class='lightbox careers']/article/div"))
             {
-                Uri jdUri = new Uri(uri, jdLink.Attributes["href"].Value);
-                yield return GetYieldexJd(jdUri);
+                yield return GetYieldexJd(jdNode);
             }
         }
 
-        private JobDescription GetYieldexJd(Uri jdUri)
+        private JobDescription GetYieldexJd(HtmlNode jdNode)
         {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
+            HtmlNode titleNode = jdNode.SelectSingleNode("h2");
+            HtmlNode locationNode = titleNode.SelectSingleNode("span");
+            titleNode.RemoveChild(locationNode);
 
-            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//h1[@class='entry-title']");
+            HtmlNode descriptionNode = jdNode.SelectSingleNode("div");
 
-            HtmlNode contentNode = doc.DocumentNode.SelectSingleNode("//div[@class='entry-content']");
-
-            string location = null;
-            HtmlDocument description = new HtmlDocument();
-
-            bool captureDescription = false;
-            foreach (HtmlNode node in contentNode.ChildNodes)
+            string location = SjpUtils.GetCleanTextFromHtml(locationNode);
+            if (string.Compare(location, "New York City", true) == 0)
             {
-                const string locationIndicator = "Location:";
-                const string descriptionIndicator = "Description:";
-
-                string text = node.InnerText.Trim();
-
-                if (text.StartsWith(locationIndicator))
-                {
-                    location = text.Substring(locationIndicator.Length).Trim();
-                }
-                else if (text.StartsWith(descriptionIndicator))
-                {
-                    captureDescription = true;
-                }
-                else if (captureDescription)
-                {
-                    description.DocumentNode.AppendChild(node);
-                }
+                location = "New York, NY";
             }
 
             return new JobDescription()
             {
-                SourceUri = jdUri.AbsolutePath,
+                SourceUri = PublicUri.AbsolutePath,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = location,
-                FullTextDescription = SjpUtils.GetCleanTextFromHtml(description.DocumentNode),
-                FullHtmlDescription = description.DocumentNode.InnerHtml
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }
