@@ -6,13 +6,14 @@ using System.Text.RegularExpressions;
 
 namespace StartupJobsParser
 {
-    public class SjpSmartsheetScraper : SjpScraper
+    public class SjpSmartsheetScraper : SjpJobviteScraperBase
     {
-        private static readonly Uri _defaultUri = new Uri("http://www.smartsheet.com/careers");
+        private static readonly Uri _publicUri = new Uri("http://www.smartsheet.com/careers/");
 
         public override string CompanyName { get { return "Smartsheet"; } }
-        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
-        public override Uri PublicUri { get { return _defaultUri; } }
+        protected override string JobviteCompanyId { get { return "q6R9VfwL"; } }
+
+        public override Uri PublicUri { get { return _publicUri; } }
 
         public SjpSmartsheetScraper(SjpScraperParams scraperParams)
             : base(scraperParams)
@@ -22,45 +23,35 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdSection in doc.DocumentNode.SelectNodes("//div[@class='job-container']"))
+            foreach (HtmlNode jdUriNode in doc.DocumentNode.SelectNodes("//ul[@class='joblist']/li/a"))
             {
-                string jobTitle = WebUtility.HtmlDecode(jdSection.SelectSingleNode("h3").InnerText).Trim();
-                string jdLink = jdSection.SelectSingleNode("div[@class='view-job-description-button-container']/a").Attributes["href"].Value;
-                Uri jdUri = new Uri(uri, jdLink);
-
-                yield return GetSmartsheetJd(jobTitle, "Bellevue, WA", jdUri);
+                yield return GetSmartsheetJd(ExtractJdUriFromGoToPageLink(jdUriNode));
             }
         }
 
-        private JobDescription GetSmartsheetJd(string title, string location, Uri jdUri)
+        private JobDescription GetSmartsheetJd(Uri jdUri)
         {
-            string description = SjpUtils.GetTextFromPdf(jdUri);
+            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
 
-            Regex locationRegex = new Regex(@"(?<location>\w+, [A-Z]{2})[^\w]");
-            Match m = locationRegex.Match(description);
-            if (m.Success)
+            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//div[@class='jvjobheader']/h2");
+
+            HtmlNode locationNode = doc.DocumentNode.SelectSingleNode("//div[@class='jvjobheader']/h3");
+            string location = SjpUtils.GetCleanTextFromHtml(locationNode);
+            if (location.Contains("|"))
             {
-                location = m.Groups["location"].Value;
+                location = location.Split('|')[1].Trim();
             }
 
-            string cleanTextDescription = description.Replace('\n', ' ').Replace('\r', ' ');
-            cleanTextDescription = Regex.Replace(cleanTextDescription, "\\s+", " ");
-
-            string htmlDescription = WebUtility.HtmlEncode(description);
-            htmlDescription = htmlDescription
-                .Replace("\r", "")
-                .Replace("\n", "<br />")
-                .Replace("", "&#8226;");
-            htmlDescription = Regex.Replace(htmlDescription, @"\\u000a[A-Z\s]", "<br />");
+            HtmlNode descriptionNode = doc.DocumentNode.SelectSingleNode("//div[@class='jvdescriptionbody']");
 
             return new JobDescription()
             {
                 SourceUri = jdUri.AbsolutePath,
                 Company = CompanyName,
-                Title = title,
-                Location = location,
-                FullTextDescription = cleanTextDescription,
-                FullHtmlDescription = htmlDescription
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = WebUtility.HtmlDecode(location).Trim(),
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }
