@@ -61,8 +61,14 @@ namespace StartupJobsParser
             HtmlNode titleNode = jdNode.SelectSingleNode("div[starts-with(@class, 'resumator-job-title')]");
 
             HtmlNode locationNode = titleNode.NextSibling;
-            Regex regex = new Regex(@"(?<Location>\w+, [A-Z]{2})");
-            string location = regex.Match(SjpUtils.GetCleanTextFromHtml(locationNode)).Groups["Location"].Value;
+            const string prefix = "Location: ";
+            const string dept = "Department:";
+            string location = SjpUtils.GetCleanTextFromHtml(locationNode).Substring(prefix.Length);
+            int deptOffset = location.IndexOf(dept);
+            if (deptOffset >= 0)
+            {
+                location = location.Substring(0, deptOffset);
+            }
 
             HtmlNode descriptionNode = 
                 jdNode.SelectSingleNode("div/div[starts-with(@class, 'resumator-job-description')]");

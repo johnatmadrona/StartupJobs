@@ -123,6 +123,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpMixpoScraper(scraperParams));
             scrapers.Add(new SjpPeachScraper(scraperParams));
             scrapers.Add(new SjpPlacedScraper(scraperParams));
+            scrapers.Add(new SjpPlayiScraper(scraperParams));
             scrapers.Add(new SjpQumuloScraper(scraperParams));
             scrapers.Add(new SjpRedfinScraper(scraperParams));
             scrapers.Add(new SjpResolutionTubeScraper(scraperParams));
