@@ -74,6 +74,7 @@
     <Compile Include="Scrapers\SjpAlgorithmiaScraper.cs" />
     <Compile Include="Scrapers\SjpAngelListScraperBase.cs" />
     <Compile Include="Scrapers\SjpBizibleScraper.cs" />
+    <Compile Include="Scrapers\SjpBoomerangCommerceScraper.cs" />
     <Compile Include="Scrapers\SjpEvocalizeScraper.cs" />
     <Compile Include="Scrapers\SjpISpotTvScraper.cs" />
     <Compile Include="Scrapers\SjpJamaScraper.cs" />
