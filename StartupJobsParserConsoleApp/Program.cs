@@ -99,6 +99,7 @@ namespace StartupJobsParserConsoleApp
             List<ISjpScraper> scrapers = new List<ISjpScraper>();
 
             scrapers.Add(new Sjp2ndWatchScraper(scraperParams));
+            scrapers.Add(new SjpAlgorithmiaScraper(scraperParams));
             scrapers.Add(new SjpApptioScraper(scraperParams));
             scrapers.Add(new SjpAnimotoScraper(scraperParams));
             scrapers.Add(new SjpBizibleScraper(scraperParams));
