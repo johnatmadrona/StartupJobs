@@ -14,15 +14,9 @@ namespace StartupJobsParser
         protected ISjpIndex _index;
         protected ISjpLinkTracker _linkTracker;
 
-        public string UriTag { get { return "?rs=sjp"; } }
         public abstract string CompanyName { get; }
         public abstract Uri DefaultScrapeUri { get; }
         public abstract Uri PublicUri { get; }
-
-        public Uri PublicTaggedUri
-        {
-            get { return new Uri(PublicUri.AbsoluteUri + UriTag); }
-        }
 
         public static string StoragePathRoot { get { return "data/"; } }
 
