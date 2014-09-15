@@ -37,47 +37,23 @@ namespace StartupJobsParser
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
 
-            // There are multiple of these nodes. The first is the one we want.
-            HtmlNode contentNode = doc.DocumentNode.SelectSingleNode("//div[@class='wrapper-content']/div[@class='container_12']");
+            // There are multiple of these nodes. The first is thec one we want.
+            HtmlNodeCollection contentNodes = doc.DocumentNode.SelectNodes("//div[@id='wrapper']/div/div[@class='row']");
 
-            HtmlNode titleNode = contentNode.SelectSingleNode("h2");
-            HtmlNode descriptionNode = contentNode.SelectSingleNode("div");
+            HtmlNode titleNode = contentNodes[0];
+            HtmlNode descriptionNode = contentNodes[1].SelectSingleNode("div");
 
-            // Remove functional group title
-            descriptionNode.SelectSingleNode("h3").Remove();
-
-            string location = _defaultLocation;
-            HtmlNode locationStartNode = descriptionNode.SelectSingleNode(".//h4[contains(text(), 'Primary Location')]");
-            if (locationStartNode != null)
+            HtmlNode currNode = descriptionNode.FirstChild;
+            while (!SjpUtils.GetCleanTextFromHtml(currNode).StartsWith("How To Apply"))
             {
-                HtmlNode locationNode = locationStartNode.NextSibling;
-                while (locationNode.Name != "p")
-                {
-                    HtmlNode next = locationNode.NextSibling;
-                    locationNode.Remove();
-                    locationNode = next;
-                }
-                location = SjpUtils.GetCleanTextFromHtml(locationNode);
-                Regex exp = new Regex(".*-(?<state>.*?)-(?<city>.*?)$");
-                Match m = exp.Match(location);
-                if (m.Success)
-                {
-                    location = 
-                        m.Groups["city"].Value.Trim() + 
-                        ", " + 
-                        m.Groups["state"].Value.Trim();
-                }
-
-                locationNode.Remove();
-                locationStartNode.Remove();
+                currNode = currNode.NextSibling;
             }
-            
-            HtmlNode removalStartNode = removalStartNode = descriptionNode.SelectSingleNode("h4[text()='How To Apply']");
-            while (removalStartNode != null)
+
+            while (currNode != null)
             {
-                HtmlNode next = removalStartNode.NextSibling;
-                removalStartNode.Remove();
-                removalStartNode = next;
+                HtmlNode next = currNode.NextSibling;
+                descriptionNode.RemoveChild(currNode);
+                currNode = next;
             }
 
             return new JobDescription()
@@ -85,7 +61,7 @@ namespace StartupJobsParser
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = location,
+                Location = "Seattle, WA",
                 FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
                 FullHtmlDescription = descriptionNode.InnerHtml
             };
