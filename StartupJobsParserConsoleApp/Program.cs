@@ -137,7 +137,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpUnionBayNetworksScraper(scraperParams));
             scrapers.Add(new SjpWildTangentScraper(scraperParams));
             scrapers.Add(new SjpYieldexScraper(scraperParams));
-            scrapers.Add(new SjpZ2LiveScraper(scraperParams));
+            scrapers.Add(new SjpZ2Scraper(scraperParams));
 
             return scrapers;
         }

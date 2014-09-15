@@ -10,7 +10,7 @@ namespace StartupJobsParser
         private static readonly Uri _defaultUri = new Uri("http://www.yieldex.com/");
         private string _defaultLocation = "New York, NY";
 
-        public override string CompanyName { get { return "Yieldex"; } }
+        public override string CompanyName { get { return "yieldex"; } }
         public override Uri DefaultScrapeUri { get { return _defaultUri; } }
         public override Uri PublicUri { get { return _defaultUri; } }
 

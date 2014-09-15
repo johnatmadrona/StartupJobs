@@ -9,7 +9,7 @@ namespace StartupJobsParser
     {
         private static readonly Uri _publicUri = new Uri("http://intrepidlearning.com/careers/");
 
-        public override string CompanyName { get { return "Intrepid Learning"; } }
+        public override string CompanyName { get { return "Intrepid Learning Solutions"; } }
         protected override string JobviteCompanyId { get { return "q089VfwW"; } }
         public override Uri PublicUri { get { return _publicUri; } }
 

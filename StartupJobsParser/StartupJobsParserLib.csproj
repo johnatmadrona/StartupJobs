@@ -120,7 +120,7 @@
     <Compile Include="Scrapers\SjpSmartsheetScraper.cs" />
     <Compile Include="Scrapers\SjpTaleoScraperBase.cs" />
     <Compile Include="Scrapers\SjpWildTangentScraper.cs" />
-    <Compile Include="Scrapers\SjpZ2LiveScraper.cs" />
+    <Compile Include="Scrapers\SjpZ2Scraper.cs" />
     <Compile Include="SjpLocalDiskIndex.cs" />
     <Compile Include="SjpLogger.cs" />
     <Compile Include="Scrapers\SjpScraper.cs" />

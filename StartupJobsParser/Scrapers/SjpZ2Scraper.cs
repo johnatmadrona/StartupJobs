@@ -4,15 +4,15 @@ using System.Collections.Generic;
 
 namespace StartupJobsParser
 {
-    public class SjpZ2LiveScraper : SjpScraper
+    public class SjpZ2Scraper : SjpScraper
     {
         private static readonly Uri _defaultUri = new Uri("http://www.z2.com/careers");
 
-        public override string CompanyName { get { return "Z2Live"; } }
+        public override string CompanyName { get { return "Z2"; } }
         public override Uri DefaultScrapeUri { get { return _defaultUri; } }
         public override Uri PublicUri { get { return _defaultUri; } }
 
-        public SjpZ2LiveScraper(SjpScraperParams scraperParams)
+        public SjpZ2Scraper(SjpScraperParams scraperParams)
             : base(scraperParams)
         {
         }
