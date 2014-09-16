@@ -31,7 +31,17 @@ namespace StartupJobsParser
         {
             HtmlNode jdNode = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
             HtmlNode titleNode = jdNode.SelectSingleNode("//h1[@id='jobTitle']");
+
             HtmlNode locationNode = jdNode.SelectSingleNode("//div[@id='jobDetailLocation']/strong");
+            string location = SjpUtils.GetCleanTextFromHtml(locationNode);
+            int excerptStart = location.IndexOf('(');
+            int excerptEnd = location.IndexOf(')');
+            // Exclude parenthetical only if it's not at the beginning and if parenths are properly ordered
+            if (0 < excerptStart && excerptStart < excerptEnd)
+            {
+                location = location.Substring(0, excerptStart).Trim() + location.Substring(excerptEnd + 1).Trim();
+            }
+
             HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[@class='detailsJobDescription']");
 
             return new JobDescription()
@@ -39,7 +49,7 @@ namespace StartupJobsParser
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = SjpUtils.GetCleanTextFromHtml(locationNode),
+                Location = location,
                 FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
                 FullHtmlDescription = descriptionNode.InnerHtml
             };

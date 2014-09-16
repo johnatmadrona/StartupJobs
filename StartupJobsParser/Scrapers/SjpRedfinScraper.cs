@@ -35,7 +35,15 @@ namespace StartupJobsParser
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
 
             HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//h1");
+
             HtmlNode locationNode = doc.DocumentNode.SelectSingleNode("//h2");
+            string location = SjpUtils.GetCleanTextFromHtml(locationNode);
+            if (location.Contains("|"))
+            {
+                char[] sep = { '|' };
+                location = location.Split(sep)[1].Trim();
+            }
+
             HtmlNode descriptionNode = doc.DocumentNode.SelectSingleNode("//div[@class='jobDesc']");
 
             return new JobDescription()
@@ -43,7 +51,7 @@ namespace StartupJobsParser
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = SjpUtils.GetCleanTextFromHtml(locationNode),
+                Location = location,
                 FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
                 FullHtmlDescription = descriptionNode.InnerHtml
             };

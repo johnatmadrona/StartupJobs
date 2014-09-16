@@ -35,11 +35,13 @@ namespace StartupJobsParser
 
             HtmlNode locationNode = titleNode.NextSibling;
             string location = null;
-            while (location == null)
+            while (locationNode != null && location == null)
             {
-                if (locationNode.InnerText.Contains("|"))
+                string locationText = SjpUtils.GetCleanTextFromHtml(locationNode);
+                if (locationText.Contains("|"))
                 {
-                    location = locationNode.InnerText.Split('|')[1];
+                    string[] tokens = locationText.Split('|');
+                    location = tokens[tokens.Length - 1].Trim();
                 }
                 else
                 {
@@ -62,7 +64,7 @@ namespace StartupJobsParser
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = WebUtility.HtmlDecode(location).Trim(),
+                Location = location,
                 FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
                 FullHtmlDescription = descriptionNode.InnerHtml
             };
