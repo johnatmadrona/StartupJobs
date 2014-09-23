@@ -8,9 +8,8 @@ namespace StartupJobsParser
     public class SjpResolutionTubeScraper : SjpScraper
     {
         private static readonly Uri _defaultUri = new Uri("http://www.resolutiontube.com/apply/");
-        private string _defaultLocation = "Seattle, WA";
 
-        public override string CompanyName { get { return "Resolution Tube"; } }
+        public override string CompanyName { get { return "ResolutionTube"; } }
         public override Uri DefaultScrapeUri { get { return _defaultUri; } }
         public override Uri PublicUri { get { return _defaultUri; } }
 
@@ -22,32 +21,32 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//div[starts-with(@id, 'job')]/div");
-            if (nodes != null && nodes.Count > 0)
+            foreach (HtmlNode jobNode in doc.DocumentNode.SelectNodes("//div[@class='job']"))
             {
-                foreach (HtmlNode jobNode in nodes)
-                {
-                    yield return GetResolutionTubeJd(jobNode);
-                }
+                HtmlNode titleNode = jobNode.SelectSingleNode("div[@class='job_title']");
+                HtmlNode locationNode = jobNode.SelectSingleNode("div[@class='job_subtitle']");
+                HtmlNode linkNode = jobNode.SelectSingleNode("div[@class='job_title']/a");
+                yield return GetResolutionTubeJd(
+                    titleNode,
+                    locationNode,
+                    new Uri(uri, linkNode.Attributes["href"].Value)
+                    );
             }
         }
 
-        private JobDescription GetResolutionTubeJd(HtmlNode jobNode)
+        private JobDescription GetResolutionTubeJd(HtmlNode titleNode, HtmlNode locationNode, Uri jdUri)
         {
-            HtmlNode titleNode = jobNode.SelectSingleNode("h3");
-            titleNode.Remove();
-
-            HtmlNode applyNode = jobNode.SelectSingleNode("p/strong[starts-with(text(), 'To apply')]");
-            applyNode.Remove();
+            HtmlNode doc = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
+            HtmlNode descriptionNode = doc.SelectSingleNode("//body/div[contains(@class, 'job_posting_section')]");
 
             return new JobDescription()
             {
                 SourceUri = PublicUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = _defaultLocation,
-                FullTextDescription = SjpUtils.GetCleanTextFromHtml(jobNode),
-                FullHtmlDescription = jobNode.InnerHtml
+                Location = SjpUtils.GetCleanTextFromHtml(locationNode),
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
+using System.IO.Compression;
 
 namespace StartupJobsParser
 {
@@ -112,9 +113,14 @@ namespace StartupJobsParser
                 Key = key,
                 CannedACL = S3CannedACL.PublicRead
             };
+
+            const int TwoWeeks = 60 * 60 * 24 * 7;
+            req.Headers.CacheControl = string.Format("max-age={0}", TwoWeeks);
+
             DataContractJsonSerializer ser = new DataContractJsonSerializer(type);
             using (MemoryStream data = new MemoryStream())
             {
+                // TODO: Compress using GZipOutputStream
                 ser.WriteObject(data, obj);
                 data.Position = 0;
                 req.InputStream = data;
