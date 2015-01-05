@@ -49,7 +49,17 @@ namespace StartupJobsParser
                             HtmlDocument doc = new HtmlDocument();
                             doc.LoadHtml(text.Substring(offset, i - offset));
                             yield return GetResumatorJd(doc.DocumentNode);
+
                             offset = text.IndexOf(SectionStartText, i);
+                            if (offset > 0)
+                            {
+                                offset = text.IndexOf('>', offset) + 1;
+                                if (offset > 0)
+                                {
+                                    i = offset - 1; // -1 because increments before next iter
+                                    depth = 1;
+                                }
+                            }
                         }
                     }
                 }
