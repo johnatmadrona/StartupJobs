@@ -7,7 +7,7 @@ namespace StartupJobsParser
 {
     public class SjpResolutionTubeScraper : SjpScraper
     {
-        private static readonly Uri _defaultUri = new Uri("http://www.resolutiontube.com/apply/");
+        private static readonly Uri _defaultUri = new Uri("http://www.resolutiontube.com/");
 
         public override string CompanyName { get { return "ResolutionTube"; } }
         public override Uri DefaultScrapeUri { get { return _defaultUri; } }
@@ -21,30 +21,27 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jobNode in doc.DocumentNode.SelectNodes("//div[@class='job']"))
+            foreach (HtmlNode jobLink in doc.DocumentNode.SelectNodes("//a[starts-with(@href,'apply/')]"))
             {
-                HtmlNode titleNode = jobNode.SelectSingleNode("div[@class='job_title']");
-                HtmlNode locationNode = jobNode.SelectSingleNode("div[@class='job_subtitle']");
-                HtmlNode linkNode = jobNode.SelectSingleNode("div[@class='job_title']/a");
-                yield return GetResolutionTubeJd(
-                    titleNode,
-                    locationNode,
-                    new Uri(uri, linkNode.Attributes["href"].Value)
-                    );
+                yield return GetResolutionTubeJd(new Uri(uri, jobLink.Attributes["href"].Value));
             }
         }
 
-        private JobDescription GetResolutionTubeJd(HtmlNode titleNode, HtmlNode locationNode, Uri jdUri)
+        private JobDescription GetResolutionTubeJd(Uri jdUri)
         {
             HtmlNode doc = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
-            HtmlNode descriptionNode = doc.SelectSingleNode("//body/div[contains(@class, 'job_posting_section')]");
+            HtmlNode titleNode = doc.SelectSingleNode("//header//h1");
+
+            HtmlNode descriptionNode = doc.SelectSingleNode("//section/div[@class='container']");
+            HtmlNode headerNode = descriptionNode.SelectSingleNode("//header");
+            descriptionNode.RemoveChild(headerNode);
 
             return new JobDescription()
             {
-                SourceUri = PublicUri.AbsoluteUri,
+                SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = SjpUtils.GetCleanTextFromHtml(locationNode),
+                Location = "Seattle, WA",
                 FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
                 FullHtmlDescription = descriptionNode.InnerHtml
             };
