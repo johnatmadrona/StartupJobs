@@ -7,8 +7,6 @@ namespace StartupJobsParser
 {
     public class SjpSkytapScraper : SjpJobviteScraperBase
     {
-        //private static readonly Uri _defaultUri = new Uri("http://www.skytap.com/company/careers/?/about-us/careers/index.php");
-
         private static readonly Uri _publicUri = new Uri("http://www.skytap.com/company/careers");
         
         public override string CompanyName { get { return "Skytap"; } }
@@ -22,13 +20,8 @@ namespace StartupJobsParser
 
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
-            /*HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//a[starts-with(@href, 'http://www.skytap.com/company/careers/')]"))
-            {
-                yield return GetSkytapJd(new Uri(jdLink.Attributes["href"].Value));
-            }*/
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdUriNode in doc.DocumentNode.SelectNodes("//ul[@class='joblist']/li/a[starts-with(@onclick,'jvGoToPage')]"))
+            foreach (HtmlNode jdUriNode in doc.DocumentNode.SelectNodes("//a[contains(@href,'/careers?jvi=')]"))
             {
                 yield return GetSkytapJd(ExtractJdUriFromGoToPageLink(jdUriNode));
             }

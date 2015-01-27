@@ -20,27 +20,22 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode linkNode in doc.DocumentNode.SelectNodes("//article[@id='careers']//a[contains(@href,'/about/careers/')]"))
+            foreach (HtmlNode linkNode in doc.DocumentNode.SelectNodes("//div[@class='careers-page']//a[contains(@href,'/about/careers/')]"))
             {
                 Uri linkUri = new Uri(uri, linkNode.Attributes["href"].Value);
-                yield return GetPeachJd(linkUri);
+                yield return GetHighspotJd(linkUri);
             }
         }
 
-        private JobDescription GetPeachJd(Uri jdUri)
+        private JobDescription GetHighspotJd(Uri jdUri)
         {
             HtmlNode doc = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
-            HtmlNode jdNode = doc.SelectSingleNode("//div[@class='content right']");
 
-            HtmlNode titleNode = jdNode.SelectSingleNode("h3");
+            HtmlNode titleNode = doc.SelectSingleNode("//*[@class='about-headline']");
 
-            HtmlNode nodeToRemove = jdNode.FirstChild;
-            while (nodeToRemove.Name != "hr")
-            {
-                jdNode.RemoveChild(nodeToRemove);
-                nodeToRemove = jdNode.FirstChild;
-            }
-            jdNode.RemoveChild(nodeToRemove);
+            HtmlNode descriptionNode = doc.SelectSingleNode("//*[@class='job-post']");
+            HtmlNode nodeToRemove = descriptionNode.SelectSingleNode("//*[@class='apply-button']");
+            descriptionNode.RemoveChild(nodeToRemove);
 
             return new JobDescription()
             {
@@ -48,8 +43,8 @@ namespace StartupJobsParser
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = "Seattle, WA",
-                FullTextDescription = SjpUtils.GetCleanTextFromHtml(jdNode),
-                FullHtmlDescription = jdNode.InnerHtml
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
             };
         }
     }

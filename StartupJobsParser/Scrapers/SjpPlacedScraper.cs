@@ -21,7 +21,7 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//div[@class='openings']/div[@class='group']/p/a"))
+            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//a[starts-with(@href,'/careers/')]"))
             {
                 yield return GetPlacedJd(new Uri(uri, jdLink.Attributes["href"].Value));
             }
@@ -32,7 +32,13 @@ namespace StartupJobsParser
             HtmlNode jdNode = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
 
             HtmlNode titleNode = jdNode.SelectSingleNode("//h1[@class='banner_title']");
-            HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[@id='content']");
+            HtmlNode baseDescriptionNode = jdNode.SelectSingleNode("//div[@class='job_description']");
+            HtmlNode requirementsNode = jdNode.SelectSingleNode("//div[@class='requirements']");
+
+            HtmlDocument description = new HtmlDocument();
+            description.LoadHtml("<div></div>");
+            description.DocumentNode.AppendChild(baseDescriptionNode);
+            description.DocumentNode.AppendChild(requirementsNode);
 
             return new JobDescription()
             {
@@ -40,8 +46,8 @@ namespace StartupJobsParser
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = "Seattle, WA",
-                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
-                FullHtmlDescription = descriptionNode.InnerHtml
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(description.DocumentNode),
+                FullHtmlDescription = description.DocumentNode.InnerHtml
             };
         }
     }

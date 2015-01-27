@@ -5,33 +5,20 @@ using System.Text.RegularExpressions;
 
 namespace StartupJobsParser
 {
-    public class SjpMaxPointScraper : SjpScraper
+    public class SjpMaxPointScraper : SjpNewtonScraperBase
     {
-        private static readonly Uri _defaultUri = new Uri("http://maxpoint.com/us/digital-advertising-company/online-advertising-careers/online-advertising-jobs");
-        private static readonly Uri _defaultScrapeUri = new Uri("http://newton.newtonsoftware.com/career/CareerHome.action?clientId=8afc05ca36a0fff80136a2d219b93475");
-
+        private Uri _publicUri = new Uri("http://maxpoint.com/us/digital-advertising-company/online-advertising-careers/online-advertising-jobs");
         public override string CompanyName { get { return "MaxPoint"; } }
-        public override Uri DefaultScrapeUri { get { return _defaultScrapeUri; } }
-        public override Uri PublicUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _publicUri; } }
+
+        protected override string NewtonCompanyId { get { return "8afc05ca36a0fff80136a2d219b93475"; } }
 
         public SjpMaxPointScraper(SjpScraperParams scraperParams)
             : base(scraperParams)
         {
         }
 
-        protected override IEnumerable<JobDescription> GetJds(Uri uri)
-        {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//div[@class='gnewtonCareerGroupJobTitleClass']/a"))
-            {
-                yield return GetMaxPointJd(
-                    SjpUtils.GetCleanTextFromHtml(jdLink),
-                    new Uri(uri, jdLink.Attributes["href"].Value)
-                    );
-            }
-        }
-
-        private JobDescription GetMaxPointJd(string title, Uri jdUri)
+        protected override JobDescription GetJd(string title, Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
 

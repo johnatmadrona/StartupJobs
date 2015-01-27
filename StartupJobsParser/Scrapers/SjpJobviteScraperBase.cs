@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using HtmlAgilityPack;
+using System.Collections.Generic;
 
 namespace StartupJobsParser
 {
@@ -47,6 +48,48 @@ namespace StartupJobsParser
             }
             string jobId = jobRoute.Substring(idStart, idEnd - idStart) + ",Job";
             return GetItemUri(WebUtility.UrlEncode(jobId));
+        }
+
+        protected override IEnumerable<JobDescription> GetJds(Uri uri)
+        {
+            HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
+            foreach (HtmlNode jdUriNode in doc.DocumentNode.SelectNodes("//*[@class='joblist']//a[starts-with(@onclick,'jvGoToPage')]"))
+            {
+                yield return GetJd(ExtractJdUriFromGoToPageLink(jdUriNode));
+            }
+        }
+
+        protected JobDescription GetJd(Uri jdUri)
+        {
+            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
+
+            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//div[@class='jvjobheader']/h2");
+
+            HtmlNode locationNode = titleNode.NextSibling;
+            string location = null;
+            while (location == null)
+            {
+                if (locationNode.InnerText.Contains("|"))
+                {
+                    location = locationNode.InnerText.Split('|')[1];
+                }
+                else
+                {
+                    locationNode = locationNode.NextSibling;
+                }
+            }
+
+            HtmlNode descriptionNode = doc.DocumentNode.SelectSingleNode("//div[@class='jvdescriptionbody']");
+
+            return new JobDescription()
+            {
+                SourceUri = jdUri.AbsoluteUri,
+                Company = CompanyName,
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = WebUtility.HtmlDecode(location).Trim(),
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
+            };
         }
     }
 }

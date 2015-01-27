@@ -56,10 +56,10 @@ namespace StartupJobsParser
 
         public static string GetCleanTextFromHtml(HtmlNode htmlNode)
         {
-            return GetCleanTextFromHtmlEncodedText(htmlNode.InnerText);
+            return GetCleanTextFromHtml(htmlNode.InnerText);
         }
 
-        public static string GetCleanTextFromHtmlEncodedText(string rawText)
+        public static string GetCleanTextFromHtml(string rawText)
         {
             string text = WebUtility.HtmlDecode(rawText).Trim();
             text = text.Replace("\\u000a", " ").Replace("\\u000d", " ");

@@ -1,19 +1,36 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 
 namespace StartupJobsParser
 {
-    public class SjpJamaScraper : SjpJobscoreScraperBase
+    public class SjpJamaScraper : SjpNewtonScraperBase
     {
-        private static readonly Uri _defaultScrapeUri = new Uri("http://www.jobscore.com/jobs/jamasoftware/");
-        private static readonly Uri _publicUri = new Uri("http://www.jamasoftware.com/company/#careers");
-
-        public override string CompanyName { get { return "Jama Software"; } }
+        private Uri _publicUri = new Uri("http://www.jamasoftware.com/careers/");
+        public override string CompanyName { get { return "Jama"; } }
         public override Uri PublicUri { get { return _publicUri; } }
-        public override Uri DefaultScrapeUri { get { return _defaultScrapeUri; } }
+
+        protected override string NewtonCompanyId { get { return "8a8725d048f86d3101490ba21f5d3d16"; } }
 
         public SjpJamaScraper(SjpScraperParams scraperParams)
             : base(scraperParams)
         {
+        }
+
+        protected override JobDescription GetJd(string title, Uri jdUri)
+        {
+            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
+            string location = "Portland, OR";
+            HtmlNode descriptionNode = doc.DocumentNode.SelectSingleNode("//td[@id='gnewtonJobDescriptionText']");
+
+            return new JobDescription()
+            {
+                SourceUri = jdUri.AbsoluteUri,
+                Company = CompanyName,
+                Title = title,
+                Location = location,
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
+            };
         }
     }
 }

@@ -39,7 +39,7 @@ namespace StartupJobsParser
             string location = SjpUtils.GetCleanTextFromHtml(locationNode);
             if (string.Compare(location, "New York City", true) == 0)
             {
-                location = "New York, NY";
+                location = _defaultLocation;
             }
 
             return new JobDescription()
