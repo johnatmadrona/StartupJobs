@@ -1,54 +1,19 @@
-﻿using HtmlAgilityPack;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace StartupJobsParser
 {
-    public class SjpMixpoScraper : SjpScraper
+    public class SjpMixpoScraper : SjpJobviteScraperBase
     {
-        private static readonly Uri _defaultUri = new Uri("http://dynamicvideoad.mixpo.com/about/careers/");
+        private static readonly Uri _publicUri = new Uri("http://dynamicvideoad.mixpo.com/about/careers/");
 
         public override string CompanyName { get { return "Mixpo"; } }
-        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
-        public override Uri PublicUri { get { return _defaultUri; } }
+        protected override string JobviteCompanyId { get { return "qc3aVfw4"; } }
+
+        public override Uri PublicUri { get { return _publicUri; } }
 
         public SjpMixpoScraper(SjpScraperParams scraperParams)
             : base(scraperParams)
         {
-        }
-
-        protected override IEnumerable<JobDescription> GetJds(Uri uri)
-        {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdLink in doc.DocumentNode.SelectNodes("//a[starts-with(@href, '/about/career_position/')]"))
-            {
-                yield return GetMixpoJd(new Uri(uri, jdLink.Attributes["href"].Value));
-            }
-        }
-
-        private JobDescription GetMixpoJd(Uri jdUri)
-        {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
-            HtmlNode jdNode = doc.DocumentNode.SelectSingleNode("//div[@id='content']");
-            
-            HtmlNode titleNode = jdNode.SelectSingleNode("h2");
-
-            HtmlNode remove = jdNode.SelectSingleNode("p[@id='breadcrumb']");
-            remove.ParentNode.RemoveChild(remove, false);
-            remove = jdNode.SelectSingleNode("h2");
-            remove.ParentNode.RemoveChild(remove, false);
-            remove = jdNode.SelectSingleNode("a[starts-with(@class, 'email')]");
-            remove.ParentNode.RemoveChild(remove, false);
-
-            return new JobDescription()
-            {
-                SourceUri = jdUri.AbsoluteUri,
-                Company = CompanyName,
-                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = "Seattle, WA",
-                FullTextDescription = SjpUtils.GetCleanTextFromHtml(jdNode),
-                FullHtmlDescription = jdNode.InnerHtml
-            };
         }
     }
 }

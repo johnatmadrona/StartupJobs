@@ -17,40 +17,5 @@ namespace StartupJobsParser
             : base(scraperParams)
         {
         }
-
-        protected override IEnumerable<JobDescription> GetJds(Uri uri)
-        {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdUriNode in doc.DocumentNode.SelectNodes("//a[contains(@href,'/careers?jvi=')]"))
-            {
-                yield return GetSkytapJd(ExtractJdUriFromGoToPageLink(jdUriNode));
-            }
-        }
-
-        private JobDescription GetSkytapJd(Uri jdUri)
-        {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
-
-            HtmlNode headerNode = doc.DocumentNode.SelectSingleNode("//div[@class='jvjobheader']");
-            HtmlNode titleNode = headerNode.SelectSingleNode("h2");
-            HtmlNode locationNode = headerNode.SelectSingleNode("h3");
-            HtmlNode descNode = doc.DocumentNode.SelectSingleNode("//div[@class='jvdescriptionbody']");
-
-            string location = SjpUtils.GetCleanTextFromHtml(locationNode);
-            if (location.Contains("|"))
-            {
-                location = location.Split('|')[1].Trim();
-            }
-
-            return new JobDescription()
-            {
-                SourceUri = jdUri.AbsoluteUri,
-                Company = CompanyName,
-                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = location,
-                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descNode),
-                FullHtmlDescription = descNode.InnerHtml
-            };
-        }
     }
 }
