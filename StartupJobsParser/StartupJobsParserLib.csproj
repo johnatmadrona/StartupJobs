@@ -87,11 +87,10 @@
     <Compile Include="Scrapers\SjpMercentScraper.cs" />
     <Compile Include="Scrapers\SjpNewtonScraperBase.cs" />
     <Compile Include="Scrapers\SjpPeachScraper.cs" />
-    <Compile Include="Scrapers\SjpPlayiScraper.cs" />
+    <Compile Include="Scrapers\SjpWonderWorkshopScraper.cs" />
     <Compile Include="Scrapers\SjpResolutionTubeScraper.cs" />
     <Compile Include="Scrapers\SjpSeeqScraper.cs" />
     <Compile Include="Scrapers\SjpSnupiScraper.cs" />
-    <Compile Include="Scrapers\SjpUnionBayNetworksScraper.cs" />
     <Compile Include="Scrapers\SjpYieldexScraper.cs" />
     <Compile Include="SjpScraperParams.cs" />
     <Compile Include="Storage\ISjpStorage.cs" />
@@ -101,7 +100,6 @@
     <Compile Include="Scrapers\Sjp2ndWatchScraper.cs" />
     <Compile Include="Scrapers\SjpAnimotoScraper.cs" />
     <Compile Include="Scrapers\SjpApptioScraper.cs" />
-    <Compile Include="Scrapers\SjpBuuteeqScraper.cs" />
     <Compile Include="Scrapers\SjpCheezburgerScraper.cs" />
     <Compile Include="Scrapers\SjpContextRelevantScraper.cs" />
     <Compile Include="Scrapers\SjpExtraHopScraper.cs" />
