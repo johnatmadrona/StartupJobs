@@ -94,52 +94,52 @@ namespace StartupJobsParserConsoleApp
             return null;// new SjpLocalDiskIndex(Path.GetFullPath(".\\index\\"));
         }
 
-        public static List<ISjpScraper> GetScrapers(SjpScraperParams scraperParams)
+        public static List<ISjpScraper> GetScrapers(SjpScraperParams sp)
         {
             List<ISjpScraper> scrapers = new List<ISjpScraper>();
 
-            scrapers.Add(new Sjp2ndWatchScraper(scraperParams));
-            scrapers.Add(new SjpAngelListScraper(scraperParams, "Algorithmia", "https://angel.co/algorithmia/jobs"));
-            scrapers.Add(new SjpApptioScraper(scraperParams));
-            scrapers.Add(new SjpAnimotoScraper(scraperParams));
-            scrapers.Add(new SjpBizibleScraper(scraperParams));
-            scrapers.Add(new SjpBoomerangCommerceScraper(scraperParams));
-            scrapers.Add(new SjpCheezburgerScraper(scraperParams));
-            scrapers.Add(new SjpContextRelevantScraper(scraperParams));
-            scrapers.Add(new SjpEvocalizeScraper(scraperParams));
-            scrapers.Add(new SjpExtraHopScraper(scraperParams));
-            scrapers.Add(new SjpHaikuDeckScraper(scraperParams));
-            scrapers.Add(new SjpHighspotScraper(scraperParams));
-            scrapers.Add(new SjpAngelListScraper(scraperParams, "Icebrg", "https://angel.co/icebrg-io/jobs"));
-            scrapers.Add(new SjpIgneousSystemsScraper(scraperParams));
-            scrapers.Add(new SjpImpinjScraper(scraperParams));
-            scrapers.Add(new SjpIndochinoScraper(scraperParams));
-            scrapers.Add(new SjpIntrepidLearningScraper(scraperParams));
-            scrapers.Add(new SjpISpotTvScraper(scraperParams));
-            scrapers.Add(new SjpJamaScraper(scraperParams));
-            scrapers.Add(new SjpJobalineScraper(scraperParams));
-            scrapers.Add(new SjpJulepScraper(scraperParams));
-            scrapers.Add(new SjpLumoScraper(scraperParams));
-            scrapers.Add(new SjpMaxPointScraper(scraperParams));
-            scrapers.Add(new SjpMercentScraper(scraperParams));
-            scrapers.Add(new SjpMozScraper(scraperParams));
-            scrapers.Add(new SjpMixpoScraper(scraperParams));
-            scrapers.Add(new SjpOpalScraper(scraperParams));
-            scrapers.Add(new SjpPeachScraper(scraperParams));
-            scrapers.Add(new SjpPlacedScraper(scraperParams));
-            scrapers.Add(new SjpWonderWorkshopScraper(scraperParams));
-            scrapers.Add(new SjpQumuloScraper(scraperParams));
-            scrapers.Add(new SjpRedfinScraper(scraperParams));
-            scrapers.Add(new SjpResolutionTubeScraper(scraperParams));
-            scrapers.Add(new SjpRoverScraper(scraperParams));
-            scrapers.Add(new SjpSeeqScraper(scraperParams));
-            scrapers.Add(new SjpSkytapScraper(scraperParams));
-            scrapers.Add(new SjpSnupiScraper(scraperParams));
-            scrapers.Add(new SjpSmartsheetScraper(scraperParams));
-            scrapers.Add(new SjpAngelListScraper(scraperParams, "Spare5", "https://angel.co/spare5/jobs"));
-            scrapers.Add(new SjpWildTangentScraper(scraperParams));
-            scrapers.Add(new SjpYieldexScraper(scraperParams));
-            scrapers.Add(new SjpZ2Scraper(scraperParams));
+            scrapers.Add(new SjpResumatorScraper(sp, "2nd Watch", "http://2ndwatch.com/contact-us/careers/", "2ndwatch"));
+            scrapers.Add(new SjpAngelListScraper(sp, "Algorithmia", "https://angel.co/algorithmia/jobs"));
+            scrapers.Add(new SjpApptioScraper(sp));
+            scrapers.Add(new SjpAnimotoScraper(sp));
+            scrapers.Add(new SjpBizibleScraper(sp));
+            scrapers.Add(new SjpBoomerangCommerceScraper(sp));
+            scrapers.Add(new SjpResumatorScraper(sp, "Cheezburger", "http://jobs.cheezburger.com/", "cheezburger"));
+            scrapers.Add(new SjpContextRelevantScraper(sp));
+            scrapers.Add(new SjpEvocalizeScraper(sp));
+            scrapers.Add(new SjpExtraHopScraper(sp));
+            scrapers.Add(new SjpHaikuDeckScraper(sp));
+            scrapers.Add(new SjpHighspotScraper(sp));
+            scrapers.Add(new SjpAngelListScraper(sp, "Icebrg", "https://angel.co/icebrg-io/jobs"));
+            scrapers.Add(new SjpIgneousSystemsScraper(sp));
+            scrapers.Add(new SjpImpinjScraper(sp));
+            scrapers.Add(new SjpIndochinoScraper(sp));
+            scrapers.Add(new SjpIntrepidLearningScraper(sp));
+            scrapers.Add(new SjpISpotTvScraper(sp));
+            scrapers.Add(new SjpJamaScraper(sp));
+            scrapers.Add(new SjpResumatorScraper(sp, "Jobaline", "http://jobalinecareers.theresumator.com/", "jobalinecareers"));
+            scrapers.Add(new SjpResumatorScraper(sp, "Julep", "http://www.julep.com/careers.html", "julepbeauty"));
+            scrapers.Add(new SjpLumoScraper(sp));
+            scrapers.Add(new SjpMaxPointScraper(sp));
+            scrapers.Add(new SjpMercentScraper(sp));
+            scrapers.Add(new SjpResumatorScraper(sp, "Moz", "http://moz.com/about/jobs", "moz"));
+            scrapers.Add(new SjpMixpoScraper(sp));
+            scrapers.Add(new SjpOpalScraper(sp));
+            scrapers.Add(new SjpPeachScraper(sp));
+            scrapers.Add(new SjpPlacedScraper(sp));
+            scrapers.Add(new SjpResumatorScraper(sp, "Wonder Workshop", "https://www.makewonder.com/careers", "Playi"));
+            scrapers.Add(new SjpQumuloScraper(sp));
+            scrapers.Add(new SjpRedfinScraper(sp));
+            scrapers.Add(new SjpResolutionTubeScraper(sp));
+            scrapers.Add(new SjpResumatorScraper(sp, "Rover.com", "http://jobs.rover.com/", "rover"));
+            scrapers.Add(new SjpSeeqScraper(sp));
+            scrapers.Add(new SjpSkytapScraper(sp));
+            scrapers.Add(new SjpResumatorScraper(sp, "SNUPI", "http://www.snupi.com/#jobs", "snupi"));
+            scrapers.Add(new SjpSmartsheetScraper(sp));
+            scrapers.Add(new SjpAngelListScraper(sp, "Spare5", "https://angel.co/spare5/jobs"));
+            scrapers.Add(new SjpWildTangentScraper(sp));
+            scrapers.Add(new SjpYieldexScraper(sp));
+            scrapers.Add(new SjpZ2Scraper(sp));
 
             return scrapers;
         }

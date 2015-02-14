@@ -7,11 +7,28 @@ using System.Text.RegularExpressions;
 
 namespace StartupJobsParser
 {
-    public abstract class SjpResumatorScraperBase : SjpScraper
+    public class SjpResumatorScraper : SjpScraper
     {
-        protected SjpResumatorScraperBase(SjpScraperParams scraperParams)
+        private string _companyName;
+        private Uri _publicUri;
+        private Uri _scrapeUri;
+
+        public override string CompanyName { get { return _companyName; } }
+        public override Uri PublicUri { get { return _publicUri; } }
+        public override Uri DefaultScrapeUri { get { return _scrapeUri; } }
+
+        public SjpResumatorScraper(
+            SjpScraperParams scraperParams,
+            string companyName,
+            string publicUri,
+            string resumatorId
+            )
             : base(scraperParams)
         {
+            // TODO: Refactor. Assignment of variable name here is bad since base class may try to access.
+            _companyName = companyName;
+            _publicUri = new Uri(publicUri);
+            _scrapeUri = new Uri("http://app.theresumator.com/widgets/basic/create/" + resumatorId);
         }
 
         protected override IEnumerable<JobDescription> GetJds(Uri uri)

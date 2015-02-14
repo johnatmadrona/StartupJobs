@@ -8,7 +8,6 @@ namespace StartupJobsParser
     public class SjpOpalScraper : SjpScraper
     {
         private static readonly Uri _defaultUri = new Uri("http://workwithopal.com/careers");
-        private string _defaultLocation = "Portland, OR";
 
         public override string CompanyName { get { return "Opal"; } }
         public override Uri DefaultScrapeUri { get { return _defaultUri; } }
