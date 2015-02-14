@@ -99,7 +99,7 @@ namespace StartupJobsParserConsoleApp
             List<ISjpScraper> scrapers = new List<ISjpScraper>();
 
             scrapers.Add(new Sjp2ndWatchScraper(scraperParams));
-            scrapers.Add(new SjpAlgorithmiaScraper(scraperParams));
+            scrapers.Add(new SjpAngelListScraper(scraperParams, "Algorithmia", "https://angel.co/algorithmia/jobs"));
             scrapers.Add(new SjpApptioScraper(scraperParams));
             scrapers.Add(new SjpAnimotoScraper(scraperParams));
             scrapers.Add(new SjpBizibleScraper(scraperParams));
@@ -110,7 +110,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpExtraHopScraper(scraperParams));
             scrapers.Add(new SjpHaikuDeckScraper(scraperParams));
             scrapers.Add(new SjpHighspotScraper(scraperParams));
-            scrapers.Add(new SjpIcebrgScraper(scraperParams));
+            scrapers.Add(new SjpAngelListScraper(scraperParams, "Icebrg", "https://angel.co/icebrg-io/jobs"));
             scrapers.Add(new SjpIgneousSystemsScraper(scraperParams));
             scrapers.Add(new SjpImpinjScraper(scraperParams));
             scrapers.Add(new SjpIndochinoScraper(scraperParams));
@@ -136,6 +136,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpSkytapScraper(scraperParams));
             scrapers.Add(new SjpSnupiScraper(scraperParams));
             scrapers.Add(new SjpSmartsheetScraper(scraperParams));
+            scrapers.Add(new SjpAngelListScraper(scraperParams, "Spare5", "https://angel.co/spare5/jobs"));
             scrapers.Add(new SjpWildTangentScraper(scraperParams));
             scrapers.Add(new SjpYieldexScraper(scraperParams));
             scrapers.Add(new SjpZ2Scraper(scraperParams));

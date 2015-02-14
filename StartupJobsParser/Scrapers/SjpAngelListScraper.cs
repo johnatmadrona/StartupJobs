@@ -4,11 +4,34 @@ using System.Collections.Generic;
 
 namespace StartupJobsParser
 {
-    public abstract class SjpAngelListScraperBase : SjpScraper
+    public class SjpAngelListScraper : SjpScraper
     {
-        protected SjpAngelListScraperBase(SjpScraperParams scraperParams)
+        private Uri _defaultUri;
+        private string _companyName;
+
+        public override string CompanyName { get { return _companyName; } }
+        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _defaultUri; } }
+
+        public SjpAngelListScraper(
+            SjpScraperParams scraperParams,
+            string companyName,
+            string uri
+            )
+            : this(scraperParams, companyName, new Uri(uri))
+        {
+        }
+
+        public SjpAngelListScraper(
+            SjpScraperParams scraperParams,
+            string companyName,
+            Uri uri
+            )
             : base(scraperParams)
         {
+            // TODO: Refactor. Assignment of variable name here is bad since base class may try to access.
+            _defaultUri = uri;
+            _companyName = companyName;
         }
 
         protected override IEnumerable<JobDescription> GetJds(Uri uri)

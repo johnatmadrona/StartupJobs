@@ -71,13 +71,11 @@
     <Compile Include="ISjpLinkTracker.cs" />
     <Compile Include="ISjpIndex.cs" />
     <Compile Include="ScrapeResult.cs" />
-    <Compile Include="Scrapers\SjpAlgorithmiaScraper.cs" />
-    <Compile Include="Scrapers\SjpAngelListScraperBase.cs" />
+    <Compile Include="Scrapers\SjpAngelListScraper.cs" />
     <Compile Include="Scrapers\SjpBizibleScraper.cs" />
     <Compile Include="Scrapers\SjpBoomerangCommerceScraper.cs" />
     <Compile Include="Scrapers\SjpEvocalizeScraper.cs" />
     <Compile Include="Scrapers\SjpHighspotScraper.cs" />
-    <Compile Include="Scrapers\SjpIcebrgScraper.cs" />
     <Compile Include="Scrapers\SjpIgneousSystemsScraper.cs" />
     <Compile Include="Scrapers\SjpISpotTvScraper.cs" />
     <Compile Include="Scrapers\SjpJamaScraper.cs" />
