@@ -87,6 +87,7 @@
     <Compile Include="Scrapers\SjpMaxPointScraper.cs" />
     <Compile Include="Scrapers\SjpMercentScraper.cs" />
     <Compile Include="Scrapers\SjpNewtonScraperBase.cs" />
+    <Compile Include="Scrapers\SjpOpalScraper.cs" />
     <Compile Include="Scrapers\SjpPeachScraper.cs" />
     <Compile Include="Scrapers\SjpWonderWorkshopScraper.cs" />
     <Compile Include="Scrapers\SjpResolutionTubeScraper.cs" />
