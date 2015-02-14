@@ -73,6 +73,7 @@
     <Compile Include="ScrapeResult.cs" />
     <Compile Include="Scrapers\SjpAngelListScraper.cs" />
     <Compile Include="Scrapers\SjpBizibleScraper.cs" />
+    <Compile Include="Scrapers\SjpEchodyneScraper.cs" />
     <Compile Include="Scrapers\SjpEvocalizeScraper.cs" />
     <Compile Include="Scrapers\SjpHighspotScraper.cs" />
     <Compile Include="Scrapers\SjpJamaScraper.cs" />

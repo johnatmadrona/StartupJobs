@@ -106,6 +106,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpJobviteScraper(sp, "Boomerang Commerce", "http://www.boomerangcommerce.com/careers/", "qg0aVfw5"));
             scrapers.Add(new SjpResumatorScraper(sp, "Cheezburger", "http://jobs.cheezburger.com/", "cheezburger"));
             scrapers.Add(new SjpContextRelevantScraper(sp));
+            scrapers.Add(new SjpEchodyneScraper(sp));
             scrapers.Add(new SjpEvocalizeScraper(sp));
             scrapers.Add(new SjpJobviteScraper(sp, "ExtraHop", "http://www.extrahop.com/company/jobs/", "qAYaVfwn"));
             scrapers.Add(new SjpHaikuDeckScraper(sp));
