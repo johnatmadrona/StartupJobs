@@ -127,6 +127,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpOpalScraper(sp));
             scrapers.Add(new SjpPeachScraper(sp));
             scrapers.Add(new SjpPlacedScraper(sp));
+            scrapers.Add(new SjpJobviteScraper(sp, "Pro.com", "http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qxYaVfwk&v=1", "qxYaVfwk"));
             scrapers.Add(new SjpResumatorScraper(sp, "Wonder Workshop", "https://www.makewonder.com/careers", "Playi"));
             scrapers.Add(new SjpQumuloScraper(sp));
             scrapers.Add(new SjpRedfinScraper(sp));
