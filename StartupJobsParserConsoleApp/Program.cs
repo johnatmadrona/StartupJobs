@@ -136,6 +136,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpSkytapScraper(sp));
             scrapers.Add(new SjpResumatorScraper(sp, "SNUPI", "http://www.snupi.com/#jobs", "snupi"));
             scrapers.Add(new SjpSmartsheetScraper(sp));
+            scrapers.Add(new SjpResumatorScraper(sp, "Shippable", "http://shippable.theresumator.com/", "shippable"));
             scrapers.Add(new SjpAngelListScraper(sp, "Spare5", "https://angel.co/spare5/jobs"));
             scrapers.Add(new SjpWildTangentScraper(sp));
             scrapers.Add(new SjpYieldexScraper(sp));
