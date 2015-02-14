@@ -110,6 +110,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpExtraHopScraper(scraperParams));
             scrapers.Add(new SjpHaikuDeckScraper(scraperParams));
             scrapers.Add(new SjpHighspotScraper(scraperParams));
+            scrapers.Add(new SjpIcebrgScraper(scraperParams));
             scrapers.Add(new SjpIgneousSystemsScraper(scraperParams));
             scrapers.Add(new SjpImpinjScraper(scraperParams));
             scrapers.Add(new SjpIndochinoScraper(scraperParams));
