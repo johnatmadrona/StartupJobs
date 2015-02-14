@@ -1,3 +1,0 @@
-﻿using System;
-
-namespace StartupJobsParser{    public class SjpBoomerangCommerceScraper : SjpJobviteScraperBase    {        private static readonly Uri _publicUri = new Uri("http://www.boomerangcommerce.com/careers/");        public override string CompanyName { get { return "Boomerang Commerce"; } }        protected override string JobviteCompanyId { get { return "qg0aVfw5"; } }        public override Uri PublicUri { get { return _publicUri; } }        public SjpBoomerangCommerceScraper(SjpScraperParams scraperParams)            : base(scraperParams)        {        }    }}

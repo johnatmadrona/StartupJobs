@@ -5,17 +5,10 @@ using System.Net;
 
 namespace StartupJobsParser
 {
-    public class SjpImpinjScraper : SjpJobviteScraperBase
+    public class SjpImpinjScraper : SjpJobviteScraper
     {
-        private static readonly Uri _publicUri = new Uri("http://www.impinj.com/careers/");
-
-        public override string CompanyName { get { return "Impinj"; } }
-        protected override string JobviteCompanyId { get { return "qPD9Vfwg"; } }
-
-        public override Uri PublicUri { get { return _publicUri; } }
-
         public SjpImpinjScraper(SjpScraperParams scraperParams)
-            : base(scraperParams)
+            : base(scraperParams, "Impinj", "http://www.impinj.com/careers/", "qPD9Vfwg")
         {
         }
 

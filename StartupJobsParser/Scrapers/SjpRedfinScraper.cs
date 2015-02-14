@@ -5,16 +5,10 @@ using System.Net;
 
 namespace StartupJobsParser
 {
-    public class SjpRedfinScraper : SjpJobviteScraperBase
+    public class SjpRedfinScraper : SjpJobviteScraper
     {
-        private static readonly Uri _publicUri = new Uri("http://www.redfin.com/about/jobs");
-
-        public override string CompanyName { get { return "Redfin"; } }
-        protected override string JobviteCompanyId { get { return "qf49Vfw7"; } }
-        public override Uri PublicUri { get { return _publicUri; } }
-
         public SjpRedfinScraper(SjpScraperParams scraperParams)
-            : base(scraperParams)
+            : base(scraperParams, "Redfin", "http://www.redfin.com/about/jobs", "qf49Vfw7")
         {
         }
 

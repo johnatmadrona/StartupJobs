@@ -5,16 +5,10 @@ using System.Net;
 
 namespace StartupJobsParser
 {
-    public class SjpIntrepidLearningScraper : SjpJobviteScraperBase
+    public class SjpIntrepidLearningScraper : SjpJobviteScraper
     {
-        private static readonly Uri _publicUri = new Uri("http://intrepidlearning.com/careers/");
-
-        public override string CompanyName { get { return "Intrepid Learning Solutions"; } }
-        protected override string JobviteCompanyId { get { return "q089VfwW"; } }
-        public override Uri PublicUri { get { return _publicUri; } }
-
         public SjpIntrepidLearningScraper(SjpScraperParams scraperParams)
-            : base(scraperParams)
+            : base(scraperParams, "Intrepid Learning Solutions", "http://intrepidlearning.com/careers/", "q089VfwW")
         {
         }
 

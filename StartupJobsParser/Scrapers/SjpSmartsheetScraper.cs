@@ -2,21 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Text.RegularExpressions;
 
 namespace StartupJobsParser
 {
-    public class SjpSmartsheetScraper : SjpJobviteScraperBase
+    public class SjpSmartsheetScraper : SjpJobviteScraper
     {
-        private static readonly Uri _publicUri = new Uri("http://www.smartsheet.com/careers/");
-
-        public override string CompanyName { get { return "Smartsheet"; } }
-        protected override string JobviteCompanyId { get { return "q6R9VfwL"; } }
-
-        public override Uri PublicUri { get { return _publicUri; } }
-
         public SjpSmartsheetScraper(SjpScraperParams scraperParams)
-            : base(scraperParams)
+            : base(scraperParams, "Smartsheet", "http://www.smartsheet.com/careers/", "q6R9VfwL")
         {
         }
 
