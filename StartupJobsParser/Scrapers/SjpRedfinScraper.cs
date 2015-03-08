@@ -7,24 +7,15 @@ namespace StartupJobsParser
 {
     public class SjpRedfinScraper : SjpJobviteScraper
     {
+        private const string _redfinCompanyId = "qf49Vfw7";
+        private static string _scraperUrl = string.Format(_listUriFormat + "&page=Jobs-Location", _redfinCompanyId);
+
         public SjpRedfinScraper(SjpScraperParams scraperParams)
-            : base(scraperParams, "Redfin", "http://www.redfin.com/about/jobs", "qf49Vfw7")
+            : base(scraperParams, "Redfin", "http://www.redfin.com/about/jobs", _redfinCompanyId, _scraperUrl)
         {
         }
 
-        protected override IEnumerable<JobDescription> GetJds(Uri uri)
-        {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode jdUriNode in doc.DocumentNode.SelectNodes("//a[contains(@href, '/open-jobs?')]"))
-            {
-                // Get the jobvite job ID from the link
-                Uri tmpUri = new Uri(jdUriNode.Attributes["href"].Value);
-                string jobId = tmpUri.Query.Split('=')[1];
-                yield return GetRedfinJd(GetItemUri(WebUtility.UrlEncode(jobId)));
-            }
-        }
-
-        private JobDescription GetRedfinJd(Uri jdUri)
+        protected override JobDescription GetJd(Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
 

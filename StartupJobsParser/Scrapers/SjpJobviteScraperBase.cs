@@ -7,8 +7,8 @@ namespace StartupJobsParser
 {
     public class SjpJobviteScraper : SjpScraper
     {
-        private const string _listUriFormat = "http://hire.jobvite.com/CompanyJobs/Careers.aspx?c={0}&jvresize=";
-        private const string _itemUriFormat = _listUriFormat + "&j={1}";
+        protected const string _listUriFormat = "http://hire.jobvite.com/CompanyJobs/Careers.aspx?c={0}&jvresize=";
+        protected const string _itemUriFormat = _listUriFormat + "&j={1}";
 
         private string _companyName;
         private string _jobviteCompanyId;
@@ -27,12 +27,30 @@ namespace StartupJobsParser
             string publicUri,
             string jobviteCompanyId
             )
+            : this(scraperParams, companyName, publicUri, jobviteCompanyId, null)
+        {
+        }
+
+        public SjpJobviteScraper(
+            SjpScraperParams scraperParams,
+            string companyName,
+            string publicUri,
+            string jobviteCompanyId,
+            string scraperUri
+            )
             : base(scraperParams)
         {
             _companyName = companyName;
             _publicUri = new Uri(publicUri);
             _jobviteCompanyId = jobviteCompanyId;
-            _defaultScrapeUri = new Uri(string.Format(_listUriFormat, JobviteCompanyId));
+            if (scraperUri != null)
+            {
+                _defaultScrapeUri = new Uri(scraperUri);
+            }
+            else
+            {
+                _defaultScrapeUri = new Uri(string.Format(_listUriFormat, JobviteCompanyId));
+            }
         }
 
         protected Uri GetItemUri(string jobId)
@@ -74,6 +92,7 @@ namespace StartupJobsParser
             }
             if (nodes == null)
             {
+                // XPath is case-sensitive - this handles the jobList (vs joblist) case
                 nodes = doc.DocumentNode.SelectNodes("//*[@class='jobList']//a[contains(@href,'?jvi=')]");
             }
 
