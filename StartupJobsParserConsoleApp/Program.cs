@@ -119,7 +119,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpIntrepidLearningScraper(sp));
             scrapers.Add(new SjpJobviteScraper(sp, "iSpot.tv", "http://www.ispot.tv/careers", "qrI9VfwX"));
             scrapers.Add(new SjpJamaScraper(sp));
-            scrapers.Add(new SjpResumatorScraper(sp, "Jobaline", "http://jobalinecareers.theresumator.com/", "jobalinecareers"));
+            scrapers.Add(new SjpJobalineScraper(sp));
             scrapers.Add(new SjpResumatorScraper(sp, "Julep", "http://www.julep.com/careers.html", "julepbeauty"));
             scrapers.Add(new SjpLumoScraper(sp));
             scrapers.Add(new SjpMaxPointScraper(sp));
