@@ -75,6 +75,7 @@
     <Compile Include="Scrapers\SjpBizibleScraper.cs" />
     <Compile Include="Scrapers\SjpEchodyneScraper.cs" />
     <Compile Include="Scrapers\SjpEvocalizeScraper.cs" />
+    <Compile Include="Scrapers\SjpGreenhouseScraperBase.cs" />
     <Compile Include="Scrapers\SjpHighspotScraper.cs" />
     <Compile Include="Scrapers\SjpJamaScraper.cs" />
     <Compile Include="Scrapers\SjpJobscoreScraperBase.cs" />
@@ -99,7 +100,6 @@
     <Compile Include="Scrapers\SjpIndochinoScraper.cs" />
     <Compile Include="Scrapers\SjpIntrepidLearningScraper.cs" />
     <Compile Include="Scrapers\SjpJobviteScraperBase.cs" />
-    <Compile Include="Scrapers\SjpPlacedScraper.cs" />
     <Compile Include="Scrapers\SjpQumuloScraper.cs" />
     <Compile Include="Scrapers\SjpRedfinScraper.cs" />
     <Compile Include="Scrapers\SjpResumatorScraperBase.cs" />
