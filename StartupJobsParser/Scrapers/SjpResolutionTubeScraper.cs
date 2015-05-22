@@ -8,6 +8,7 @@ namespace StartupJobsParser
     public class SjpResolutionTubeScraper : SjpScraper
     {
         private static readonly Uri _defaultUri = new Uri("http://www.resolutiontube.com/");
+        private const string _defaultLocation = "Seattle, WA";
 
         public override string CompanyName { get { return "ResolutionTube"; } }
         public override Uri DefaultScrapeUri { get { return _defaultUri; } }
@@ -41,7 +42,7 @@ namespace StartupJobsParser
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = "Seattle, WA",
+                Location = _defaultLocation,
                 FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
                 FullHtmlDescription = descriptionNode.InnerHtml
             };

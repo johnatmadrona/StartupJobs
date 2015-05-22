@@ -7,7 +7,7 @@ namespace StartupJobsParser
     public class SjpEchodyneScraper : SjpScraper
     {
         private static readonly Uri _defaultUri = new Uri("http://echodyne.com/careers/");
-        private string _defaultLocation = "Seattle, WA";
+        private const string _defaultLocation = "Seattle, WA";
 
         public override string CompanyName { get { return "Echodyne"; } }
         public override Uri DefaultScrapeUri { get { return _defaultUri; } }

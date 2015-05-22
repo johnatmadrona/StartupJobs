@@ -32,6 +32,23 @@ namespace StartupJobsParser
             return doc;
         }
 
+        public static string GetTextDoc(string uri)
+        {
+            return GetTextDoc(new Uri(uri));
+        }
+
+        public static string GetTextDoc(Uri uri)
+        {
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(uri);
+            using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
+            {
+                using (StreamReader reader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+        }
+
         public static string GetTextFromPdf(string uri)
         {
             return GetTextFromPdf(new Uri(uri));

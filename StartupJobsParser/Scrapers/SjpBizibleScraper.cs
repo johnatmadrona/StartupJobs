@@ -8,7 +8,7 @@ namespace StartupJobsParser
     public class SjpBizibleScraper : SjpScraper
     {
         private static readonly Uri _defaultUri = new Uri("http://www.bizible.com/jobs/");
-        private string _defaultLocation = "Seattle, WA";
+        private const string _defaultLocation = "Seattle, WA";
 
         public override string CompanyName { get { return "Bizible"; } }
         public override Uri DefaultScrapeUri { get { return _defaultUri; } }

@@ -1,16 +1,87 @@
-﻿using HtmlAgilityPack;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
 namespace StartupJobsParser
 {
+    internal class PeachJob
+    {
+        JContainer _jc;
+
+        public string Title { get {
+            return _jc.Value<string>("title");
+        } }
+
+        public string DescriptionHtml { get {
+            return ToHtml("Description", _jc.SelectToken("description"));
+        } }
+
+        public string ResponsibilitiesHtml { get {
+            return ToHtml("Responsibilities", _jc.SelectToken("responsibilities"));
+        } }
+
+        public string RequirementsHtml { get {
+            return ToHtml("Requirements", _jc.SelectToken("requirements"));
+        } }
+
+        public string BonusesHtml { get {
+            return ToHtml("Bonuses", _jc.SelectToken("bonuses"));
+        } }
+
+        public PeachJob(JContainer jc)
+        {
+            _jc = jc;
+        }
+
+        private string ToHtml(string name, JToken t)
+        {
+            if (t == null)
+            {
+                return "";
+            }
+
+            List<string> parts = new List<string>();
+            if (t.Type == JTokenType.String)
+            {
+                parts.Add(t.Value<string>());
+            }
+            else if (t.Type == JTokenType.Array)
+            {
+                parts.AddRange(t.Values<string>());
+            }
+
+            if (parts.Count < 1)
+            {
+                return "";
+            }
+
+            string html = "<div><h2>" + name + "</h2>";
+            if (parts.Count == 1)
+            {
+                html += parts[0];
+            }
+            else
+            {
+                html += "<ul><li>";
+                html += string.Join("</li><li>", parts);
+                html += "</li></ul>";
+            }
+            html += "</div>";
+
+            return html;
+        }
+    }
+
     public class SjpPeachScraper : SjpScraper
     {
-        private static readonly Uri _defaultUri = new Uri("https://www.peachd.com/jobs");
+        private static readonly Uri _publicUri = new Uri("https://www.peachd.com/jobs");
+        private static readonly Uri _defaultUri = new Uri("https://peach-us.s3.amazonaws.com/prod/js/e26bddf6603e.js");
+        private const string _defaultLocation = "Seattle, WA";
 
         public override string CompanyName { get { return "Peach"; } }
         public override Uri DefaultScrapeUri { get { return _defaultUri; } }
-        public override Uri PublicUri { get { return _defaultUri; } }
+        public override Uri PublicUri { get { return _publicUri; } }
 
         public SjpPeachScraper(SjpScraperParams scraperParams)
             : base(scraperParams)
@@ -19,34 +90,56 @@ namespace StartupJobsParser
 
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
-            HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode headerNode in doc.DocumentNode.SelectNodes("//div[starts-with(@onclick,'toggle(')]"))
+            string doc = SjpUtils.GetTextDoc(uri);
+
+            const string startText = "new Job(";
+            int offset = doc.IndexOf(startText);
+            while (offset >= 0)
             {
-                HtmlNode bodyNode = headerNode.NextSibling;
-                while (bodyNode != null && 
-                    (!bodyNode.Attributes.Contains("class") || bodyNode.Attributes["class"].Value != "jobsSection"))
+                // Find opening of json object
+                offset += startText.Length;
+                while (offset < doc.Length && doc[offset] != '{')
                 {
-                    bodyNode = bodyNode.NextSibling;
+                    offset++;
                 }
 
-                yield return GetPeachJd(headerNode, bodyNode);
+                if (offset < doc.Length)
+                {
+                    // Find end of json object
+                    int depth = 1;
+                    int end;
+                    for (end = offset + 1; end < doc.Length && depth > 0; end++)
+                    {
+                        if (doc[end] == '{') depth++;
+                        else if (doc[end] == '}') depth--;
+                    }
+
+                    string json = doc.Substring(offset, end - offset);
+                    yield return CreatePeachJd(json);
+
+                    offset = doc.IndexOf(startText, end);
+                }
             }
         }
 
-        private JobDescription GetPeachJd(HtmlNode headerNode, HtmlNode bodyNode)
+        private JobDescription CreatePeachJd(string json)
         {
-            HtmlNodeCollection headerItems = headerNode.SelectNodes("div");
-            HtmlNode titleNode = headerItems[0];
-            HtmlNode locationNode = headerItems[1];
+            JContainer jc = (JContainer)JsonConvert.DeserializeObject(json);
+            PeachJob job = new PeachJob(jc);
+
+            string htmlDescription = job.DescriptionHtml + 
+                job.ResponsibilitiesHtml + 
+                job.RequirementsHtml + 
+                job.BonusesHtml;
 
             return new JobDescription()
             {
                 SourceUri = PublicUri.AbsoluteUri,
                 Company = CompanyName,
-                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = SjpUtils.GetCleanTextFromHtml(locationNode),
-                FullTextDescription = SjpUtils.GetCleanTextFromHtml(bodyNode),
-                FullHtmlDescription = bodyNode.InnerHtml
+                Title = job.Title,
+                Location = _defaultLocation,
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(htmlDescription),
+                FullHtmlDescription = htmlDescription
             };
         }
     }

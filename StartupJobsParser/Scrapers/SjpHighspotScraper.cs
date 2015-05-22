@@ -7,6 +7,7 @@ namespace StartupJobsParser
     public class SjpHighspotScraper : SjpScraper
     {
         private static readonly Uri _defaultUri = new Uri("https://www.highspot.com/about/careers/");
+        private const string _defaultLocation = "Seattle, WA";
 
         public override string CompanyName { get { return "Highspot"; } }
         public override Uri DefaultScrapeUri { get { return _defaultUri; } }
@@ -42,7 +43,7 @@ namespace StartupJobsParser
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
-                Location = "Seattle, WA",
+                Location = _defaultLocation,
                 FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
                 FullHtmlDescription = descriptionNode.InnerHtml
             };

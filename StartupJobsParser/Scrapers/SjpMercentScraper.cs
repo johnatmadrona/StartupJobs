@@ -8,7 +8,7 @@ namespace StartupJobsParser
     public class SjpMercentScraper : SjpScraper
     {
         private static readonly Uri _defaultUri = new Uri("http://www.mercent.com/careers");
-        private string _defaultLocation = "Seattle, WA";
+        private const string _defaultLocation = "Seattle, WA";
 
         public override string CompanyName { get { return "Mercent"; } }
         public override Uri DefaultScrapeUri { get { return _defaultUri; } }
