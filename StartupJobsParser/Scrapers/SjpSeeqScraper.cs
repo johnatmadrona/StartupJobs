@@ -22,12 +22,12 @@ namespace StartupJobsParser
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
 
-            HtmlNodeCollection jdInfoNodes = doc.DocumentNode.SelectNodes("//div[@class='div_job_item_name']/a");
-            if (jdInfoNodes != null)
+            HtmlNodeCollection jdLinkNodes = doc.DocumentNode.SelectNodes("//a[@class='a_joblist']");
+            if (jdLinkNodes != null)
             {
-                foreach (HtmlNode jdInfoNode in jdInfoNodes)
+                foreach (HtmlNode jdLinkNode in jdLinkNodes)
                 {
-                    yield return GetSeeqJd(new Uri(uri, jdInfoNode.Attributes["href"].Value));
+                    yield return GetSeeqJd(new Uri(uri, jdLinkNode.Attributes["href"].Value));
                 }
             }
         }
@@ -36,10 +36,16 @@ namespace StartupJobsParser
         {
             HtmlNode jdNode = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
 
-            HtmlNode titleNode = jdNode.SelectSingleNode("//h1[@id='h1_opening_name']");
-            HtmlNode locationNode = jdNode.SelectSingleNode("//h2[@id='h2_job_info']");
+            HtmlNode titleNode = jdNode.SelectSingleNode("//*[starts-with(@class,'jobtitle')]");
+            HtmlNode locationNode = jdNode.SelectSingleNode("//*[@class='meta-job-location-city']");
 
-            HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[@id='div_jd']");
+            // RecruiterBox mispelled class name "jobdesciption". It's not a mistake here.
+            // Added some handling logic since they may fix it.
+            HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[@class='jobdesciption']");
+            if (descriptionNode == null)
+            {
+                descriptionNode = jdNode.SelectSingleNode("//div[@class='jobdescription']");
+            }
 
             return new JobDescription()
             {
