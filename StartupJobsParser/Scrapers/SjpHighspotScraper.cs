@@ -21,7 +21,7 @@ namespace StartupJobsParser
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
-            foreach (HtmlNode linkNode in doc.DocumentNode.SelectNodes("//div[@class='careers-page']//a[contains(@href,'/about/careers/')]"))
+            foreach (HtmlNode linkNode in doc.DocumentNode.SelectNodes("//div[@class='careers-page']//a[contains(@href,'/careers/')]"))
             {
                 Uri linkUri = new Uri(uri, linkNode.Attributes["href"].Value);
                 yield return GetHighspotJd(linkUri);
