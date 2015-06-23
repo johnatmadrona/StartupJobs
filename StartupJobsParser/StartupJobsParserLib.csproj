@@ -87,13 +87,11 @@
     <Compile Include="Scrapers\SjpJobscoreScraperBase.cs" />
     <Compile Include="Scrapers\SjpLumoScraper.cs" />
     <Compile Include="Scrapers\SjpMaxPointScraper.cs" />
-    <Compile Include="Scrapers\SjpMercentScraper.cs" />
     <Compile Include="Scrapers\SjpNewtonScraperBase.cs" />
     <Compile Include="Scrapers\SjpOpalScraper.cs" />
     <Compile Include="Scrapers\SjpPeachScraper.cs" />
     <Compile Include="Scrapers\SjpResolutionTubeScraper.cs" />
     <Compile Include="Scrapers\SjpSeeqScraper.cs" />
-    <Compile Include="Scrapers\SjpYieldexScraper.cs" />
     <Compile Include="SjpScraperParams.cs" />
     <Compile Include="Storage\ISjpStorage.cs" />
     <Compile Include="JobDescription.cs" />
@@ -111,7 +109,6 @@
     <Compile Include="Scrapers\SjpSmartsheetScraper.cs" />
     <Compile Include="Scrapers\SjpTaleoScraperBase.cs" />
     <Compile Include="Scrapers\SjpWildTangentScraper.cs" />
-    <Compile Include="Scrapers\SjpZ2Scraper.cs" />
     <Compile Include="SjpLocalDiskIndex.cs" />
     <Compile Include="SjpLogger.cs" />
     <Compile Include="Scrapers\SjpScraper.cs" />

@@ -123,7 +123,6 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpResumatorScraper(sp, "Julep", "http://www.julep.com/careers.html", "julepbeauty"));
             scrapers.Add(new SjpLumoScraper(sp));
             scrapers.Add(new SjpMaxPointScraper(sp));
-            scrapers.Add(new SjpMercentScraper(sp));
             scrapers.Add(new SjpResumatorScraper(sp, "Moz", "http://moz.com/about/jobs", "moz"));
             scrapers.Add(new SjpJobviteScraper(sp, "Mixpo", "http://dynamicvideoad.mixpo.com/about/careers/", "qc3aVfw4"));
             scrapers.Add(new SjpOpalScraper(sp));
@@ -143,8 +142,6 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpSmartsheetScraper(sp));
             scrapers.Add(new SjpAngelListScraper(sp, "Spare5", "https://angel.co/spare5/jobs"));
             scrapers.Add(new SjpWildTangentScraper(sp));
-            scrapers.Add(new SjpYieldexScraper(sp));
-            scrapers.Add(new SjpZ2Scraper(sp));
 
             return scrapers;
         }
