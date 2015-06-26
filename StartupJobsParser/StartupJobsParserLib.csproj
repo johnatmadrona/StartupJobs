@@ -103,7 +103,6 @@
     <Compile Include="Scrapers\SjpIndochinoScraper.cs" />
     <Compile Include="Scrapers\SjpIntrepidLearningScraper.cs" />
     <Compile Include="Scrapers\SjpJobviteScraperBase.cs" />
-    <Compile Include="Scrapers\SjpQumuloScraper.cs" />
     <Compile Include="Scrapers\SjpRedfinScraper.cs" />
     <Compile Include="Scrapers\SjpResumatorScraperBase.cs" />
     <Compile Include="Scrapers\SjpSmartsheetScraper.cs" />
