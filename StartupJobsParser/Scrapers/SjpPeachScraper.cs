@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using HtmlAgilityPack;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -76,11 +77,10 @@ namespace StartupJobsParser
     public class SjpPeachScraper : SjpScraper
     {
         private static readonly Uri _publicUri = new Uri("https://www.peachd.com/jobs");
-        private static readonly Uri _defaultUri = new Uri("https://peach-us.s3.amazonaws.com/prod/js/e26bddf6603e.js");
         private const string _defaultLocation = "Seattle, WA";
 
         public override string CompanyName { get { return "Peach"; } }
-        public override Uri DefaultScrapeUri { get { return _defaultUri; } }
+        public override Uri DefaultScrapeUri { get { return _publicUri; } }
         public override Uri PublicUri { get { return _publicUri; } }
 
         public SjpPeachScraper(SjpScraperParams scraperParams)
@@ -90,7 +90,20 @@ namespace StartupJobsParser
 
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
-            string doc = SjpUtils.GetTextDoc(uri);
+            HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
+
+            foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//script[starts-with(@src,'https://peach-us.s3.amazonaws.com/prod/js/')]"))
+            {
+                foreach (JobDescription jd in GetJdsFromJs(node.Attributes["src"].Value))
+                {
+                    yield return jd;
+                }
+            }
+        }
+
+        private IEnumerable<JobDescription> GetJdsFromJs(string jsUri)
+        {
+            string doc = SjpUtils.GetTextDoc(jsUri);
 
             const string startText = "new Job(";
             int offset = doc.IndexOf(startText);
