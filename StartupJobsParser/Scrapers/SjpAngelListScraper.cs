@@ -45,26 +45,43 @@ namespace StartupJobsParser
 
         private JobDescription GetAngelListJd(Uri jdUri)
         {
-            HtmlNode jdNode = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
+            HtmlNode doc = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
 
-            HtmlNode headerNode = jdNode.SelectSingleNode("//h1[contains(@class,'join-title')]");
-            string headerText = SjpUtils.GetCleanTextFromHtml(headerNode);
-            int lastAt = headerText.LastIndexOf(" at ");
-            if (lastAt < 0)
+            HtmlNode titleNode = doc.SelectSingleNode("//h1[contains(@class,'join-title')]");
+
+            HtmlNodeCollection parts = doc.SelectNodes("//div[@class='s-vgPad2']");
+
+            // Expect to always get 2 items, 1st item is job description, 2nd item is job metadata
+            HtmlNode descriptionNode = parts[0];
+
+            string location = null;
+            HtmlNodeCollection jobDescriptors = parts[1].SelectNodes("./div");
+            for (int i = 0; i < jobDescriptors.Count && location == null; i++)
             {
-                throw new Exception("Couldn't find expected separator");
-            }
-            string title = headerText.Substring(0, lastAt);
 
-            HtmlNode locationNode = jdNode.SelectSingleNode("//div[@class='locations']");
-            HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[contains(@class,'about_container')]");
+                if (SjpUtils.GetCleanTextFromHtml(jobDescriptors[i]) == "Location")
+                {
+                    location = SjpUtils.GetCleanTextFromHtml(jobDescriptors[i + 1]);
+
+                    const string remoteText = ", Remote OK";
+                    int remoteIndex = location.IndexOf(remoteText);
+                    if (remoteIndex > 0)
+                    {
+                        location = location.Remove(remoteIndex, remoteText.Length);
+                    }
+                }
+            }
+            if (location == null)
+            {
+                throw new Exception("Could not find location");
+            }
 
             return new JobDescription()
             {
                 SourceUri = jdUri.AbsoluteUri,
                 Company = CompanyName,
-                Title = title,
-                Location = SjpUtils.GetCleanTextFromHtml(locationNode),
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = location,
                 FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
                 FullHtmlDescription = descriptionNode.InnerHtml
             };

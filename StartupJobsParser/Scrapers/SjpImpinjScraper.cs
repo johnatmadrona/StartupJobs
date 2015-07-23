@@ -12,7 +12,7 @@ namespace StartupJobsParser
         {
         }
 
-        protected override JobDescription GetJd(Uri jdUri)
+        protected override JobDescription GetJdFromHireSubdomain(Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
 

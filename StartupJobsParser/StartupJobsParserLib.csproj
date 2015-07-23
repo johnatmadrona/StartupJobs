@@ -92,6 +92,7 @@
     <Compile Include="Scrapers\SjpPeachScraper.cs" />
     <Compile Include="Scrapers\SjpResolutionTubeScraper.cs" />
     <Compile Include="Scrapers\SjpSeeqScraper.cs" />
+    <Compile Include="Scrapers\SjpSpare5Scraper.cs" />
     <Compile Include="SjpScraperParams.cs" />
     <Compile Include="Storage\ISjpStorage.cs" />
     <Compile Include="JobDescription.cs" />
@@ -101,7 +102,6 @@
     <Compile Include="Scrapers\SjpHaikuDeckScraper.cs" />
     <Compile Include="Scrapers\SjpImpinjScraper.cs" />
     <Compile Include="Scrapers\SjpIndochinoScraper.cs" />
-    <Compile Include="Scrapers\SjpIntrepidLearningScraper.cs" />
     <Compile Include="Scrapers\SjpJobviteScraperBase.cs" />
     <Compile Include="Scrapers\SjpRedfinScraper.cs" />
     <Compile Include="Scrapers\SjpResumatorScraperBase.cs" />

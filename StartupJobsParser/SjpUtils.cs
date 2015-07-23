@@ -2,6 +2,8 @@
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -18,9 +20,40 @@ namespace StartupJobsParser
 
         public static HtmlDocument GetHtmlDoc(Uri uri)
         {
+            return GetHtmlDoc(uri, false, null);
+        }
+
+        public static HtmlDocument GetHtmlDoc(
+            Uri uri,
+            bool setUserAgent,
+            IEnumerable<KeyValuePair<string, string>> headers
+            )
+        {
             HtmlDocument doc = new HtmlDocument();
 
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(uri);
+
+            if (setUserAgent)
+            {
+                const string agentText = "MadronaJobScraper/0.1";
+                if (req.UserAgent == null)
+                {
+                    req.UserAgent = agentText;
+                }
+                else
+                {
+                    req.UserAgent += " " + agentText;
+                }
+            }
+
+            if (headers != null)
+            {
+                foreach (KeyValuePair<string, string> header in headers)
+                {
+                    req.Headers.Add(header.Key, header.Value);
+                }
+            }
+
             using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
             {
                 using (Stream htmlStream = resp.GetResponseStream())

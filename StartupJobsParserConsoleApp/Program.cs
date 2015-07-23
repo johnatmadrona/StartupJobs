@@ -106,7 +106,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpJobviteScraper(sp, "Boomerang Commerce", "http://www.boomerangcommerce.com/careers/", "qg0aVfw5"));
             scrapers.Add(new SjpResumatorScraper(sp, "Cheezburger", "http://jobs.cheezburger.com/", "cheezburger"));
             scrapers.Add(new SjpResumatorScraper(sp, "Context Relevant", "http://www.contextrelevant.com/job-openings/", "contextrelevant"));
-            scrapers.Add(new SjpJobviteScraper(sp, "Dato", "http://dato.com/company/careers/index.html", "qY5aVfwS"));
+            scrapers.Add(new SjpJobviteScraper(sp, "Dato", "http://dato.com/company/careers/index.html", "qY5aVfwS", "http://jobs.jobvite.com/careers/dato/jobs"));
             scrapers.Add(new SjpEchodyneScraper(sp));
             scrapers.Add(new SjpEvocalizeScraper(sp));
             scrapers.Add(new SjpJobviteScraper(sp, "ExtraHop", "http://www.extrahop.com/company/jobs/", "qAYaVfwn"));
@@ -116,7 +116,6 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpJobviteScraper(sp, "Igneous Systems", "http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qpO9Vfw1&v=1", "qpO9Vfw1"));
             scrapers.Add(new SjpImpinjScraper(sp));
             scrapers.Add(new SjpIndochinoScraper(sp));
-            scrapers.Add(new SjpIntrepidLearningScraper(sp));
             scrapers.Add(new SjpJobviteScraper(sp, "iSpot.tv", "http://www.ispot.tv/careers", "qrI9VfwX"));
             scrapers.Add(new SjpJamaScraper(sp));
             scrapers.Add(new SjpJobalineScraper(sp));
@@ -140,7 +139,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpJobviteScraper(sp, "Skytap", "http://www.skytap.com/company/careers", "q1A9Vfwp"));
             scrapers.Add(new SjpResumatorScraper(sp, "SNUPI", "http://www.snupi.com/#jobs", "snupi"));
             scrapers.Add(new SjpSmartsheetScraper(sp));
-            scrapers.Add(new SjpAngelListScraper(sp, "Spare5", "https://angel.co/spare5/jobs"));
+            scrapers.Add(new SjpSpare5Scraper(sp));
             scrapers.Add(new SjpWildTangentScraper(sp));
 
             return scrapers;

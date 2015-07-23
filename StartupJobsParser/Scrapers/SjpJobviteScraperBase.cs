@@ -84,6 +84,22 @@ namespace StartupJobsParser
 
         protected override IEnumerable<JobDescription> GetJds(Uri uri)
         {
+            if (uri.Host.StartsWith("hire."))
+            {
+                return GetJdsFromHireSubdomain(uri);
+            }
+            else if (uri.Host.StartsWith("jobs."))
+            {
+                return GetJdsFromJobsSubdomain(uri);
+            }
+            else
+            {
+                throw new Exception("Unexpected subdomain in Jobvite URL: " + uri.AbsoluteUri);
+            }
+        }
+
+        protected virtual IEnumerable<JobDescription> GetJdsFromHireSubdomain(Uri uri)
+        {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
             HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//*[@class='joblist']//a[starts-with(@onclick,'jvGoToPage')]");
             if (nodes == null)
@@ -98,11 +114,11 @@ namespace StartupJobsParser
 
             foreach (HtmlNode jdUriNode in nodes)
             {
-                yield return GetJd(ExtractJdUriFromGoToPageLink(jdUriNode));
+                yield return GetJdFromHireSubdomain(ExtractJdUriFromGoToPageLink(jdUriNode));
             }
         }
 
-        protected virtual JobDescription GetJd(Uri jdUri)
+        protected virtual JobDescription GetJdFromHireSubdomain(Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
 
@@ -130,6 +146,47 @@ namespace StartupJobsParser
                 Company = CompanyName,
                 Title = SjpUtils.GetCleanTextFromHtml(titleNode),
                 Location = WebUtility.HtmlDecode(location).Trim(),
+                FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
+                FullHtmlDescription = descriptionNode.InnerHtml
+            };
+        }
+
+        protected virtual IEnumerable<JobDescription> GetJdsFromJobsSubdomain(Uri uri)
+        {
+            HtmlDocument doc = SjpUtils.GetHtmlDoc(uri);
+            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//*[@class='jv-job-list-name']//a");
+            foreach (HtmlNode jdUriNode in nodes)
+            {
+                Uri jobUri = new Uri(uri, jdUriNode.Attributes["href"].Value);
+                yield return GetJdFromJobsSubdomain(jobUri);
+            }
+        }
+
+        protected virtual JobDescription GetJdFromJobsSubdomain(Uri jdUri)
+        {
+            HtmlNode doc = SjpUtils.GetHtmlDoc(jdUri).DocumentNode;
+
+            HtmlNode titleNode = doc.SelectSingleNode("//*[@class='jv-header']");
+
+            HtmlNode locationNode = doc.SelectSingleNode("//*[@class='jv-job-detail-meta']");
+            HtmlNode child = locationNode.FirstChild;
+            while (child.Name != "span")
+            {
+                HtmlNode remove = child;
+                child = child.NextSibling;
+                remove.Remove();
+            }
+            child.Remove();
+            string location = SjpUtils.GetCleanTextFromHtml(locationNode).Replace("\n", "");
+
+            HtmlNode descriptionNode = doc.SelectSingleNode("//div[@class='jv-job-detail-description']");
+
+            return new JobDescription()
+            {
+                SourceUri = jdUri.AbsoluteUri,
+                Company = CompanyName,
+                Title = SjpUtils.GetCleanTextFromHtml(titleNode),
+                Location = location,
                 FullTextDescription = SjpUtils.GetCleanTextFromHtml(descriptionNode),
                 FullHtmlDescription = descriptionNode.InnerHtml
             };
