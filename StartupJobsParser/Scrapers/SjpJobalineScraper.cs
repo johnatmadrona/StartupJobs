@@ -33,11 +33,20 @@ namespace StartupJobsParser
         private JobDescription GetJobalineJd(Uri jdUri)
         {
             HtmlDocument doc = SjpUtils.GetHtmlDoc(jdUri);
-            HtmlNode jdNode = doc.DocumentNode.SelectSingleNode("//div[@id='jobPost']");
+            HtmlNode jdNode = doc.DocumentNode;
 
-            HtmlNode titleNode = jdNode.SelectSingleNode("//div[@id='jaJobTitle']");
-            HtmlNode locationNode = jdNode.SelectSingleNode("//div[@id='jaLocation']");
-            HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[@id='jobDescription']");
+            HtmlNode titleNode = jdNode.SelectSingleNode("//*[contains(@class,'job-title')]");
+
+            HtmlNode locationNode = jdNode.SelectSingleNode("//span[@class='info-icons']");
+            Regex locationEx = new Regex("(?<location>[a-zA-Z ]+, [A-Z]{2})");
+            Match m = locationEx.Match(locationNode.InnerText);
+            string location = _defaultLocation;
+            if (m.Success)
+            {
+                location = m.Groups["location"].Value.Trim();
+            }
+
+            HtmlNode descriptionNode = jdNode.SelectSingleNode("//div[@class='job-description-container']");
 
             return new JobDescription()
             {

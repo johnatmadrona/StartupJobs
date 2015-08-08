@@ -14,6 +14,7 @@ namespace StartupJobsParser
         protected ISjpIndex _index;
         protected ISjpLinkTracker _linkTracker;
 
+        public string ScraperId { get { return CompanyName; } }
         public abstract string CompanyName { get; }
         public abstract Uri DefaultScrapeUri { get; }
         public abstract Uri PublicUri { get; }

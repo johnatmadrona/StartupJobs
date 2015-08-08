@@ -43,7 +43,7 @@ namespace StartupJobsParserConsoleApp
 
             ScrapeResult aggregateScrapeResult = new ScrapeResult();
 
-            List<KeyValuePair<Type, Exception>> errors = new List<KeyValuePair<Type,Exception>>();
+            List<KeyValuePair<string, Exception>> errors = new List<KeyValuePair<string, Exception>>();
             Parallel.ForEach(scrapers, scraper =>
             {
                 try
@@ -52,7 +52,10 @@ namespace StartupJobsParserConsoleApp
                 }
                 catch (Exception ex)
                 {
-                    errors.Add(new KeyValuePair<Type,Exception>(scraper.GetType(), ex));
+                    errors.Add(new KeyValuePair<string, Exception>(
+                        scraper.GetType().ToString() + ": " + scraper.ScraperId,
+                        ex
+                        ));
                 }
             });
 
@@ -69,8 +72,8 @@ namespace StartupJobsParserConsoleApp
             }
             catch (Exception ex)
             {
-                errors.Add(new KeyValuePair<Type, Exception>(
-                    typeof(JobDescription[]),
+                errors.Add(new KeyValuePair<string, Exception>(
+                    "jd-aggregation",
                     new Exception(string.Format("Error while storing aggregate: {0}", ex), ex)
                     ));
             }
@@ -130,7 +133,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpResumatorScraper(sp, "Placed", "http://www.placed.com/about/careers", "placed"));
             scrapers.Add(new SjpJobviteScraper(sp, "Pro.com", "http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qxYaVfwk&v=1", "qxYaVfwk"));
             scrapers.Add(new SjpResumatorScraper(sp, "Wonder Workshop", "https://www.makewonder.com/careers", "Playi"));
-            scrapers.Add(new SjpJobviteScraper(sp, "Qumulo", "http://qumulo.com/people/jobs/"/*"http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qS1aVfwI&v=1"*/, "qS1aVfwI"));
+            scrapers.Add(new SjpGreenhouseScraper(sp, "Qumulo", "http://qumulo.com/people/jobs/", "qumulo"));
             scrapers.Add(new SjpRedfinScraper(sp));
             scrapers.Add(new SjpResolutionTubeScraper(sp));
             scrapers.Add(new SjpResumatorScraper(sp, "Rover.com", "http://jobs.rover.com/", "rover"));
