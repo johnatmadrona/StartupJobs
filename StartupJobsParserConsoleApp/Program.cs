@@ -120,7 +120,7 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpImpinjScraper(sp));
             scrapers.Add(new SjpIndochinoScraper(sp));
             scrapers.Add(new SjpJobviteScraper(sp, "iSpot.tv", "http://www.ispot.tv/careers", "qrI9VfwX"));
-            scrapers.Add(new SjpJamaScraper(sp));
+            scrapers.Add(new SjpGreenhouseScraper(sp, "Jama", "http://qumulo.com/people/jobs/", "jamasoftware"));
             scrapers.Add(new SjpJobalineScraper(sp));
             scrapers.Add(new SjpResumatorScraper(sp, "Julep", "http://www.julep.com/careers.html", "julepbeauty"));
             scrapers.Add(new SjpLumoScraper(sp));
@@ -140,8 +140,8 @@ namespace StartupJobsParserConsoleApp
             scrapers.Add(new SjpSeeqScraper(sp));
             scrapers.Add(new SjpResumatorScraper(sp, "Shippable", "http://shippable.theresumator.com/", "shippable"));
             scrapers.Add(new SjpJobviteScraper(sp, "Skytap", "http://www.skytap.com/company/careers", "q1A9Vfwp"));
-            scrapers.Add(new SjpResumatorScraper(sp, "SNUPI", "http://www.snupi.com/#jobs", "snupi"));
             scrapers.Add(new SjpSmartsheetScraper(sp));
+            scrapers.Add(new SjpResumatorScraper(sp, "SNUPI", "http://www.snupi.com/#jobs", "snupi"));
             scrapers.Add(new SjpSpare5Scraper(sp));
             scrapers.Add(new SjpWildTangentScraper(sp));
 

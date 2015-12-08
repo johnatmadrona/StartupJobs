@@ -82,7 +82,6 @@
     <Compile Include="Scrapers\SjpEvocalizeScraper.cs" />
     <Compile Include="Scrapers\SjpGreenhouseScraperBase.cs" />
     <Compile Include="Scrapers\SjpHighspotScraper.cs" />
-    <Compile Include="Scrapers\SjpJamaScraper.cs" />
     <Compile Include="Scrapers\SjpJobalineScraper.cs" />
     <Compile Include="Scrapers\SjpJobscoreScraperBase.cs" />
     <Compile Include="Scrapers\SjpLumoScraper.cs" />
