@@ -1,0 +1,25 @@
+{
+  "name": "startupjobs",
+  "version": "0.0.1",
+  "description": "Startup job scraper and web UI",
+  "author": "Hakon Verespej <mrhakon@gmail.com>",
+  "license": "UNLICENSED",
+  "main": "./app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/verespej/startupjobs.git"
+  },
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "bunyan": "^1.5.1",
+    "express": "^4.13.3",
+    "q": "^1.4.1",
+    "uuid": "^2.0.1"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": "4.2.2"
+  }
+}
