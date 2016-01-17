@@ -1,10 +1,10 @@
+var Q = require('q');
 var bunyan = require('bunyan');
 var uuid = require('uuid');
 var express = require('express');
 var bodyParser = require('body-parser');
 
-// TODO: Scrape job pages
-//var scrapers = require('./scrapers/test.js');
+var scrapers = require('./scrapers');
 
 var _log = new bunyan({
 	name: 'job-scraper',
@@ -62,6 +62,13 @@ app.get('/api', function(req, res) {
 	});*/
 });
 
-app.listen(app.get('port'), function() {
-	_log.info('Express server started on port ' + app.get('port'));
-});
+//app.listen(app.get('port'), function() {
+//	_log.info('Express server started on port ' + app.get('port'));
+	console.log('SCRAPING...');
+	scrapers.jobvite.scrape('Animoto', 'animoto').done(function(jds) {
+		console.log(jds);
+	}, function(err) {
+		console.log(err);
+	});
+//});
+
