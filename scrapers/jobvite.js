@@ -35,17 +35,33 @@ function scrape(company, jvId) {
 function scrapeJobDescription(company, url) {
     var d = Q.defer();
 
-    var jd = {
-        SourceUri: url,
-        Company: company,
-        Title: 'Title',
-        Location: 'location',
-        FullTextDescription: 'Full Text',
-        FullHtmlDescription: '<html><body>Full Html</body></html>'
-    };
-    d.resolve(jd);
+    console.log('Getting job description from ' + url);
+    request(url, function(err, res, html) {
+        if (err) {
+            d.reject(err);
+        } else {
+            var $ = cheerio.load(html);
+            $('.jv-job-detail-meta').children()
+            d.resolve({
+                SourceUri: url,
+                Company: company,
+                Title: scrubString($('.jv-header').text()),
+                Location: scrubString($('.jv-job-detail-meta').contents()[2].data),
+                FullTextDescription: scrubString($('.jv-job-detail-description').text()),
+                FullHtmlDescription: $('.jv-job-detail-description').html()
+            });
+        }
+    });
 
     return d.promise;
+}
+
+function scrubString(text) {
+    text = text.replace('\\\'', '\'');
+    text = text.replace('\\n', ' ');
+    text = text.replace('\\r', ' ');
+    text = text.replace(/\s+/g, ' ');
+    return text.trim();
 }
 
 module.exports = {
