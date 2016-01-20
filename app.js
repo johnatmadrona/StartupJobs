@@ -2,6 +2,7 @@ var _bunyan = require('bunyan');
 var _uuid = require('uuid');
 var _express = require('express');
 var _body_parser = require('body-parser');
+var _fs = require('fs');
 
 var _scrapers = require('./scrapers');
 
@@ -45,8 +46,73 @@ app.use(function(req, res, next) {
 });
 
 app.use(_express.static(__dirname + '/WebUI'));
+app.use('/logos', _express.static(__dirname + '/images/logos'));
 
 app.set('port', (process.env.PORT || 5000));
+
+// List available logos
+app.get('/api/logos', function(req, res, next) {
+	var dir_path = __dirname + '/images/logos/';
+	var suffix = '-logo.png';
+	_fs.readdir(dir_path, function(err, files) {
+		if (err) {
+			_log.error(err, 'Error reading directory: ' + dir_path);
+			res.status(500).send('Internal error');
+			return next(err);
+		}
+
+		var result = [];
+		for (var i = 0; i < files.length; i++) {
+			var m = files[i].match(/(\w+)-logo.png$/);
+			if (!m) {
+				_log.error('Unexpected file found in logos dir: ' + files[i]);
+			} else {
+				var company_name = m[1];
+				result.push({
+					companyName: company_name,
+					url: '/api/logos/' + company_name
+				});
+			}
+		}
+
+		res.json(result);
+		next();
+	});
+});
+
+// Retrieve logo
+app.get('/api/logos/:company_name', function(req, res, next) {
+	if (/[\\\/\*\.]/.test(req.params.company_name)) {
+		_log.info('Bad user input, invalid company name: ' + req.params.company_name);
+		res.status(400).send('Invalid request');
+		return next();
+	}
+
+	var file_path = __dirname + '/images/logos/' + req.params.company_name + '-logo.png';
+	_fs.stat(file_path, function(err, stats) {
+		if (err) {
+			_log.error(err, 'Error retrieving file "' + file_path + '"');
+			if (err.code == 'ENOENT') {
+				res.status(404).send('Not found');
+				return next();
+			} else {
+      			res.status(500).send('Internal error');
+      			return next(err);
+      		}
+		}
+
+		res.sendFile(file_path, { dotfiles: 'deny' }, function(err) {
+			if (err) {
+				_log.error(err, 'Error sending file "' + file_path + '"');
+				res.status(500).end();
+				return next(err);
+			}
+
+			_log.info('Successfully sent file "' + file_path + '"');
+			next();
+		});
+	});
+});
 
 // TODO: Create API exposing scraped data
 // TODO: Create API exposing company logos
@@ -61,13 +127,13 @@ app.get('/api', function(req, res) {
 	});*/
 });
 
-//app.listen(app.get('port'), function() {
-//	_log.info('Express server started on port ' + app.get('port'));
-	console.log('SCRAPING...');
+app.listen(app.get('port'), function() {
+	_log.info('Express server started on port ' + app.get('port'));
+	/*console.log('SCRAPING...');
 	_scrapers.jobvite.scrape(_log, 'Animoto', 'animoto').done(function(jds) {
 		console.log(jds);
 	}, function(err) {
 		console.log(err);
-	});
-//});
+	});*/
+});
 
