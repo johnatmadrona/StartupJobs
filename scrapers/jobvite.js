@@ -1,46 +1,44 @@
-var Q = require('q');
-var request = require('request');
-var cheerio = require('cheerio');
-var nodeUrl = require('url');
+var _q = require('q');
+var _request = require('request');
+var _cheerio = require('cheerio');
+var _node_url = require('url');
 
-function scrape(company, jvId) {
+function scrape(log, company, jvId) {
     var url = 'http://jobs.jobvite.com/careers/' + jvId + '/jobs?jvi=';
-    var d = Q.defer();
+    var d = _q.defer();
 
-    console.log('Getting job links from ' + url);
-    request(url, function(err, res, html) {
+    log.info('Getting job links from ' + url);
+    _request(url, function(err, res, html) {
         if (err) {
             d.reject(err);
         } else {
             var jobPagePrefix = '/' + jvId + '/job/';
-            var $ = cheerio.load(html);
+            var $ = _cheerio.load(html);
             var links = $('a[href^="' + jobPagePrefix + '"]');
-
-            console.log(links.length + ' job descriptions found');
 
             var jds = [];
             links.each(function() {
-                var jdUrl = nodeUrl.resolve(url, $(this).attr('href'));
-                console.log('Getting job info from ' + jdUrl);
-                jds.push(scrapeJobDescription(company, jdUrl));
+                var jdUrl = _node_url.resolve(url, $(this).attr('href'));
+                jds.push(scrapeJobDescription(log, company, jdUrl));
             });
 
-            d.resolve(Q.all(jds));
+            d.resolve(_q.all(jds));
         }
     });
 
     return d.promise;
 }
 
-function scrapeJobDescription(company, url) {
-    var d = Q.defer();
+function scrapeJobDescription(log, company, url) {
+    log.info('Getting job description from ' + url);
 
-    console.log('Getting job description from ' + url);
-    request(url, function(err, res, html) {
+    var d = _q.defer();
+
+    _request(url, function(err, res, html) {
         if (err) {
             d.reject(err);
         } else {
-            var $ = cheerio.load(html);
+            var $ = _cheerio.load(html);
             $('.jv-job-detail-meta').children()
             d.resolve({
                 SourceUri: url,

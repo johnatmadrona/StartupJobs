@@ -1,12 +1,11 @@
-var Q = require('q');
-var bunyan = require('bunyan');
-var uuid = require('uuid');
-var express = require('express');
-var bodyParser = require('body-parser');
+var _bunyan = require('bunyan');
+var _uuid = require('uuid');
+var _express = require('express');
+var _body_parser = require('body-parser');
 
-var scrapers = require('./scrapers');
+var _scrapers = require('./scrapers');
 
-var _log = new bunyan({
+var _log = new _bunyan({
 	name: 'job-scraper',
 	streams: [
 		{
@@ -18,14 +17,14 @@ var _log = new bunyan({
 			level: 'error'
 		}
 	],
-	serializers: bunyan.stdSerializers
+	serializers: _bunyan.stdSerializers
 });
 
-var app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+var app = _express();
+app.use(_body_parser.json());
+app.use(_body_parser.urlencoded({ extended: true }));
 app.use(function(req, res, next) {
-	req.id = uuid.v4();
+	req.id = _uuid.v4();
 	req.log = _log.child({ req_id: req.id });
 	res.setHeader('X-Request-Id', req.id);
 
@@ -45,7 +44,7 @@ app.use(function(req, res, next) {
 	next();
 });
 
-app.use(express.static(__dirname + '/WebUI'));
+app.use(_express.static(__dirname + '/WebUI'));
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -65,7 +64,7 @@ app.get('/api', function(req, res) {
 //app.listen(app.get('port'), function() {
 //	_log.info('Express server started on port ' + app.get('port'));
 	console.log('SCRAPING...');
-	scrapers.jobvite.scrape('Animoto', 'animoto').done(function(jds) {
+	_scrapers.jobvite.scrape(_log, 'Animoto', 'animoto').done(function(jds) {
 		console.log(jds);
 	}, function(err) {
 		console.log(err);
