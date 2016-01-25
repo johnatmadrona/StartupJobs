@@ -1,0 +1,258 @@
+{
+	"albany": {
+		"canonicalName": "Albany",
+		"state": "ny"
+	},
+	"atlanta": {
+		"canonicalName": "Atlanta",
+		"state": "ga"
+	},
+	"austin": {
+		"canonicalName": "Austin",
+		"state": "tx"
+	},
+	"bangalore": {
+		"canonicalName": "Bangalore",
+		"state": "karnataka"
+	},
+	"bengaluru": {
+		"canonicalName": "Bangalore",
+		"state": "karnataka"
+	},
+	"bellevue": {
+		"canonicalName": "Bellevue",
+		"state": "wa"
+	},
+	"bentonville": {
+		"canonicalName": "Bentonville",
+		"state": "ak"
+	},
+	"boston": {
+		"canonicalName": "Boston",
+		"state": "ma"
+	},
+	"boulder": {
+		"canonicalName": "Boulder",
+		"state": "co"
+	},
+	"calgary": {
+		"canonicalName": "Calgary",
+		"state": "alberta"
+	},
+	"cary": {
+		"canonicalName": "Cary",
+		"state": "nc"
+	},
+	"charleston": {
+		"canonicalName": "Charleston",
+		"state": "sc"
+	},
+	"charlotte": {
+		"canonicalName": "Charlotte",
+		"state": "nc"
+	},
+	"chicago": {
+		"canonicalName": "Chicago",
+		"state": "il"
+	},
+	"cleveland": {
+		"canonicalName": "Cleveland",
+		"state": "oh"
+	},
+	"columbus": {
+		"canonicalName": "Columbus",
+		"state": "oh"
+	},
+	"dallas": {
+		"canonicalName": "Dallas",
+		"state": "tx"
+	},
+	"denver": {
+		"canonicalName": "Denver",
+		"state": "co"
+	},
+	"fort-myers": {
+		"canonicalName": "Fort Myers",
+		"state": "fl"
+	},
+	"fremont": {
+		"canonicalName": "Fremont",
+		"state": "wa"
+	},
+	"houston": {
+		"canonicalName": "Houston",
+		"state": "tx"
+	},
+	"irvine": {
+		"canonicalName": "Irvine",
+		"state": "ca"
+	},
+	"kirkland": {
+		"canonicalName": "Kirkland",
+		"state": "wa"
+	},
+	"london": {
+		"canonicalName": "London",
+		"state": "england"
+	},
+	"los-angeles": {
+		"canonicalName": "Los Angeles",
+		"state": "ca"
+	},
+	"la": {
+		"canonicalName": "Los Angeles",
+		"state": "ca"
+	},
+	"manhattan-beach": {
+		"canonicalName": "Manhattan Beach",
+		"state": "ca"
+	},
+	"mcallen": {
+		"canonicalName": "McAllen",
+		"state": "tx"
+	},
+	"melbourne": {
+		"canonicalName": "Melbourne",
+		"state": "victoria"
+	},
+	"miami": {
+		"canonicalName": "Miami",
+		"state": "fl"
+	},
+	"minneapolis": {
+		"canonicalName": "Minneapolis",
+		"state": "mn"
+	},
+	"morrisville": {
+		"canonicalName": "Morrisville",
+		"state": "nc"
+	},
+	"munich": {
+		"canonicalName": "Munich",
+		"state": "bavaria"
+	},
+	"new-york": {
+		"canonicalName": "New York",
+		"state": "ny"
+	},
+	"new-york-city": {
+		"canonicalName": "New York",
+		"state": "ny"
+	},
+	"ny": {
+		"canonicalName": "New York",
+		"state": "ny"
+	},
+	"nyc": {
+		"canonicalName": "New York",
+		"state": "ny"
+	},
+	"norfolk": {
+		"canonicalName": "Norfolk",
+		"state": "va"
+	},
+	"palo-alto": {
+		"canonicalName": "Palo Alto",
+		"state": "ca"
+	},
+	"phoenix": {
+		"canonicalName": "Pheonix",
+		"state": "az"
+	},
+	"philadelphia": {
+		"canonicalName": "Philadelphia",
+		"state": "pa"
+	},
+	"portland": {
+		"canonicalName": "Portland",
+		"state": "or"
+	},
+	"pdx": {
+		"canonicalName": "Portland",
+		"state": "or"
+	},
+	"providence": {
+		"canonicalName": "Providence",
+		"state": "ri"
+	},
+	"queen-anne": {
+		"canonicalName": "Queen Anne",
+		"state": "wa"
+	},
+	"redmond": {
+		"canonicalName": "Redmond",
+		"state": "wa"
+	},
+	"richmond": {
+		"canonicalName": "Richmond",
+		"state": "va"
+	},
+	"riverside": {
+		"canonicalName": "Riverside",
+		"state": "ca"
+	},
+	"sacramento": {
+		"canonicalName": "Sacramento",
+		"state": "ca"
+	},
+	"san-antonio": {
+		"canonicalName": "San Antonio",
+		"state": "tx"
+	},
+	"san-diego": {
+		"canonicalName": "San Diego",
+		"state": "ca"
+	},
+	"san-francisco": {
+		"canonicalName": "San Francisco",
+		"state": "ca"
+	},
+	"bay-area": {
+		"canonicalName": "San Francisco",
+		"state": "ca"
+	},
+	"sf": {
+		"canonicalName": "San Francisco",
+		"state": "ca"
+	},
+	"sfo": {
+		"canonicalName": "San Francisco",
+		"state": "ca"
+	},
+	"san-mateo": {
+		"canonicalName": "San Mateo",
+		"state": "ca"
+	},
+	"seattle": {
+		"canonicalName": "Seattle",
+		"state": "wa"
+	},
+	"st-louis": {
+		"canonicalName": "St. Louis",
+		"state": "mo"
+	},
+	"stafford": {
+		"canonicalName": "Stafford",
+		"state": "va"
+	},
+	"sunnyvale": {
+		"canonicalName": "Sunnyvale",
+		"state": "ca"
+	},
+	"sydney": {
+		"canonicalName": "Sydney",
+		"state": "new-south-wales"
+	},
+	"toronto": {
+		"canonicalName": "Toronto",
+		"state": "ontario"
+	},
+	"tucson": {
+		"canonicalName": "Tucson",
+		"state": "az"
+	},
+	"vancouver": {
+		"canonicalName": "Vancouver",
+		"state": "british-columbia"
+	}
+}

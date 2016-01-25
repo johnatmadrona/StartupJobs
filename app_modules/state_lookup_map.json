@@ -1,0 +1,206 @@
+{
+	"alberta": {
+		"canonicalName": "Alberta",
+		"country": "canada"
+	},
+	"arizona": {
+		"canonicalName": "Arizona",
+		"country": "usa"
+	},
+	"az": {
+		"canonicalName": "Arizona",
+		"country": "usa"
+	},
+	"arkansas": {
+		"canonicalName": "Arkansas",
+		"country": "usa"
+	},
+	"ak": {
+		"canonicalName": "Arkansas",
+		"country": "usa"
+	},
+	"bavaria": {
+		"canonicalName": "Bavaria",
+		"country": "germany"
+	},
+	"british-columbia": {
+		"canonicalName": "British Columbia",
+		"country": "canada"
+	},
+	"bc": {
+		"canonicalName": "British Columbia",
+		"country": "canada"
+	},
+	"california": {
+		"canonicalName": "California",
+		"country": "usa"
+	},
+	"ca": {
+		"canonicalName": "California",
+		"country": "usa"
+	},
+	"central-region": {
+		"canonicalName": "Central Region",
+		"country": "usa"
+	},
+	"colorado": {
+		"canonicalName": "Colorado",
+		"country": "usa"
+	},
+	"co": {
+		"canonicalName": "Colorado",
+		"country": "usa"
+	},
+	"east-coast": {
+		"canonicalName": "East Coast",
+		"country": "usa"
+	},
+	"england": {
+		"canonicalName": "England",
+		"country": "uk"
+	},
+	"florida": {
+		"canonicalName": "Florida",
+		"country": "usa"
+	},
+	"fl": {
+		"canonicalName": "Florida",
+		"country": "usa"
+	},
+	"georgia": {
+		"canonicalName": "Georgia",
+		"country": "usa"
+	},
+	"ga": {
+		"canonicalName": "Georgia",
+		"country": "usa"
+	},
+	"illinois": {
+		"canonicalName": "Illinois",
+		"country": "usa"
+	},
+	"il": {
+		"canonicalName": "Illinois",
+		"country": "usa"
+	},
+	"karnataka": {
+		"canonicalName": "Karnataka",
+		"country": "india"
+	},
+	"massachusetts": {
+		"canonicalName": "Massachusetts",
+		"country": "usa"
+	},
+	"ma": {
+		"canonicalName": "Massachusetts",
+		"country": "usa"
+	},
+	"minnesota": {
+		"canonicalName": "Minnesota",
+		"country": "usa"
+	},
+	"mn": {
+		"canonicalName": "Minnesota",
+		"country": "usa"
+	},
+	"missouri": {
+		"canonicalName": "Missouri",
+		"country": "usa"
+	},
+	"mo": {
+		"canonicalName": "Missouri",
+		"country": "usa"
+	},
+	"new-south-wales": {
+		"canonicalName": "New South Wales",
+		"country": "australia"
+	},
+	"new-york": {
+		"canonicalName": "New York",
+		"country": "usa"
+	},
+	"ny": {
+		"canonicalName": "New York",
+		"country": "usa"
+	},
+	"north-carolina": {
+		"canonicalName": "North Carolina",
+		"country": "usa"
+	},
+	"nc": {
+		"canonicalName": "North Carolina",
+		"country": "usa"
+	},
+	"ohio": {
+		"canonicalName": "Ohio",
+		"country": "usa"
+	},
+	"oh": {
+		"canonicalName": "Ohio",
+		"country": "usa"
+	},
+	"ontario": {
+		"canonicalName": "Ontario",
+		"country": "canada"
+	},
+	"oregon": {
+		"canonicalName": "Oregon",
+		"country": "usa"
+	},
+	"or": {
+		"canonicalName": "Oregon",
+		"country": "usa"
+	},
+	"pennsylvania": {
+		"canonicalName": "Pennsylvania",
+		"country": "usa"
+	},
+	"pa": {
+		"canonicalName": "Pennsylvania",
+		"country": "usa"
+	},
+	"rhode-island": {
+		"canonicalName": "Rhode Island",
+		"country": "usa"
+	},
+	"ri": {
+		"canonicalName": "Rhode Island",
+		"country": "usa"
+	},
+	"south-carolina": {
+		"canonicalName": "South Carolina",
+		"country": "usa"
+	},
+	"sc": {
+		"canonicalName": "South Carolina",
+		"country": "usa"
+	},
+	"washington": {
+		"canonicalName": "Washington",
+		"country": "usa"
+	},
+	"wa": {
+		"canonicalName": "Washington",
+		"country": "usa"
+	},
+	"texas": {
+		"canonicalName": "Texas",
+		"country": "usa"
+	},
+	"tx": {
+		"canonicalName": "Texas",
+		"country": "usa"
+	},
+	"victoria": {
+		"canonicalName": "Victoria",
+		"country": "australia"
+	},
+	"virginia": {
+		"canonicalName": "Virginia",
+		"country": "usa"
+	},
+	"va": {
+		"canonicalName": "Virginia",
+		"country": "usa"
+	}
+}

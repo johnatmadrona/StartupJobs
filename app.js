@@ -5,6 +5,7 @@ var _body_parser = require('body-parser');
 var _fs = require('fs');
 
 var _scrapers = require('./scrapers');
+var _store = require('./app_modules/job_store');
 
 var _log = new _bunyan({
 	name: 'job-scraper',
@@ -96,9 +97,9 @@ app.get('/api/logos/:company_name', function(req, res, next) {
 				res.status(404).send('Not found');
 				return next();
 			} else {
-      			res.status(500).send('Internal error');
-      			return next(err);
-      		}
+				res.status(500).send('Internal error');
+				return next(err);
+			}
 		}
 
 		res.sendFile(file_path, { dotfiles: 'deny' }, function(err) {
@@ -115,7 +116,6 @@ app.get('/api/logos/:company_name', function(req, res, next) {
 });
 
 // TODO: Create API exposing scraped data
-// TODO: Create API exposing company logos
 app.get('/api', function(req, res) {
 	req.log.info({ body: req.body }, 'SMS content');
 
@@ -127,13 +127,17 @@ app.get('/api', function(req, res) {
 	});*/
 });
 
-app.listen(app.get('port'), function() {
-	_log.info('Express server started on port ' + app.get('port'));
-	/*console.log('SCRAPING...');
-	_scrapers.jobvite.scrape(_log, 'Animoto', 'animoto').done(function(jds) {
-		console.log(jds);
+//app.listen(app.get('port'), function() {
+//	_log.info('Express server started on port ' + app.get('port'));
+	console.log('SCRAPING...');
+	_store.init(_log).then(function() {
+		return _scrapers.jobvite.scrape(_log, 'Animoto', 'animoto');
+	}).then(function(jds) {
+		return _store.add_jobs(_log, jds);
+	}).done(function(jds) {
+		console.log('DONE');
 	}, function(err) {
-		console.log(err);
-	});*/
-});
+		_log.error(err);
+	});
+//});
 

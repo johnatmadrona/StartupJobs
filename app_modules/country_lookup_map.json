@@ -1,0 +1,38 @@
+{
+	"australia": {
+		"canonicalName": "Australia"
+	},
+	"canada": {
+		"canonicalName": "Canada"
+	},
+	"ca": {
+		"canonicalName": "Canada"
+	},
+	"germany": {
+		"canonicalName": "Germany"
+	},
+	"deutschland": {
+		"canonicalName": "Germany"
+	},
+	"india": {
+		"canonicalName": "India"
+	},
+	"united-kingdom": {
+		"canonicalName": "United Kingdom"
+	},
+	"uk": {
+		"canonicalName": "United Kingdom"
+	},
+	"united-states": {
+		"canonicalName": "USA"
+	},
+	"united-states-of-america": {
+		"canonicalName": "USA"
+	},
+	"us": {
+		"canonicalName": "USA"
+	},
+	"usa": {
+		"canonicalName": "USA"
+	}
+}

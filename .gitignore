@@ -6,3 +6,5 @@
 bin/
 obj/
 node_modules/
+*.private.json
+
