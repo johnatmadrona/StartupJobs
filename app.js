@@ -3,6 +3,7 @@ var _uuid = require('uuid');
 var _express = require('express');
 var _body_parser = require('body-parser');
 var _fs = require('fs');
+var _hash = require('object-hash');
 
 var _scrapers = require('./scrapers');
 var _store = require('./app_modules/job_store');
@@ -133,8 +134,24 @@ app.get('/api', function(req, res) {
 	_store.init(_log).then(function() {
 		return _scrapers.jobvite.scrape(_log, 'Animoto', 'animoto');
 	}).then(function(jds) {
-		return _store.add_jobs(_log, jds);
-	}).done(function(jds) {
+		return _store.add_jobs(_log, jds).then(function() {
+			return jds;
+		});
+	}).then(function(jds) {
+		var new_jobs_map = {};
+		for (var i = 0; i < jds.length; i++) {
+			new_jobs_map[_hash(jds[i])] = true;
+		}
+		return _store.query_jobs(_log, { company: 'Animoto' }).then(function(old_jobs) {
+			// Create a list of stored jobs that are obsolete
+			return old_jobs.filter(function(old_job) {
+				return typeof(new_jobs_map[_hash(old_job)]) === 'undefined';
+			});
+		});
+	}).then(function(obsolete_jobs) {
+		_log.info({ count: obsolete_jobs.length }, 'Deleting obsolete jobs');
+		return _store.remove_jobs(_log, obsolete_jobs);
+	}).done(function() {
 		console.log('DONE');
 	}, function(err) {
 		_log.error(err);
