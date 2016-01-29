@@ -129,34 +129,51 @@ app.get('/api', function(req, res) {
 	});*/
 });
 
-function runScrapers(scrapers) {
-	_log.info({ scraper_count: scrapers.length }, 'Initiating scraping');
-	_store.init(_log).then(function() {
+function runScrapers(log, scrapers) {
+	log.info({ scraper_count: scrapers.length }, 'Initiating scraping');
+	_store.init(log).then(function() {
 		var ops = [];
 		for (var i = 0; i < scrapers.length; i++) {
-			ops.push(runScraper(scrapers[i]));
+			ops.push(runScraper(log, scrapers[i]));
 		}
-		return _q.all(ops);
-	}).done(function() {
-		_log.info('Scraping complete');
+		return _q.allSettled(ops);
+	}).done(function(results) {
+		var sc = results.reduce(function(p, item) {
+			return p + (item.state === 'rejected' ? 0 : 1);
+		}, 0);
+
+		var status = {
+			total_count: results.length,
+			success_count: sc,
+			failure_count: results.length - sc
+		};
+
+		if (status.failure_count > 0) {
+			log.error(status, 'Scraping complete, with errors');
+		} else {
+			log.info(status, 'Scraping complete, without errors');
+		}
 	}, function(err) {
-		_log.error(err);
+		log.error(err, 'Error while running scrapers');
 	});
 }
 
-function runScraper(scraper) {
-	_log.info({ company: scraper.company }, 'Running scraper');
-	return scraper.scrape(_log)
-		.then(storeJobs)
+function runScraper(log, scraper) {
+	log.info({ company: scraper.company }, 'Running scraper');
+	return scraper.scrape(log)
+		.then(function(jds) { return storeJobs(log, jds); })
 		.then(function(jds) { return getObsoleteJobs(scraper.company, jds); })
 		.then(function(obsolete_jobs) {
-			_log.info({ company: scraper.company, count: obsolete_jobs.length }, 'Deleting obsolete jobs');
-			return _store.remove_jobs(_log, obsolete_jobs);
+			log.info({ company: scraper.company, count: obsolete_jobs.length }, 'Deleting obsolete jobs');
+			return _store.remove_jobs(log, obsolete_jobs);
+		}).catch(function(err) {
+			log.error({ company: scraper.company, err: err }, 'Error while running scraper');
+			return _q.reject(err);
 		});
 }
 
-function storeJobs(jds) {
-	return _store.add_jobs(_log, jds).then(function() {
+function storeJobs(log, jds) {
+	return _store.add_jobs(log, jds).then(function() {
 		return jds;
 	});
 }
@@ -174,7 +191,7 @@ function getObsoleteJobs(company, jds) {
 	});
 }
 
-runScrapers(_scrapers.scrapers);
+runScrapers(_log, _scrapers.scrapers);
 
 //app.listen(app.get('port'), function() {
 //	_log.info('Express server started on port ' + app.get('port'));
