@@ -1,3 +1,4 @@
+var _q = require('q');
 var _bunyan = require('bunyan');
 var _uuid = require('uuid');
 var _express = require('express');
@@ -128,33 +129,53 @@ app.get('/api', function(req, res) {
 	});*/
 });
 
-//app.listen(app.get('port'), function() {
-//	_log.info('Express server started on port ' + app.get('port'));
-	console.log('SCRAPING...');
+function runScrapers(scrapers) {
+	_log.info({ scraper_count: scrapers.length }, 'Initiating scraping');
 	_store.init(_log).then(function() {
-		return _scrapers.jobvite.scrape(_log, 'Animoto', 'animoto');
-	}).then(function(jds) {
-		return _store.add_jobs(_log, jds).then(function() {
-			return jds;
-		});
-	}).then(function(jds) {
-		var new_jobs_map = {};
-		for (var i = 0; i < jds.length; i++) {
-			new_jobs_map[_hash(jds[i])] = true;
+		var ops = [];
+		for (var i = 0; i < scrapers.length; i++) {
+			ops.push(runScraper(scrapers[i]));
 		}
-		return _store.query_jobs(_log, { company: 'Animoto' }).then(function(old_jobs) {
-			// Create a list of stored jobs that are obsolete
-			return old_jobs.filter(function(old_job) {
-				return typeof(new_jobs_map[_hash(old_job)]) === 'undefined';
-			});
-		});
-	}).then(function(obsolete_jobs) {
-		_log.info({ count: obsolete_jobs.length }, 'Deleting obsolete jobs');
-		return _store.remove_jobs(_log, obsolete_jobs);
+		return _q.all(ops);
 	}).done(function() {
-		console.log('DONE');
+		_log.info('Scraping complete');
 	}, function(err) {
 		_log.error(err);
 	});
-//});
+}
 
+function runScraper(scraper) {
+	_log.info({ company: scraper.company }, 'Running scraper');
+	return scraper.scrape(_log)
+		.then(storeJobs)
+		.then(function(jds) { return getObsoleteJobs(scraper.company, jds); })
+		.then(function(obsolete_jobs) {
+			_log.info({ company: scraper.company, count: obsolete_jobs.length }, 'Deleting obsolete jobs');
+			return _store.remove_jobs(_log, obsolete_jobs);
+		});
+}
+
+function storeJobs(jds) {
+	return _store.add_jobs(_log, jds).then(function() {
+		return jds;
+	});
+}
+
+function getObsoleteJobs(company, jds) {
+	var new_jobs_map = {};
+	for (var i = 0; i < jds.length; i++) {
+		new_jobs_map[_hash(jds[i])] = true;
+	}
+	return _store.query_jobs(_log, { company: company }).then(function(old_jobs) {
+		// Create a list of stored jobs that are obsolete
+		return old_jobs.filter(function(old_job) {
+			return typeof(new_jobs_map[_hash(old_job)]) === 'undefined';
+		});
+	});
+}
+
+runScrapers(_scrapers.scrapers);
+
+//app.listen(app.get('port'), function() {
+//	_log.info('Express server started on port ' + app.get('port'));
+//});
