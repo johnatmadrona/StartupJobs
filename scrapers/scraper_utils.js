@@ -1,6 +1,6 @@
-var _city_lookup = require('./city_lookup_map.json');
-var _state_lookup = require('./state_lookup_map.json');
-var _country_lookup = require('./country_lookup_map.json');
+var _city_lookup = require('./lookup_map_city.json');
+var _state_lookup = require('./lookup_map_state.json');
+var _country_lookup = require('./lookup_map_country.json');
 
 function get_hashable_text(name) {
     return name.replace(/[\s\.]+/g, '-').toLowerCase();
