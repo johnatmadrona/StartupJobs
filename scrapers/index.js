@@ -1,4 +1,5 @@
 var _q = require('q');
+var _angellist = require('./angellist.js');
 var _jazz = require('./jazz.js');
 var _jobvite = require('./jobvite.js');
 
@@ -7,19 +8,19 @@ module.exports = {
 		{
 			company: '2nd Watch',
 			scrape: function(log) {
-				return _jazz.scrape(log, '2nd Watch', '2ndwatch', 'http://2ndwatch.com/contact-us/careers/');
+				return _jazz.scrape(log, this.company, '2ndwatch', 'http://2ndwatch.com/contact-us/careers/');
 			}
 		},
 		{
 			company: 'Algorithmia',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _angellist.scrape(log, this.company, 'algorithmia');
 			}
 		},
 		{
 			company: 'Animoto',
 			scrape: function(log) {
-				return _jobvite.scrape(log, 'Animoto', 'animoto');
+				return _jobvite.scrape(log, this.company, 'animoto');
 			}
 		},
 		{
@@ -339,12 +340,16 @@ module.exports = {
 			scrape: function(log) {
 				return _q.reject(new Error('Not yet implemented'));
 			}
-		}/*,
+		}
+
+		/*
+		,
 		{
 			company: 'New Company',
 			scrape: function(log) {
 				return _q.reject(new Error('Not yet implemented'));
 			}
-		}*/
+		}
+		*/
 	]
 };
