@@ -3,6 +3,7 @@ var _angellist = require('./angellist.js');
 var _greenhouse = require('./greenhouse.js');
 var _jazz = require('./jazz.js');
 var _jobvite = require('./jobvite.js');
+var _no_job_page = require('./no_job_page.js');
 
 module.exports = {
 	scrapers: [
@@ -33,7 +34,14 @@ module.exports = {
 		{
 			company: 'Area360',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _no_job_page.scrape(
+					log,
+					this.company,
+					'http://www.area360.com/#contact-us',
+					'Seattle, WA',
+					'Chris Smith',
+					'chris.smith@area360.com'
+				);
 			}
 		},
 		{
