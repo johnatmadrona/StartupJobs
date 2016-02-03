@@ -1,5 +1,6 @@
 var _q = require('q');
 var _angellist = require('./angellist.js');
+var _greenhouse = require('./greenhouse.js');
 var _jazz = require('./jazz.js');
 var _jobvite = require('./jobvite.js');
 
@@ -26,7 +27,7 @@ module.exports = {
 		{
 			company: 'Apptio',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _greenhouse.scrape(log, this.company, 'apptio');
 			}
 		},
 		{
