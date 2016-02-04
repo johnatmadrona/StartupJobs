@@ -10,16 +10,15 @@ function scrape(log, company, info_url, location, contact_name, contact_email) {
         company.replace(/\s+/g, '%20') + '">' + contact_email + '</a>.</div>'
     );
 
-    // Use Q's fulfilled promise operation and .all operation to 
-    // match behavior of other scrapers
-    var result = _q({
+    // Use Q's .all operation to match behavior of other scrapers
+    var result = {
         url: info_url,
         company: company,
         title: 'Opportunistic Role',
         location: _util.map_location(log, location),
         text: _util.scrub_string($.text()),
         html: $.html()
-    });
+    };
     return _q.all([result]);
 }
 

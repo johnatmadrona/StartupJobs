@@ -1,5 +1,6 @@
 var _q = require('q');
 var _angellist = require('./angellist.js');
+var _custom_bocada = require('./custom_bocada.js');
 var _greenhouse = require('./greenhouse.js');
 var _jazz = require('./jazz.js');
 var _jobvite = require('./jobvite.js');
@@ -47,13 +48,13 @@ module.exports = {
 		{
 			company: 'Bizible',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jazz.scrape(log, this.company, 'bizible1', 'http://www.bizible.com/jobs');
 			}
 		},
 		{
 			company: 'Bocada',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _custom_bocada.scrape(log, this.company, 'Kirkland, WA', 'http://bocada.com/careers/');
 			}
 		},
 		{
