@@ -4,24 +4,19 @@ var _request = require('request');
 var _cheerio = require('cheerio');
 var _util = require('./scraper_utils.js');
 
+var _al_headers = {
+    'Accept': 'text/html',
+    'Cache-Control': 'max-age=0',
+    'Host': 'angel.co',
+    'User-Agent': 'startup-jobs'
+};
+
 function scrape(log, company, angellist_id) {
     var d = _q.defer();
 
     var options = {
         url: 'https://angel.co/' + angellist_id + '/jobs/',
-        headers: {
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            //'Accept-Encoding': ...'gzip, deflate, sdch',
-            'Accept-Language': 'en-US,en;q=0.8,es;q=0.6',
-            'Cache-Control': 'max-age=0',
-            //'Connection': 'keep-alive',
-            //Cookie: ...
-            'Host': 'angel.co',
-            //If-None-Match: ...
-            'Referer': 'https://algorithmia.com/',
-            //'Upgrade-Insecure-Requests': 1,
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36'
-        }
+        headers: _al_headers
     };
 
     log.info({ company: company, angellist_id: angellist_id, url: options.url }, 'Getting jd links');
@@ -54,11 +49,10 @@ function scrape(log, company, angellist_id) {
 }
 
 function scrapeJobDescription(log, company, title, location, url) {
-    log.info({ company: company, title: title, location: location, url: url }, 'Getting jd');
-
     var d = _q.defer();
 
-    _request(url, function(err, res, html) {
+    log.info({ company: company, title: title, location: location, url: url }, 'Getting jd');
+    _request({ url: url, headers: _al_headers }, function(err, res, html) {
         if (err) {
             d.reject(err);
         } else {
@@ -69,7 +63,7 @@ function scrapeJobDescription(log, company, title, location, url) {
                 title: title,
                 location: _util.map_location(log, location),
                 text: _util.scrub_string($('.product-info').text()),
-                html: $('.product-info').html()
+                html: $('.product-info').html().trim()
             };
             d.resolve(jd);
         }
