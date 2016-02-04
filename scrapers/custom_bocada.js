@@ -25,7 +25,7 @@ function scrape(log, company, location, url) {
 	                title: title,
 	                location: _util.map_location(log, location),
 	                text: _util.scrub_string(description.text()),
-	                html: description.html()
+	                html: description.html().trim()
 	            };
 	            jds.push(new_jd);
             });

@@ -35,7 +35,7 @@ function scrape(log, company, jazz_id, public_url) {
 	                title: _util.scrub_string($(this).find('.resumator-job-title').text()),
 	                location: _util.map_location(log, raw_loc),
 	                text: _util.scrub_string($(this).find('.resumator-job-description-text').text()),
-	                html: $(this).find('.resumator-job-description-text').html()
+	                html: $(this).find('.resumator-job-description-text').html().trim()
 	            };
 	            jds.push(new_jd);
             });
