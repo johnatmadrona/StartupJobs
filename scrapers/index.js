@@ -5,6 +5,7 @@ var _greenhouse = require('./greenhouse.js');
 var _jazz = require('./jazz.js');
 var _jobvite = require('./jobvite.js');
 var _no_job_page = require('./no_job_page.js');
+var _workable = require('./workable');
 
 module.exports = {
 	scrapers: [
@@ -66,7 +67,7 @@ module.exports = {
 		{
 			company: 'Booster Fuels',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _workable.scrape(log, this.company, 'boosterfuels');
 			}
 		},
 		{
