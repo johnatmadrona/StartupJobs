@@ -195,6 +195,10 @@
 		"canonicalName": "Redmond",
 		"state": "wa"
 	},
+	"redwood-city": {
+		"canonicalName": "Redwood City",
+		"state": "ca"
+	},
 	"richmond": {
 		"canonicalName": "Richmond",
 		"state": "va"

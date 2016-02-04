@@ -73,37 +73,37 @@ module.exports = {
 		{
 			company: 'Branch Metrics',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _greenhouse.scrape(log, this.company, 'branchmetrics');
 			}
 		},
 		{
 			company: 'Cape Productions',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _greenhouse.scrape(log, this.company, 'cape');
 			}
 		},
 		{
 			company: 'Cedexis',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _workable.scrape(log, this.company, 'cedexis');
 			}
 		},
 		{
 			company: 'Cheezburger',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jazz.scrape(log, this.company, 'cheezburger', 'http://cheezburger.theresumator.com/');
 			}
 		},
 		{
 			company: 'Context Relevant',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _greenhouse.scrape(log, this.company, 'contextrelevant');
 			}
 		},
 		{
 			company: 'Dato',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jobvite.scrape(log, this.company, 'dato');
 			}
 		},
 		{
