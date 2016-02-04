@@ -13,7 +13,16 @@ function map_location(log, raw_location) {
 
 	var loc_parts = raw_location.split(',');
 	for (var i = 0; i < loc_parts.length; i++) {
-	    var key = get_hashable_text(loc_parts[i]);
+		var entity = loc_parts[i];
+		if (entity.toLowerCase().startsWith('greater ')) {
+			entity = entity.substring(8);
+		}
+
+		if (entity.toLowerCase().endsWith(' area')) {
+			entity = entity.substring(0, entity.length - 5);
+		}
+
+	    var key = get_hashable_text(entity);
 	    var city, state;
 	    if (_city_lookup[key]) {
 	        city = _city_lookup[key];

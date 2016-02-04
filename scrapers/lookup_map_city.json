@@ -75,6 +75,14 @@
 		"canonicalName": "Fort Myers",
 		"state": "fl"
 	},
+	"fort-worth": {
+		"canonicalName": "Fort Worth",
+		"state": "tx"
+	},
+	"ft-worth": {
+		"canonicalName": "Fort Worth",
+		"state": "tx"
+	},
 	"fremont": {
 		"canonicalName": "Fremont",
 		"state": "wa"
