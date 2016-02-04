@@ -60,7 +60,7 @@ module.exports = {
 		{
 			company: 'Boomerang Commerce',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jobvite.scrape(log, this.company, 'boomerangcommerce');
 			}
 		},
 		{
