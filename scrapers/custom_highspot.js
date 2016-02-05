@@ -14,7 +14,7 @@ function scrape(log, company, location, url) {
         } else {
             var $ = _cheerio.load(html);
             var jds = [];
-            $('.views-field-title > .field-content > a').each(function() {
+            $('.careers-page a[href*="/careers/"]').each(function() {
                 var jd_url = _node_url.resolve(url, $(this).attr('href'));
 	            jds.push(scrapeJobDescription(log, company, location, jd_url));
             });
@@ -37,8 +37,9 @@ function scrapeJobDescription(log, company, location, url) {
 
             var description_text = '';
             var description_html = '';
-            $('div[property="content:encoded"] > div').each(function() {
-                if ($(this).text().trim().toLowerCase().startsWith('how to apply')) {
+            $('.job-post').children().each(function() {
+                if (typeof($(this).attr('class')) !== 'undefined' && 
+                    $(this).attr('class').includes('apply-button')) {
                     // Stop reading after this point
                     return false;
                 }
@@ -49,11 +50,14 @@ function scrapeJobDescription(log, company, location, url) {
             var jd = {
                 url: url,
                 company: company,
-                title: _util.scrub_string($('span[property="dc:title"]').attr('content')),
+                title: _util.scrub_string($('.about-headline').text()),
                 location: _util.map_location(log, location),
                 text: description_text,
                 html: description_html
             };
+            console.log();
+            console.log(jd);
+            console.log();
             d.resolve(jd);
         }
     });
