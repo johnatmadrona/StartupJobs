@@ -2,6 +2,7 @@ var _q = require('q');
 var _angellist = require('./angellist.js');
 var _custom_bocada = require('./custom_bocada.js');
 var _custom_echodyne = require('./custom_echodyne.js');
+var _custom_envelopvr = require('./custom_envelopvr.js');
 var _greenhouse = require('./greenhouse.js');
 var _jazz = require('./jazz.js');
 var _jobvite = require('./jobvite.js');
@@ -116,7 +117,7 @@ module.exports = {
 		{
 			company: 'Envelop VR',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _custom_envelopvr.scrape(log, this.company, 'https://www.envelopvr.com/careers');
 			}
 		},
 		{
