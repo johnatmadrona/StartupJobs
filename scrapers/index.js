@@ -3,6 +3,7 @@ var _angellist = require('./angellist.js');
 var _custom_bocada = require('./custom_bocada.js');
 var _custom_echodyne = require('./custom_echodyne.js');
 var _custom_envelopvr = require('./custom_envelopvr.js');
+var _custom_eventbase = require('./custom_eventbase.js');
 var _greenhouse = require('./greenhouse.js');
 var _jazz = require('./jazz.js');
 var _jobvite = require('./jobvite.js');
@@ -123,7 +124,7 @@ module.exports = {
 		{
 			company: 'Eventbase',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _custom_eventbase.scrape(log, this.company, 'Vancouver, BC', 'https://www.eventbase.com/careers');
 			}
 		},
 		{
