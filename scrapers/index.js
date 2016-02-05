@@ -1,6 +1,7 @@
 var _q = require('q');
 var _angellist = require('./angellist.js');
 var _custom_bocada = require('./custom_bocada.js');
+var _custom_echodyne = require('./custom_echodyne.js');
 var _greenhouse = require('./greenhouse.js');
 var _jazz = require('./jazz.js');
 var _jobvite = require('./jobvite.js');
@@ -109,7 +110,7 @@ module.exports = {
 		{
 			company: 'Echodyne',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _custom_echodyne.scrape(log, this.company, 'Bellevue, WA', 'http://echodyne.com/careers/');
 			}
 		},
 		{
