@@ -27,7 +27,7 @@ module.exports = {
 		{
 			company: 'Animoto',
 			scrape: function(log) {
-				return _jobvite.scrape(log, this.company, 'animoto');
+				return _jobvite.scrape(log, this.company, { id_type: 'jobs', id: 'animoto' });
 			}
 		},
 		{
@@ -64,7 +64,7 @@ module.exports = {
 		{
 			company: 'Boomerang Commerce',
 			scrape: function(log) {
-				return _jobvite.scrape(log, this.company, 'boomerangcommerce');
+				return _jobvite.scrape(log, this.company, { id_type: 'hire', id: 'qg0aVfw5' });
 			}
 		},
 		{
@@ -106,7 +106,7 @@ module.exports = {
 		{
 			company: 'Dato',
 			scrape: function(log) {
-				return _jobvite.scrape(log, this.company, 'dato');
+				return _jobvite.scrape(log, this.company, { id_type: 'jobs', id: 'dato' });
 			}
 		},
 		{
@@ -130,13 +130,20 @@ module.exports = {
 		{
 			company: 'Evocalize',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _no_job_page.scrape(
+					log,
+					this.company,
+					'http://evocalize.com/about/jobs',
+					'Seattle, WA',
+					'the team',
+					'jobs@evocalize.com'
+				);
 			}
 		},
 		{
 			company: 'ExtraHop',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+		 		return _jobvite.scrape(log, this.company, { id_type: 'hire', id: 'qAYaVfwn' });
 			}
 		},
 		{
