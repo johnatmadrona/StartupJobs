@@ -175,14 +175,6 @@
 		"canonicalName": "South Carolina",
 		"country": "usa"
 	},
-	"washington": {
-		"canonicalName": "Washington",
-		"country": "usa"
-	},
-	"wa": {
-		"canonicalName": "Washington",
-		"country": "usa"
-	},
 	"texas": {
 		"canonicalName": "Texas",
 		"country": "usa"
@@ -190,6 +182,10 @@
 	"tx": {
 		"canonicalName": "Texas",
 		"country": "usa"
+	},
+	"tokyo": {
+		"canonicalName": "Tokyo",
+		"country": "japan"
 	},
 	"victoria": {
 		"canonicalName": "Victoria",
@@ -201,6 +197,14 @@
 	},
 	"va": {
 		"canonicalName": "Virginia",
+		"country": "usa"
+	},
+	"washington": {
+		"canonicalName": "Washington",
+		"country": "usa"
+	},
+	"wa": {
+		"canonicalName": "Washington",
 		"country": "usa"
 	}
 }

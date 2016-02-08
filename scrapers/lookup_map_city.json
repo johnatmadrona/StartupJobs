@@ -259,6 +259,10 @@
 		"canonicalName": "Sydney",
 		"state": "new-south-wales"
 	},
+	"tokyo": {
+		"canonicalName": "Tokyo",
+		"state": "tokyo"
+	},
 	"toronto": {
 		"canonicalName": "Toronto",
 		"state": "ontario"

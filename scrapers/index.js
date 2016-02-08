@@ -28,7 +28,7 @@ module.exports = {
 		{
 			company: 'Animoto',
 			scrape: function(log) {
-				return _jobvite.scrape(log, this.company, { id_type: 'jobs', id: 'animoto' });
+				return _jobvite.scrape(log, this.company, 'http://jobs.jobvite.com/careers/animoto/');
 			}
 		},
 		{
@@ -65,7 +65,7 @@ module.exports = {
 		{
 			company: 'Boomerang Commerce',
 			scrape: function(log) {
-				return _jobvite.scrape(log, this.company, { id_type: 'hire', id: 'qg0aVfw5' });
+				return _jobvite.scrape(log, this.company, 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qg0aVfw5&k=JobListing&jvresize=');
 			}
 		},
 		{
@@ -107,7 +107,7 @@ module.exports = {
 		{
 			company: 'Dato',
 			scrape: function(log) {
-				return _jobvite.scrape(log, this.company, { id_type: 'jobs', id: 'dato' });
+				return _jobvite.scrape(log, this.company, 'http://jobs.jobvite.com/dato/');
 			}
 		},
 		{
@@ -144,7 +144,7 @@ module.exports = {
 		{
 			company: 'ExtraHop',
 			scrape: function(log) {
-		 		return _jobvite.scrape(log, this.company, { id_type: 'hire', id: 'qAYaVfwn' });
+		 		return _jobvite.scrape(log, this.company, 'https://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qAYaVfwn&jvresize=');
 			}
 		},
 		{
@@ -162,19 +162,19 @@ module.exports = {
 		{
 			company: 'Icebrg',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _angellist.scrape(log, this.company, 'icebrg-io');
 			}
 		},
 		{
 			company: 'Igneous Systems',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+		 		return _jobvite.scrape(log, this.company, 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qpO9Vfw1&jvresize=');
 			}
 		},
 		{
 			company: 'Impinj',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+		 		return _jobvite.scrape(log, this.company, 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qPD9Vfwg&jvresize=');
 			}
 		},
 		{
