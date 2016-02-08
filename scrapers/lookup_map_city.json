@@ -131,6 +131,10 @@
 		"canonicalName": "Minneapolis",
 		"state": "mn"
 	},
+	"montreal": {
+		"canonicalName": "Montreal",
+		"state": "qc"
+	},
 	"morrisville": {
 		"canonicalName": "Morrisville",
 		"state": "nc"

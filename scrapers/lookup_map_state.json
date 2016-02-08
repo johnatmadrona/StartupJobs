@@ -159,6 +159,14 @@
 		"canonicalName": "Pennsylvania",
 		"country": "usa"
 	},
+	"quebec": {
+		"canonicalName": "Quebec",
+		"country": "canada"
+	},
+	"qc": {
+		"canonicalName": "Quebec",
+		"country": "canada"
+	},
 	"rhode-island": {
 		"canonicalName": "Rhode Island",
 		"country": "usa"
