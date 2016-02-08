@@ -180,7 +180,7 @@ module.exports = {
 		{
 			company: 'Indochino',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jobvite.scrape(log, this.company, 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qWn9Vfw7&jvresize=');
 			}
 		},
 		{

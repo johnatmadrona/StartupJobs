@@ -115,15 +115,30 @@ function scrape_job_description(log, company, url) {
                 location = _util.scrub_string($('.jv-job-detail-meta').contents()[2].data);
                 contentNode = $('.jv-job-detail-description');
             } else if (res.request.uri.host === 'hire.jobvite.com') {
+                var location_node;
                 if (/[\?&]jvresize=/.test(res.request.uri.search)) {
                     title = _util.scrub_string($('.title_jobdesc > h2').text());
-                    location = _util.scrub_string($('.title_jobdesc > h3').text().split('|')[1]);
+                    location_node = $('.title_jobdesc > h3');
                     contentNode = $('.jobDesc');
                 } else {
-                    title = _util.scrub_string($('.jvjobheader > h2').text());
-                    location = _util.scrub_string($('.jvjobheader > h3').text().split('|')[1]);
-                    contentNode = $('.jvdescriptionbody');
+                    if ($('.jvjobheader').length > 0) {
+                        // This may be custom code for Impinj
+                        title = _util.scrub_string($('.jvjobheader > h2').text());
+                        location_node = $('.jvjobheader > h3');
+                        contentNode = $('.jvdescriptionbody');
+                    } else {
+                        // This may be custom code for Indochino
+                        title = _util.scrub_string($('.jvheader').text());
+                        location_node = $('.jvheader').next();
+                        var aggregated_html = '<span>';
+                        $('.jvheader').parent().children('p, ul, h2').each(function() {
+                            aggregated_html += $(this).html() + ' ';
+                        });
+                        aggregated_html += '</span>';
+                        contentNode = _cheerio.load(aggregated_html)('span');
+                    }
                 }
+                location = _util.scrub_string(location_node.text().split('|')[1]);
             }
 
             var jd = {
