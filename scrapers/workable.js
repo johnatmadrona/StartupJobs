@@ -44,7 +44,7 @@ function scrapeJobDescription(log, company, url) {
             var description_html = '';
             $('.section--text').each(function() {
                 description_text += _util.scrub_string($(this).text()) + ' ';
-                description_html += $(this).html() + ' ';
+                description_html += _util.outer_html($(this)) + ' ';
             });
 
             var jd = {
