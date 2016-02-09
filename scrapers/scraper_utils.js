@@ -1,3 +1,4 @@
+var _cheerio = require('cheerio');
 var _city_lookup = require('./lookup_map_city.json');
 var _state_lookup = require('./lookup_map_state.json');
 var _country_lookup = require('./lookup_map_country.json');
@@ -51,6 +52,10 @@ function map_location(log, raw_location) {
 	return mapped;
 }
 
+function outer_html(cheerio_node) {
+	return _cheerio.load('<span></span>')('span').append(cheerio_node.clone()).html();
+}
+
 function scrub_string(text) {
     var result = text.replace('\\\'', '\'');
     result = result.replace('\\"', '"');
@@ -62,5 +67,6 @@ function scrub_string(text) {
 
 module.exports = {
 	map_location: map_location,
+	outer_html: outer_html,
 	scrub_string: scrub_string
 };
