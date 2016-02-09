@@ -40,7 +40,7 @@ function scrape_job_description(log, company, url) {
             var content_text = '';
             var content_nodes = $('.content').children().eq(1).find('.section').not('.last-section-apply');
             content_nodes.each(function() {
-                content_html += $(this).html() + ' ';
+                content_html += _util.outer_html($(this)) + ' ';
                 content_text += _util.scrub_string($(this).text()) + ' ';
             });
 
@@ -52,9 +52,6 @@ function scrape_job_description(log, company, url) {
                 text: content_text,
                 html: content_html.trim()
             };
-            console.log();
-            console.log(jd);
-            console.log();
             d.resolve(jd);
         }
     });
