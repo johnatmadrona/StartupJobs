@@ -44,7 +44,7 @@ function scrapeJobDescription(log, company, location, url) {
                     return false;
                 }
                 description_text += _util.scrub_string($(this).text()) + ' ';
-                description_html += $(this).html().trim() + ' ';
+                description_html += _util.outer_html($(this)) + ' ';
             });
 
             var jd = {
@@ -55,9 +55,6 @@ function scrapeJobDescription(log, company, location, url) {
                 text: description_text,
                 html: description_html
             };
-            console.log();
-            console.log(jd);
-            console.log();
             d.resolve(jd);
         }
     });
