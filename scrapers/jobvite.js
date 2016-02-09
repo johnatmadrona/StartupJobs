@@ -17,7 +17,7 @@ function scrape(log, company, url) {
     _request({ url: url, followRedirect: true }, function(err, res, html) {
         if (err) {
             d.reject(err);
-        } else if (url !== res.request.uri.href) {
+        } else if (!are_urls_equal(url, res.request.uri.href, true)) {
             log.error({ original_url: url, redirected_url: res.request.uri.href }, 'URL redirected');
             d.reject(new Error('Request redirected from ' + url + ' to ' + res.request.uri.href));
         } else {
@@ -28,13 +28,24 @@ function scrape(log, company, url) {
     return d.promise;
 }
 
+function are_urls_equal(first, second, ignore_protocol) {
+    var f = first;
+    var s = second;
+    if (typeof(ignore_protocol) !== 'undefined' && ignore_protocol) {
+        f_start = first.indexOf('//');
+        f = f.substring(f_start);
+        s_start = second.indexOf('//');
+        s = s.substring(s_start);
+    }
+    return f === s;
+}
+
 function parse_listing_and_scrape_jds(log, company, parsed_url, html) {
     var $ = _cheerio.load(html);
     var jds = [];
     var links;
 
     if (parsed_url.hostname === 'jobs.jobvite.com') {
-        //var company_id = /\/careers\/(\w+)\//.exec(parsed_url.href)[1];
         links = $('a[href*="/job/"]');
         links.each(function() {
             var jd_url = _node_url.resolve(parsed_url.href, $(this).attr('href'));
@@ -53,10 +64,13 @@ function parse_listing_and_scrape_jds(log, company, parsed_url, html) {
                 jds.push(scrape_job_description(log, company, jd_url));
             });
         } else {
-            links = $('.jobList a');
+            links = $('.jobList a[href*="jvi="]');
+            if (links.length < 1) {
+                links = $('.joblist a[href*="jvi="]');
+            }
             links.each(function() {
                 var job_id = /[\?&]jvi=([\w,]+)/.exec($(this).attr('href'))[1];
-                var jd_url = 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&jvresize=&c=' + company_id + '&j=' + escape(job_id);
+                var jd_url = 'https://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&jvresize=&c=' + company_id + '&j=' + escape(job_id);
                 jds.push(scrape_job_description(log, company, jd_url));
             });
         }
@@ -104,7 +118,7 @@ function scrape_job_description(log, company, url) {
     _request(url, function(err, res, html) {
         if (err) {
             d.reject(err);
-        } else if (url !== res.request.uri.href) {
+        } else if (!are_urls_equal(url, res.request.uri.href, true)) {
             log.error({ original_url: url, redirected_url: res.request.uri.href }, 'URL redirected');
             d.reject(new Error('Request redirected from ' + url + ' to ' + res.request.uri.href));
         } else {
@@ -116,25 +130,30 @@ function scrape_job_description(log, company, url) {
                 content_node = $('.jv-job-detail-description');
             } else if (res.request.uri.host === 'hire.jobvite.com') {
                 var location_node;
-                if (/[\?&]jvresize=/.test(res.request.uri.search)) {
+                if ($('.title_jobdesc').length > 0) {
                     title = _util.scrub_string($('.title_jobdesc > h2').text());
                     location_node = $('.title_jobdesc > h3');
                     content_node = $('.jobDesc');
+                } else if ($('.jvjobheader').length > 0) {
+                    title = _util.scrub_string($('.jvjobheader > h2').text());
+                    location_node = $('.jvjobheader > h3');
+                    content_node = $('.jvdescriptionbody');
+                } else if ($('.jvheader').length > 0) {
+                    // This may be custom code for Indochino
+                    title = _util.scrub_string($('.jvheader').text());
+                    location_node = $('.jvheader').next();
+                    content_node = _cheerio.load('<span></span>')('span');
+                    $('.jvheader').parent().children('p, ul, h2').each(function() {
+                        content_node.append($(this).clone());
+                    });
+                } else if ($('.jvcontent').length > 0) {
+                    // This may be custom code for Redfin
+                    var title_node = $('.jvcontent h1');
+                    title = _util.scrub_string(title_node.text());
+                    location_node = title_node.parent().children('h2');
+                    content_node = $('.jobDesc');
                 } else {
-                    if ($('.jvjobheader').length > 0) {
-                        // This may be custom code for Impinj
-                        title = _util.scrub_string($('.jvjobheader > h2').text());
-                        location_node = $('.jvjobheader > h3');
-                        content_node = $('.jvdescriptionbody');
-                    } else {
-                        // This may be custom code for Indochino
-                        title = _util.scrub_string($('.jvheader').text());
-                        location_node = $('.jvheader').next();
-                        content_node = _cheerio.load('<span></span>')('span');
-                        $('.jvheader').parent().children('p, ul, h2').each(function() {
-                            content_node.append($(this).clone());
-                        });
-                    }
+                    throw new Error('Unexpected format');
                 }
                 location = _util.scrub_string(location_node.text().split('|')[1]);
             }
