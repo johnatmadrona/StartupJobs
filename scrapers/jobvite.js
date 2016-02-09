@@ -109,33 +109,31 @@ function scrape_job_description(log, company, url) {
             d.reject(new Error('Request redirected from ' + url + ' to ' + res.request.uri.href));
         } else {
             var $ = _cheerio.load(html);
-            var title, location, contentNode;
+            var title, location, content_node;
             if (res.request.uri.host === 'jobs.jobvite.com') {
                 title = _util.scrub_string($('.jv-header').text());
                 location = _util.scrub_string($('.jv-job-detail-meta').contents()[2].data);
-                contentNode = $('.jv-job-detail-description');
+                content_node = $('.jv-job-detail-description');
             } else if (res.request.uri.host === 'hire.jobvite.com') {
                 var location_node;
                 if (/[\?&]jvresize=/.test(res.request.uri.search)) {
                     title = _util.scrub_string($('.title_jobdesc > h2').text());
                     location_node = $('.title_jobdesc > h3');
-                    contentNode = $('.jobDesc');
+                    content_node = $('.jobDesc');
                 } else {
                     if ($('.jvjobheader').length > 0) {
                         // This may be custom code for Impinj
                         title = _util.scrub_string($('.jvjobheader > h2').text());
                         location_node = $('.jvjobheader > h3');
-                        contentNode = $('.jvdescriptionbody');
+                        content_node = $('.jvdescriptionbody');
                     } else {
                         // This may be custom code for Indochino
                         title = _util.scrub_string($('.jvheader').text());
                         location_node = $('.jvheader').next();
-                        var aggregated_html = '<span>';
+                        content_node = _cheerio.load('<span></span>')('span');
                         $('.jvheader').parent().children('p, ul, h2').each(function() {
-                            aggregated_html += $(this).html() + ' ';
+                            content_node.append($(this).clone());
                         });
-                        aggregated_html += '</span>';
-                        contentNode = _cheerio.load(aggregated_html)('span');
                     }
                 }
                 location = _util.scrub_string(location_node.text().split('|')[1]);
@@ -146,12 +144,9 @@ function scrape_job_description(log, company, url) {
                 company: company,
                 title: title,
                 location: _util.map_location(log, location),
-                text: _util.scrub_string(contentNode.text()),
-                html: contentNode.html().trim()
+                text: _util.scrub_string(content_node.text()),
+                html: content_node.html().trim()
             };
-            console.log();
-            console.log(jd);
-            console.log();
             d.resolve(jd);
         }
     });
