@@ -37,13 +37,13 @@ function scrapeJobDescription(log, company, location, url) {
 
             var description_text = '';
             var description_html = '';
-            $('div[property="content:encoded"] > div').each(function() {
+            $('div[property="content:encoded"]').children().each(function() {
                 if ($(this).text().trim().toLowerCase().startsWith('how to apply')) {
                     // Stop reading after this point
                     return false;
                 }
                 description_text += _util.scrub_string($(this).text()) + ' ';
-                description_html += $(this).html().trim() + ' ';
+                description_html += _util.outer_html($(this)) + ' ';
             });
 
             var jd = {
