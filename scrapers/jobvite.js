@@ -21,7 +21,7 @@ function scrape(log, company, url) {
             log.error({ original_url: url, redirected_url: res.request.uri.href }, 'URL redirected');
             d.reject(new Error('Request redirected from ' + url + ' to ' + res.request.uri.href));
         } else {
-            d.resolve(_q.all(parse_listing_and_scrape_jds(log, company, parsed_url, html)));
+            d.resolve(parse_listing_and_scrape_jds(log, company, parsed_url, html));
         }
     });
 
@@ -41,17 +41,19 @@ function are_urls_equal(first, second, ignore_protocol) {
 }
 
 function parse_listing_and_scrape_jds(log, company, parsed_url, html) {
-    var $ = _cheerio.load(html);
     var jds = [];
-    var links;
 
     if (parsed_url.hostname === 'jobs.jobvite.com') {
-        links = $('a[href*="/job/"]');
-        links.each(function() {
-            var jd_url = _node_url.resolve(parsed_url.href, $(this).attr('href'));
-            jds.push(scrape_job_description(log, company, jd_url));
+        return get_jobs_style_links(parsed_url, html).then(function(urls) {
+            for (var i = 0; i < urls.length; i++) {
+                jds.push(scrape_job_description(log, company, urls[i]));
+            }
+            return _q.all(jds);
         });
     } else if (parsed_url.hostname === 'hire.jobvite.com') {
+        var $ = _cheerio.load(html);
+        var links;
+
         var company_id = /[\?&]c=(\w+)/.exec(parsed_url.href)[1];
         links = $('a[onclick^="jvGoToPage(\'Job Description\'"]');
         if (links.length > 0) {
@@ -74,11 +76,52 @@ function parse_listing_and_scrape_jds(log, company, parsed_url, html) {
                 jds.push(scrape_job_description(log, company, jd_url));
             });
         }
+        return _q.all(jds); 
     } else {
         throw new Error('Invalid domain for jobvite scraping: ' + parsed_url.hostname);
     }
+}
 
-    return jds; 
+function get_jobs_style_links(parsed_url, base_html) {
+    var promises = [];
+    var links = [];
+
+    var $base = _cheerio.load(base_html);
+
+    $base('a[href*="/job/"]').each(function() {
+        links.push(_node_url.resolve(parsed_url.href, $base(this).attr('href')));
+    });
+
+    $base('a[href*="/search?"]').each(function() {
+        var d = _q.defer();
+        var url = _node_url.resolve(parsed_url.href, $base(this).attr('href'));
+        _request(url, function(err, res, html) {
+            if (err) {
+                d.reject(err);
+            } else {
+                var $ = _cheerio.load(html);
+                var match = /(\d+)-(\d+) of (\d+)/.exec($('.jv-pagination-text').text().trim());
+                if (match[2] !== match[3]) {
+                    throw new Error('Pagination not yet implemented');
+                }
+                $('a[href*="/job/"]').each(function() {
+                    links.push(_node_url.resolve(parsed_url.href, $(this).attr('href')));
+                });
+                d.resolve();
+            }
+        });
+        promises.push(d.promise);
+    });
+
+    return _q.all(promises).then(function() {
+        // Filter for unique urls
+        return links.sort().reduce(function(list, value) {
+            if (list.length < 1 || list[list.length - 1] !== value) {
+                list.push(value);
+            }
+            return list;
+        }, []);
+    });
 }
 
 // Parsing roughly matches that used in function jvGoToPage in 
@@ -166,6 +209,7 @@ function scrape_job_description(log, company, url) {
                 text: _util.scrub_string(content_node.text()),
                 html: content_node.html().trim()
             };
+            console.log(jd);
             d.resolve(jd);
         }
     });
