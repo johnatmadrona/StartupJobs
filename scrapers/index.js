@@ -1,14 +1,26 @@
 var _q = require('q');
 var _angellist = require('./angellist.js');
+var _applytojob = require('./applytojob.js');
 var _custom_bocada = require('./custom_bocada.js');
 var _custom_echodyne = require('./custom_echodyne.js');
 var _custom_envelopvr = require('./custom_envelopvr.js');
 var _custom_eventbase = require('./custom_eventbase.js');
 var _custom_highspot  = require('./custom_highspot.js');
+var _custom_matcherino = require('./custom_matcherino.js');
+var _custom_opal = require('./custom_opal.js');
+var _custom_peach = require('./custom_peach.js');
+var _custom_pro = require('./custom_pro.js');
+var _custom_spare5 = require('./custom_spare5.js');
+var _gild = require('./gild.js');
 var _greenhouse = require('./greenhouse.js');
 var _jazz = require('./jazz.js');
+var _jobaline = require('./jobaline.js');
 var _jobvite = require('./jobvite.js');
+var _lever = require('./lever.js');
+var _newton = require('./newton.js');
 var _no_job_page = require('./no_job_page.js');
+var _recruiterbox = require('./recruiterbox.js');
+var _taleo = require('./taleo.js');
 var _workable = require('./workable');
 
 module.exports = {
@@ -23,6 +35,19 @@ module.exports = {
 			company: 'Algorithmia',
 			scrape: function(log) {
 				return _angellist.scrape(log, this.company, 'algorithmia');
+			}
+		},
+		{
+			company: 'Amperity',
+			scrape: function(log) {
+				return _no_job_page.scrape(
+					log,
+					this.company,
+					'https://amperity.com/',
+					'Seattle, WA',
+					'Kabir Shahani',
+					'kabir@amperity.com'
+				);
 			}
 		},
 		{
@@ -95,7 +120,14 @@ module.exports = {
 		{
 			company: 'Cheezburger',
 			scrape: function(log) {
-				return _jazz.scrape(log, this.company, 'cheezburger', 'http://cheezburger.theresumator.com/');
+				return _no_job_page.scrape(
+					log,
+					this.company,
+					'http://www.cheezburger.com/',
+					'Seattle, WA',
+					'the team',
+					'contactus@cheezburger.com'
+				);
 			}
 		},
 		{
@@ -184,183 +216,199 @@ module.exports = {
 			}
 		},
 		{
-			company: 'Intrepid Learning',
-			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
-			}
-		},
-		{
 			company: 'iSpot.tv',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jobvite.scrape(log, this.company, 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qrI9VfwX&jvresize=');
 			}
 		},
 		{
 			company: 'Jama Software',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _greenhouse.scrape(log, this.company, 'jamasoftware');
 			}
 		},
 		{
 			company: 'Jintronix',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _no_job_page.scrape(
+					log,
+					this.company,
+					'http://www.jintronix.com/team/',
+					'Montreal, QC, Canada',
+					'the team',
+					'careers@jintronix.com'
+				);
 			}
 		},
 		{
 			company: 'Jobaline',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jobaline.scrape(log, this.company, 'jobalineinc');
 			}
 		},
 		{
 			company: 'Jova',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _angellist.scrape(log, this.company, 'jova');
 			}
 		},
 		{
 			company: 'Julep',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jazz.scrape(log, this.company, 'julepbeauty', 'http://www.julep.com/careers.html');
 			}
 		},
 		{
 			company: 'LUMO Bodytech',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _lever.scrape(log, this.company, 'lumo');
 			}
 		},
 		{
 			company: 'Matcherino',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _custom_matcherino.scrape(log, this.company, 'Seattle, WA', 'https://matcherino.com/jobs');
 			}
 		},
 		{
 			company: 'MaxPoint',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _newton.scrape(log, this.company, '8afc05ca36a0fff80136a2d219b93475');
 			}
 		},
 		{
 			company: 'Mixpo',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jobvite.scrape(log, this.company, 'https://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qc3aVfw4&jvresize=');
 			}
 		},
 		{
 			company: 'Mobilewalla',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _no_job_page.scrape(
+					log,
+					this.company,
+					'https://www.mobilewalla.com/contact%20us.html',
+					'Seattle, WA',
+					'the team',
+					'contact@mobilewalla.com'
+				);
 			}
 		},
 		{
 			company: 'Opal Labs',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _custom_opal.scrape(log, this.company, 'http://workwithopal.com/careers');
 			}
 		},
 		{
 			company: 'Peach',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _custom_peach.scrape(log, this.company, 'https://www.peachd.com/jobs/');
 			}
 		},
 		{
-			company: 'New Company',
+			company: 'Pixvana',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _recruiterbox.scrape(log, this.company, '39683', 'http://www.pixvana.com/jobs/');
 			}
 		},
 		{
 			company: 'Placed',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _applytojob.scrape(log, this.company, 'placed');
 			}
 		},
 		{
 			company: 'PlayFab',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _greenhouse.scrape(log, this.company, 'playfab');
 			}
 		},
 		{
 			company: 'Poppy Care',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _no_job_page.scrape(
+					log,
+					this.company,
+					'http://www.meetpoppy.com/',
+					'Seattle, WA',
+					'Avni',
+					'avni@poppyteam.com'
+				);
 			}
 		},
 		{
 			company: 'Pro.com',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _custom_pro.scrape(log, this.company, 'https://jobs.pro.com/');
 			}
 		},
 		{
 			company: 'Qumulo',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _greenhouse.scrape(log, this.company, 'qumulo');
 			}
 		},
 		{
 			company: 'Redfin',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jobvite.scrape(log, this.company, 'https://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qf49Vfw7&jvresize=');
 			}
 		},
 		{
 			company: 'Rover.com',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jazz.scrape(log, this.company, 'rover', 'http://jobs.rover.com/');
 			}
 		},
 		{
 			company: 'Seeq',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _recruiterbox.scrape(log, this.company, '9417', 'https://www.seeq.com/about/careers');
 			}
 		},
 		{
 			company: 'Shippable',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _no_job_page.scrape(
+					log,
+					this.company,
+					'https://app.shippable.com/company.html',
+					'Seattle, WA',
+					'the team',
+					'resumes@shippable.com'
+				);
 			}
 		},
 		{
 			company: 'Skytap',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jobvite.scrape(log, this.company, 'http://jobs.jobvite.com/skytap/');
 			}
 		},
 		{
 			company: 'Smartsheet',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
-			}
-		},
-		{
-			company: 'SNUPI Technologies',
-			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _gild.scrape(log, this.company, 'smartsheet.com');
 			}
 		},
 		{
 			company: 'Spare5',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _custom_spare5.scrape(log, this.company, 'Seattle, WA', 'http://www.spare5.com/jobs/');
 			}
 		},
 		{
 			company: 'WildTangent',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _taleo.scrape(log, this.company, 'WILDTANGENT');
 			}
 		},
 		{
 			company: 'Wonder Workshop',
 			scrape: function(log) {
-				return _q.reject(new Error('Not yet implemented'));
+				return _jazz.scrape(log, this.company, 'Playi', 'https://www.makewonder.com/careers');
 			}
 		}
 

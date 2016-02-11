@@ -138,14 +138,14 @@ function runScrapers(log, scrapers) {
 		}
 		return _q.allSettled(ops);
 	}).done(function(results) {
-		var sc = results.reduce(function(p, item) {
+		var success_count = results.reduce(function(p, item) {
 			return p + (item.state === 'rejected' ? 0 : 1);
 		}, 0);
 
 		var status = {
 			total_count: results.length,
-			success_count: sc,
-			failure_count: results.length - sc
+			success_count: success_count,
+			failure_count: results.length - success_count
 		};
 
 		if (status.failure_count > 0) {
