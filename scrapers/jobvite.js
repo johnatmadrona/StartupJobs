@@ -209,7 +209,6 @@ function scrape_job_description(log, company, url) {
                 text: _util.scrub_string(content_node.text()),
                 html: content_node.html().trim()
             };
-            console.log(jd);
             d.resolve(jd);
         }
     });

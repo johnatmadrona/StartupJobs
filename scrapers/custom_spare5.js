@@ -24,7 +24,6 @@ function scrape(log, company, location, url) {
 	                text: _util.scrub_string($(this).next().text()),
 	                html: $(this).next().html().trim()
 	            };
-                console.log(new_jd);
 	            jds.push(new_jd);
             });
 

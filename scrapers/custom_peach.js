@@ -25,7 +25,6 @@ function scrape(log, company, url) {
                         text: description.text,
                         html: description.html
                     };
-                    console.log(jd);
                     jds.push(jd);
                 }
             }
