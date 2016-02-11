@@ -14,13 +14,15 @@ function scrape(log, company, jazz_id, public_url) {
         } else {
         	var html_start = script.indexOf('\'<div id="resumator-widget"');
         	if (html_start < 0) {
-        		throw new Error('Start of html not found for ' + jazz_id);
+        		d.reject(new Error('Start of html not found for ' + jazz_id));
+                return;
         	}
         	html_start++;
 
         	var html_end =  script.indexOf('\'', html_start);
         	if (html_end < 0) {
-        		throw new Error('End of html not found for ' + jazz_id);
+        		d.reject(new Error('End of html not found for ' + jazz_id));
+                return;
         	}
 
         	var html = script.substring(html_start, html_end);

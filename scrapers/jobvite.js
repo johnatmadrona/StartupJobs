@@ -10,7 +10,8 @@ function scrape(log, company, url) {
     var parsed_url = _node_url.parse(url);
     if (parsed_url.hostname !== 'jobs.jobvite.com' &&
         parsed_url.hostname !== 'hire.jobvite.com') {
-        throw new Error('Invalid domain for jobvite scraping: ' + parsed_url.hostname);
+        d.reject(new Error('Invalid domain for jobvite scraping: ' + parsed_url.hostname));
+        return;
     }
 
     log.info({ company: company, url: url }, 'Getting jd links');

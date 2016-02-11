@@ -36,7 +36,8 @@ function parse_js(log, company, location, url) {
             // Extract the root
             var start = js.indexOf('createElement("div",{className:"container"},i["default"].createElement("h1"');
             if (start < 0) {
-                throw new Error('Parsing failed due to syntax error');
+                d.reject(new Error('Parsing failed due to syntax error'));
+                return;
             }
             var root_markers = find_createElement_text(js, start);
             var tree = build_tree(js, root_markers);

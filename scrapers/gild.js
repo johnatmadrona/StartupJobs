@@ -18,7 +18,8 @@ function scrape(log, company, g_id) {
             var jds = [];
 
             if ($('.pagination').length > 0) {
-                throw new Error('Pagination not yet implemeneted');
+                d.reject(new Error('Pagination not yet implemeneted'));
+                return;
             }
 
             $('a.view-job').each(function() {
@@ -57,22 +58,20 @@ function scrape_job_description(log, company, url) {
             });
 
             if (typeof(location) === 'undefined') {
-                throw new Error('Unexpected format, couldn\'t find location');
+                d.reject(new Error('Unexpected format, couldn\'t find location'));
+            } else if (typeof(description_node) === 'undefined') {
+                d.reject(new Error('Unexpected format, couldn\'t find location'));
+            } else {
+                var jd = {
+                    url: url,
+                    company: company,
+                    title: _util.scrub_string(title_node.text()),
+                    location: _util.map_location(log, location),
+                    text: _util.scrub_string(description_node.text()),
+                    html: description_node.html().trim()
+                };
+                d.resolve(jd);
             }
-
-            if (typeof(description_node) === 'undefined') {
-                throw new Error('Unexpected format, couldn\'t find location');
-            }
-
-            var jd = {
-                url: url,
-                company: company,
-                title: _util.scrub_string(title_node.text()),
-                location: _util.map_location(log, location),
-                text: _util.scrub_string(description_node.text()),
-                html: description_node.html().trim()
-            };
-            d.resolve(jd);
         }
     });
 
