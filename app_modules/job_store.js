@@ -155,7 +155,12 @@ function add_job_to_s3(log, s3, bucket, job) {
 
 function init(log, aws_key_id, aws_key, aws_region, s3_bucket) {
 	log.info(
-		{ aws_key_id: aws_key_id, aws_key: aws_key, aws_region: aws_region, s3_bucket: s3_bucket },
+		{
+			aws_key_id: aws_key_id ? '(set)' : aws_key_id,
+			aws_key: aws_key ? '(set)' : aws_key,
+			aws_region: aws_region ? '(set)' : aws_region,
+			s3_bucket: s3_bucket
+		},
 		'Initializing jd store'
 	);
 

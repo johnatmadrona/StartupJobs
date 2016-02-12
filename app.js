@@ -136,7 +136,7 @@ function run_scrapers(log, scrapers) {
 		process.env.AWS_KEY_ID,
 		process.env.AWS_KEY,
 		process.env.AWS_REGION,
-		'startup-jobs-scraper'
+		'startup-jobs-v1'
 	).then(function() {
 		var ops = [];
 		for (var i = 0; i < scrapers.length; i++) {
