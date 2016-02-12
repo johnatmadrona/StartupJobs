@@ -1,56 +1,38 @@
 var _q = require('q');
-var _request = require('request');
 var _cheerio = require('cheerio');
 var _node_url = require('url');
 var _util = require('./scraper_utils.js');
 
 function scrape(log, company, location, url) {
-    var d = _q.defer();
-
     log.info({ company: company, url: url }, 'Getting jds');
-    _request(url, function(err, res, html) {
-        if (err) {
-            d.reject(err);
-        } else {
-            var $ = _cheerio.load(html);
-            var js_url = _node_url.resolve(url, $('script[src$="/bundle-main.js"]').attr('src'));
-            d.resolve(parse_js(log, company, location, js_url));
-        }
+    return _util.request(log, url).then(function(html) {
+        var $ = _cheerio.load(html);
+        var js_url = _node_url.resolve(url, $('script[src$="/bundle-main.js"]').attr('src'));
+        return parse_js(log, company, location, js_url);
     });
-
-    return d.promise;
 }
 
 function parse_js(log, company, location, url) {
-    var d = _q.defer();
-
     log.info({ company: company, url: url }, 'Retrieveing javascript');
-    _request(url, function(err, res, js) {
-        if (err) {
-            d.reject(err);
-        } else {
-            // Consider using PhantomJS for page rendering instead of parsing Javascript
+    return _util.request(log, url).then(function(js) {
+        // Consider using PhantomJS for page rendering instead of parsing Javascript
 
-            log.info('Parsing javascript');
+        log.info('Parsing javascript');
 
-            // Extract the root
-            var start = js.indexOf('createElement("div",{className:"container"},i["default"].createElement("h1"');
-            if (start < 0) {
-                d.reject(new Error('Parsing failed due to syntax error'));
-                return;
-            }
-            var root_markers = find_createElement_text(js, start);
-            var tree = build_tree(js, root_markers);
-            var html = render_html(tree);
-
-            log.info('Building JDs');
-            var jds = create_jds_from_html(log, company, location, url, html);
-
-            d.resolve(_q.all(jds));
+        // Extract the root
+        var start = js.indexOf('createElement("div",{className:"container"},i["default"].createElement("h1"');
+        if (start < 0) {
+            d.reject(new Error('Parsing failed due to syntax error'));
+            return;
         }
-    });
+        var root_markers = find_createElement_text(js, start);
+        var tree = build_tree(js, root_markers);
+        var html = render_html(tree);
 
-    return d.promise;
+        log.info('Building JDs');
+        var jds = create_jds_from_html(log, company, location, url, html);
+        return _q.all(jds);
+    });
 }
 
 function find_createElement_text(original_text, original_text_offset) {

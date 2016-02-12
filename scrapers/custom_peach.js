@@ -1,40 +1,31 @@
 var _q = require('q');
-var _request = require('request');
 var _node_url = require('url');
 var _util = require('./scraper_utils.js');
 
 function scrape(log, company, url) {
-    var d = _q.defer();
-
     var jobs_url = _node_url.resolve(url, '/api/jobs/');
     log.info({ company: company, url: url, jobs_url: jobs_url }, 'Getting jd links');
-    _request(jobs_url, function(err, res, json) {
-        if (err) {
-            d.reject(err);
-        } else {
-            var jobs = JSON.parse(json);
-            var jds = [];
-            for (var i = 0; i < jobs.length; i++) {
-                if (jobs[i].active) {
-                    var description = format_description(jobs[i]);
-                    var jd = _util.create_jd(
-                        log,
-                        _node_url.resolve(url, '/jobs/' + jobs[i].id + '/'),
-                        company,
-                        jobs[i].title,
-                        jobs[i].location,
-                        description.text,
-                        description.html
-                    );
-                    jds.push(jd);
-                }
+    return _util.request(log, jobs_url).then(function(json) {
+        var jobs = JSON.parse(json);
+        var jds = [];
+        for (var i = 0; i < jobs.length; i++) {
+            if (jobs[i].active) {
+                var description = format_description(jobs[i]);
+                var jd = _util.create_jd(
+                    log,
+                    _node_url.resolve(url, '/jobs/' + jobs[i].id + '/'),
+                    company,
+                    jobs[i].title,
+                    jobs[i].location,
+                    description.text,
+                    description.html
+                );
+                jds.push(jd);
             }
-
-            d.resolve(_q.all(jds));
         }
-    });
 
-    return d.promise;
+        return _q.all(jds);
+    });
 }
 
 function format_description(job) {

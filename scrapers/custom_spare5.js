@@ -1,38 +1,29 @@
 var _q = require('q');
-var _request = require('request');
 var _cheerio = require('cheerio');
 var _util = require('./scraper_utils.js');
 
 function scrape(log, company, location, url) {
-    var d = _q.defer();
-
     log.info({ company: company, url: url }, 'Getting jds');
-    _request({ url: url, headers: { 'User-Agent': 'startup-jobs' } }, function(err, res, html) {
-        if (err) {
-            d.reject(err);
-        } else {
-            var $ = _cheerio.load(html);
+    return _util.request(log, url).then(function(html) {
+        var $ = _cheerio.load(html);
 
-            var jds = [];
-            $('*[data-type="page"] *[data-block-type="23"]').each(function() {
-                var title = _util.scrub_string($(this).text());
-            	var new_jd = _util.create_jd(
-                    log,
-	                url,
-	                company,
-	                title,
-	                location,
-	                _util.scrub_string($(this).next().text()),
-	                $(this).next().html().trim()
-	            );
-	            jds.push(new_jd);
-            });
+        var jds = [];
+        $('*[data-type="page"] *[data-block-type="23"]').each(function() {
+            var title = _util.scrub_string($(this).text());
+        	var new_jd = _util.create_jd(
+                log,
+                url,
+                company,
+                title,
+                location,
+                _util.scrub_string($(this).next().text()),
+                $(this).next().html().trim()
+            );
+            jds.push(new_jd);
+        });
 
-            d.resolve(_q.all(jds));
-        }
+        return _q.all(jds);
     });
-
-    return d.promise;
 }
 
 module.exports = {

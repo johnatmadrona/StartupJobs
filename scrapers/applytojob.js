@@ -9,14 +9,14 @@ function scrape(log, company, atj_id) {
         var $ = _cheerio.load(html);
         var jds = [];
         $('.list-group-item-heading > a').each(function() {
-            jds.push(scrapeJobDescription(log, company, $(this).attr('href')));
+            jds.push(scrape_job_description(log, company, $(this).attr('href')));
         });
 
         return _q.all(jds);
     });
 }
 
-function scrapeJobDescription(log, company, url) {
+function scrape_job_description(log, company, url) {
     log.info({ company: company, url: url }, 'Getting jd');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
