@@ -40,14 +40,15 @@ function scrapeJobDescription(log, company, url) {
             var location = _util.scrub_string(header.substring(header_divide + 1));
             var description = $('.entry-content');
 
-            var jd = {
-                url: url,
-                company: company,
-                title: title,
-                location: _util.map_location(log, location),
-                text: _util.scrub_string(description.text()),
-                html: description.html().trim()
-            };
+            var jd = _util.create_jd(
+                log,
+                url,
+                company,
+                title,
+                location,
+                _util.scrub_string(description.text()),
+                description.html().trim()
+            );
             d.resolve(jd);
         }
     });

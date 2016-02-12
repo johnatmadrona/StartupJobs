@@ -9,7 +9,10 @@ function scrape(log, company, lever_id) {
     var url = 'https://jobs.lever.co/' + lever_id + '/';
 
     log.info({ company: company, url: url }, 'Getting jd links');
-    _request(url, function(err, res, html) {
+    var headers = {
+        'User-Agent': 'startup-jobs'
+    };
+    _request({ url: url, headers: headers }, function(err, res, html) {
         if (err) {
             d.reject(err);
         } else {
@@ -32,9 +35,16 @@ function scrape_job_description(log, company, url) {
     _request(url, function(err, res, html) {
         if (err) {
             d.reject(err);
+        } else if (res.statusCode != 200) {
+            log.error({
+                company: company,
+                url: url,
+                status_code: res.statusCode,
+                status_message: res.statusMessage
+            }, 'Server responded with an unexpected status code');
+            d.reject(new Error('Unexpected response from server with status code ' + res.statusCode));
         } else {
             var $ = _cheerio.load(html);
-            var location = _util.scrub_string($('.posting-categories').children().eq(0).text());
 
             var content_html = '';
             var content_text = '';
@@ -44,14 +54,15 @@ function scrape_job_description(log, company, url) {
                 content_text += _util.scrub_string($(this).text()) + ' ';
             });
 
-            var jd = {
-                url: url,
-                company: company,
-                title: _util.scrub_string($('.posting-headline > h2').text()),
-                location: _util.map_location(log, location),
-                text: content_text,
-                html: content_html.trim()
-            };
+            var jd = _util.create_jd(
+                log,
+                url,
+                company,
+                _util.scrub_string($('.posting-headline > h2').text()),
+                _util.scrub_string($('.posting-categories').children().eq(0).text()),
+                content_text.trim(),
+                content_html.trim()
+            );
             d.resolve(jd);
         }
     });

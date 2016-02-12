@@ -31,14 +31,15 @@ function scrape(log, company, rb_id, public_url) {
 
                 var $ = _cheerio.load('<span></span>')('span').append(jobs[i].description);
 
-                var new_jd = {
-                    url: public_url,
-                    company: company,
-                    title: jobs[i].title,
-                    location: _util.map_location(log, location),
-                    text: _util.scrub_string($.text()),
-                    html: $.html().trim()
-                };
+                var new_jd = _util.create_jd(
+                    log,
+                    public_url,
+                    company,
+                    jobs[i].title,
+                    location,
+                    _util.scrub_string($.text()),
+                    $.html().trim()
+                );
                 jds.push(new_jd);
             }
 

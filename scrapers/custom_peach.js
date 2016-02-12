@@ -17,14 +17,15 @@ function scrape(log, company, url) {
             for (var i = 0; i < jobs.length; i++) {
                 if (jobs[i].active) {
                     var description = format_description(jobs[i]);
-                    var jd = {
-                        url: _node_url.resolve(url, '/jobs/' + jobs[i].id + '/'),
-                        company: company,
-                        title: jobs[i].title,
-                        location: _util.map_location(log, jobs[i].location),
-                        text: description.text,
-                        html: description.html
-                    };
+                    var jd = _util.create_jd(
+                        log,
+                        _node_url.resolve(url, '/jobs/' + jobs[i].id + '/'),
+                        company,
+                        jobs[i].title,
+                        jobs[i].location,
+                        description.text,
+                        description.html
+                    );
                     jds.push(jd);
                 }
             }

@@ -3,6 +3,46 @@ var _city_lookup = require('./lookup_map_city.json');
 var _state_lookup = require('./lookup_map_state.json');
 var _country_lookup = require('./lookup_map_country.json');
 
+
+function create_jd(
+	log,
+	url,
+	company,
+	title,
+	location_text,
+	text_description,
+	html_description
+	) {
+
+	if (typeof(url) !== 'string' || url === null || url.length < 1 ||
+		typeof(company) !== 'string' || company === null || company.length < 1 ||
+		typeof(title) !== 'string' || title === null || title.length < 1 ||
+		typeof(location_text) !== 'string' || location_text === null ||
+		typeof(text_description) !== 'string' || text_description === null ||
+		typeof(html_description) !== 'string' || html_description === null
+		) {
+
+		log.error({
+			url: url,
+			company: company,
+			title: title,
+			location_text: location_text,
+			text_description: text_description,
+			html_description: html_description
+		}, 'Error creating jd - invalid params');
+		throw new Error('All parameters must be provided and of type "string"');
+	}
+
+    return {
+        url: url,
+        company: company,
+        title: title,
+        location: map_location(log, location_text),
+        text_description: text_description,
+        html_description: html_description
+    };
+}
+
 function get_hashable_text(name) {
     return name.replace(/[\s\.]+/g, '-').toLowerCase();
 }
@@ -66,7 +106,7 @@ function scrub_string(text) {
 }
 
 module.exports = {
-	map_location: map_location,
+	create_jd: create_jd,
 	outer_html: outer_html,
 	scrub_string: scrub_string
 };

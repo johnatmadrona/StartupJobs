@@ -47,14 +47,15 @@ function scrapeJobDescription(log, company, location, url) {
                 description_html += _util.outer_html($(this)) + ' ';
             });
 
-            var jd = {
-                url: url,
-                company: company,
-                title: _util.scrub_string($('.about-headline').text()),
-                location: _util.map_location(log, location),
-                text: description_text,
-                html: description_html
-            };
+            var jd = _util.create_jd(
+                log,
+                url,
+                company,
+                _util.scrub_string($('.about-headline').text()),
+                location,
+                description_text,
+                description_html
+            );
             d.resolve(jd);
         }
     });

@@ -30,15 +30,15 @@ function scrape(log, company, jazz_id, public_url) {
 
             var jds = [];
             $('.resumator-job').each(function() {
-            	var raw_loc = _util.scrub_string($(this).find('.resumator-job-info').contents()[1].data);
-            	var new_jd = {
-	                url: public_url,
-	                company: company,
-	                title: _util.scrub_string($(this).find('.resumator-job-title').text()),
-	                location: _util.map_location(log, raw_loc),
-	                text: _util.scrub_string($(this).find('.resumator-job-description-text').text()),
-	                html: $(this).find('.resumator-job-description-text').html().trim()
-	            };
+            	var new_jd = _util.create_jd(
+                    log,
+	                public_url,
+	                company,
+	                _util.scrub_string($(this).find('.resumator-job-title').text()),
+	                _util.scrub_string($(this).find('.resumator-job-info').contents()[1].data),
+	                _util.scrub_string($(this).find('.resumator-job-description-text').text()),
+	                $(this).find('.resumator-job-description-text').html().trim()
+	            );
 	            jds.push(new_jd);
             });
 

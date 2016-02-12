@@ -33,14 +33,15 @@ function scrapeJobDescription(log, company, location, url) {
         } else {
             var $ = _cheerio.load(html);
             var contentNode = $('.entry-content div').eq(1);
-            var jd = {
-                url: url,
-                company: company,
-                title: _util.scrub_string($('.entry-title').text()),
-                location: _util.map_location(log, location),
-                text: _util.scrub_string(contentNode.text()),
-                html: contentNode.html().trim()
-            };
+            var jd = _util.create_jd(
+                log,
+                url,
+                company,
+                _util.scrub_string($('.entry-title').text()),
+                location,
+                _util.scrub_string(contentNode.text()),
+                contentNode.html().trim()
+            );
             d.resolve(jd);
         }
     });

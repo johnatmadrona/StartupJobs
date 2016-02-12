@@ -66,14 +66,15 @@ function scrapeJobDescription(log, company, url) {
                 throw new Error('Unexpected format, couldn\'t find description');
             }
 
-            var jd = {
-                url: url,
-                company: company,
-                title: title,
-                location: _util.map_location(log, location),
-                text: _util.scrub_string(description_node.text()),
-                html: description_node.html().trim()
-            };
+            var jd = _util.create_jd(
+                log,
+                url,
+                company,
+                title,
+                location,
+                _util.scrub_string(description_node.text()),
+                description_node.html().trim()
+            );
             d.resolve(jd);
         }
     });

@@ -37,14 +37,15 @@ function scrape_job_description(log, company, url) {
             var raw_location = _util.scrub_string($('.info-icons').children().eq(0).text());
             var parsed_location = /([\w ,]+)\d{5}/.exec(raw_location)[1].trim();
             var content_node = $('.job-description-container');
-            var jd = {
-                url: url,
-                company: company,
-                title: _util.scrub_string($('.job-title').text()),
-                location: _util.map_location(log, parsed_location),
-                text: _util.scrub_string(content_node.text()),
-                html: content_node.html().trim()
-            };
+            var jd = _util.create_jd(
+                log,
+                url,
+                company,
+                _util.scrub_string($('.job-title').text()),
+                parsed_location,
+                _util.scrub_string(content_node.text()),
+                content_node.html().trim()
+            );
             d.resolve(jd);
         }
     });

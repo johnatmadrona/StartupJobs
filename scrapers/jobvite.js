@@ -202,14 +202,15 @@ function scrape_job_description(log, company, url) {
                 location = _util.scrub_string(location_node.text().split('|')[1]);
             }
 
-            var jd = {
-                url: url,
-                company: company,
-                title: title,
-                location: _util.map_location(log, location),
-                text: _util.scrub_string(content_node.text()),
-                html: content_node.html().trim()
-            };
+            var jd = _util.create_jd(
+                log,
+                url,
+                company,
+                title,
+                location,
+                _util.scrub_string(content_node.text()),
+                content_node.html().trim()
+            );
             d.resolve(jd);
         }
     });

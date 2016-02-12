@@ -38,7 +38,6 @@ function scrapeJobDescription(log, company, url) {
             d.reject(err);
         } else {
             var $ = _cheerio.load(html);
-            var loc = _util.scrub_string($('.section--header > .meta').text());
 
             var description_text = '';
             var description_html = '';
@@ -47,14 +46,15 @@ function scrapeJobDescription(log, company, url) {
                 description_html += _util.outer_html($(this)) + ' ';
             });
 
-            var jd = {
-                url: url,
-                company: company,
-                title: _util.scrub_string($('.section--header > h1').text()),
-                location: _util.map_location(log, loc),
-                text: description_text,
-                html: description_html
-            };
+            var jd = _util.create_jd(
+                log,
+                url,
+                company,
+                _util.scrub_string($('.section--header > h1').text()),
+                _util.scrub_string($('.section--header > .meta').text()),
+                description_text.trim(),
+                description_html.trim()
+            );
             d.resolve(jd);
         }
     });

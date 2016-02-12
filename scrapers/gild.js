@@ -62,14 +62,15 @@ function scrape_job_description(log, company, url) {
             } else if (typeof(description_node) === 'undefined') {
                 d.reject(new Error('Unexpected format, couldn\'t find location'));
             } else {
-                var jd = {
-                    url: url,
-                    company: company,
-                    title: _util.scrub_string(title_node.text()),
-                    location: _util.map_location(log, location),
-                    text: _util.scrub_string(description_node.text()),
-                    html: description_node.html().trim()
-                };
+                var jd = _util.create_jd(
+                    log,
+                    url,
+                    company,
+                    _util.scrub_string(title_node.text()),
+                    location,
+                    _util.scrub_string(description_node.text()),
+                    description_node.html().trim()
+                );
                 d.resolve(jd);
             }
         }

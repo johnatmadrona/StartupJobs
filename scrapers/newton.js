@@ -43,14 +43,15 @@ function scrape_job_description(log, company, title, location, url) {
         } else {
             var $ = _cheerio.load(html);
             var description_node = $('#gnewtonJobDescriptionText');
-            var jd = {
-                url: url,
-                company: company,
-                title: title,
-                location: _util.map_location(log, location),
-                text: _util.scrub_string(description_node.text()),
-                html: description_node.html().trim()
-            };
+            var jd = _util.create_jd(
+                log,
+                url,
+                company,
+                title,
+                location,
+                _util.scrub_string(description_node.text()),
+                description_node.html().trim()
+            );
             d.resolve(jd);
         }
     });

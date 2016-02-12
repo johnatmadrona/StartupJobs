@@ -16,17 +16,16 @@ function scrape(log, company, location, url) {
 
             var jds = [];
             $('.accordion > h3 > a').each(function() {
-                var title = _util.scrub_string($(this).text());
-                var anchor_url = _node_url.resolve(url, $(this).attr('href'));
                 var description = $(this).parent().next();
-            	var new_jd = {
-	                url: anchor_url,
-	                company: company,
-	                title: title,
-	                location: _util.map_location(log, location),
-	                text: _util.scrub_string(description.text()),
-	                html: description.html().trim()
-	            };
+            	var new_jd = _util.create_jd(
+                    log,
+	                _node_url.resolve(url, $(this).attr('href')),
+	                company,
+	                _util.scrub_string($(this).text()),
+	                location,
+	                _util.scrub_string(description.text()),
+	                description.html().trim()
+	            );
 	            jds.push(new_jd);
             });
 

@@ -11,14 +11,15 @@ function scrape(log, company, info_url, location, contact_name, contact_email) {
     );
 
     // Use Q's .all operation to match behavior of other scrapers
-    var result = {
-        url: info_url,
-        company: company,
-        title: 'Opportunistic Role',
-        location: _util.map_location(log, location),
-        text: _util.scrub_string($.text()),
-        html: $.html()
-    };
+    var result = _util.create_jd(
+        log,
+        info_url,
+        company,
+        'Opportunistic Role',
+        location,
+        _util.scrub_string($.text()),
+        $.html()
+    );
     return _q.all([result]);
 }
 

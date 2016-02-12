@@ -126,14 +126,15 @@ function create_jds_from_html(log, company, location, url, html) {
             next = next.next();
         }
 
-        var new_jd = {
-            url: url,
-            company: company,
-            title: _util.scrub_string($(this).text()),
-            location: _util.map_location(log, location),
-            text: aggregated_text.trim(),
-            html: aggregated_html.trim()
-        };
+        var new_jd = _util.create_jd(
+            log,
+            url,
+            company,
+            _util.scrub_string($(this).text()),
+            location,
+            aggregated_text.trim(),
+            aggregated_html.trim()
+        );
         jds.push(new_jd);
     });
 
