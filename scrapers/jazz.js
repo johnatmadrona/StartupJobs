@@ -8,13 +8,13 @@ function scrape(log, company, jazz_id, public_url) {
     return _util.request(log, url).then(function(script) {
     	var html_start = script.indexOf('\'<div id="resumator-widget"');
     	if (html_start < 0) {
-    		throw new Error('Start of html not found for ' + jazz_id);
+    		return _q.reject(new Error('Start of html not found for ' + jazz_id));
     	}
     	html_start++;
 
     	var html_end =  script.indexOf('\'', html_start);
     	if (html_end < 0) {
-    		throw new Error('End of html not found for ' + jazz_id);
+    		return _q.reject(new Error('End of html not found for ' + jazz_id));
     	}
 
     	var html = script.substring(html_start, html_end);

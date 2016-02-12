@@ -87,7 +87,7 @@ function get_all_jobs_from_s3(log, s3, bucket, prefix, max_count) {
 
 		if ((typeof(max_count) === 'undefined' || result.Contents.length < max_count) && result.IsTruncated) {
 			//var nextMarker = result.Contents[data.Contents.length - 1].Key;
-			throw new Error('Truncation handling not yet implemented');
+			return _q.reject(new Error('Truncation handling not yet implemented'));
 		}
 
 		return _q.all(
@@ -242,7 +242,7 @@ function remove_jobs(log, jobs) {
 
 	// The AWS SDK has a limit of 1000 keys for the deleteObjects request
 	if (jobs.length > 1000) {
-		throw new Error('Deletion of more than 1000 keys not yet implemented');
+		return _q.reject(new Error('Deletion of more than 1000 keys not yet implemented'));
 	}
 
 	var options = {

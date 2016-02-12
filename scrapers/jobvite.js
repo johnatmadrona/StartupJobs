@@ -158,7 +158,7 @@ function scrape_job_description(log, company, url) {
                 location_node = title_node.parent().children('h2');
                 content_node = $('.jobDesc');
             } else {
-                throw new Error('Unexpected format');
+                return _q.reject(new Error('Unexpected format'));
             }
             location = _util.scrub_string(location_node.text().split('|')[1]);
         }

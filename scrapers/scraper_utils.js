@@ -15,10 +15,10 @@ function request(log, url) {
             	{ url: url, status_code: res.statusCode, status_message: res.statusMessage },
             	'Server responded with an unexpected status code'
             );
-            throw new Error('Unexpected response from server with status code ' + res.statusCode);
+            return _q.reject(new Error('Unexpected response from server with status code ' + res.statusCode));
 		} else if (!are_urls_equivalent(url, res.request.uri.href, true)) {
             log.error({ original_url: url, redirected_url: res.request.uri.href }, 'URL redirected');
-            throw new Error('Request redirected from ' + url + ' to ' + res.request.uri.href);
+            return _q.reject(new Error('Request redirected from ' + url + ' to ' + res.request.uri.href));
         }
 
         return payload;
