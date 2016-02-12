@@ -1,8 +1,44 @@
+var _q = require('Q');
 var _cheerio = require('cheerio');
+var _request = require('request');
 var _city_lookup = require('./lookup_map_city.json');
 var _state_lookup = require('./lookup_map_state.json');
 var _country_lookup = require('./lookup_map_country.json');
 
+function request(log, url) {
+    var headers = {
+        'User-Agent': 'startup-jobs'
+    };
+    return _q.nfcall(_request, { url: url, headers: headers }).spread(function(res, html) {
+        if (res.statusCode != 200) {
+            log.error(
+            	{ url: url, status_code: res.statusCode, status_message: res.statusMessage },
+            	'Server responded with an unexpected status code'
+            );
+            throw new Error('Unexpected response from server with status code ' + res.statusCode);
+		} else if (!are_urls_equivalent(url, res.request.uri.href, true)) {
+            log.error({ original_url: url, redirected_url: res.request.uri.href }, 'URL redirected');
+            throw new Error('Request redirected from ' + url + ' to ' + res.request.uri.href);
+        }
+
+        return html;
+    }, function(err) {
+    	log.error({ url: url, err: err }, 'HTTP request failed');
+    	throw err;	// Rethrow to handler further down chain
+    });
+}
+
+function are_urls_equivalent(first, second, ignore_protocol) {
+    var f = first;
+    var s = second;
+    if (typeof(ignore_protocol) !== 'undefined' && ignore_protocol) {
+        f_start = first.indexOf('//');
+        f = f.substring(f_start);
+        s_start = second.indexOf('//');
+        s = s.substring(s_start);
+    }
+    return f === s;
+}
 
 function create_jd(
 	log,
@@ -108,5 +144,6 @@ function scrub_string(text) {
 module.exports = {
 	create_jd: create_jd,
 	outer_html: outer_html,
+	request: request,
 	scrub_string: scrub_string
 };
