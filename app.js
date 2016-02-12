@@ -129,12 +129,18 @@ app.get('/api', function(req, res) {
 	});*/
 });
 
-function runScrapers(log, scrapers) {
+function run_scrapers(log, scrapers) {
 	log.info({ scraper_count: scrapers.length }, 'Initiating scraping');
-	_store.init(log).then(function() {
+	_store.init(
+		log, 
+		process.env.AWS_KEY_ID,
+		process.env.AWS_KEY,
+		process.env.AWS_REGION,
+		'startup-jobs-scraper'
+	).then(function() {
 		var ops = [];
 		for (var i = 0; i < scrapers.length; i++) {
-			ops.push(runScraper(log, scrapers[i]));
+			ops.push(run_scraper(log, scrapers[i]));
 		}
 		return _q.allSettled(ops);
 	}).done(function(results) {
@@ -158,11 +164,11 @@ function runScrapers(log, scrapers) {
 	});
 }
 
-function runScraper(log, scraper) {
+function run_scraper(log, scraper) {
 	log.info({ company: scraper.company }, 'Running scraper');
 	return scraper.scrape(log)
-		.then(function(jds) { return storeJobs(log, jds); })
-		.then(function(jds) { return getObsoleteJobs(scraper.company, jds); })
+		.then(function(jds) { return store_jobs(log, jds); })
+		.then(function(jds) { return get_obsolete_jobs(scraper.company, jds); })
 		.then(function(obsolete_jobs) {
 			log.info({ company: scraper.company, count: obsolete_jobs.length }, 'Deleting obsolete jobs');
 			return _store.remove_jobs(log, obsolete_jobs);
@@ -172,13 +178,13 @@ function runScraper(log, scraper) {
 		});
 }
 
-function storeJobs(log, jds) {
+function store_jobs(log, jds) {
 	return _store.add_jobs(log, jds).then(function() {
 		return jds;
 	});
 }
 
-function getObsoleteJobs(company, jds) {
+function get_obsolete_jobs(company, jds) {
 	var new_jobs_map = {};
 	for (var i = 0; i < jds.length; i++) {
 		new_jobs_map[_hash(jds[i])] = true;
@@ -191,7 +197,7 @@ function getObsoleteJobs(company, jds) {
 	});
 }
 
-runScrapers(_log, _scrapers.scrapers);
+run_scrapers(_log, _scrapers.scrapers);
 
 //app.listen(app.get('port'), function() {
 //	_log.info('Express server started on port ' + app.get('port'));

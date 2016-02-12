@@ -7,24 +7,21 @@ var _hash = require('object-hash');
 var _config;
 var _cache;
 
-var _s3_bucket = 'madrona-sjp-test';
-
-
 ///
 /// Utility functions
 /// 
 
-function createKeyPrefixFromCompany(company) {
+function create_key_prefix_from_company(company) {
 	var normalized_company = company.toLowerCase().replace(/[^a-z^0-9^\.^-]+/g, '');
 	return 'data/' + normalized_company + '/';
 }
 
-function createKeyFromJob(job) {
-	var key = createKeyPrefixFromCompany(job.company) + 'jd-' + _hash(job) + '.json';
+function create_key_from_job(job) {
+	var key = create_key_prefix_from_company(job.company) + 'jd-' + _hash(job) + '.json';
 	return key;
 }
 
-function isJobKey(str) {
+function is_job_key(str) {
 	return /jd-\w+\.json$/.test(str);
 }
 
@@ -33,11 +30,11 @@ function isJobKey(str) {
 /// S3 functions
 ///
 
-function getS3Connection(aws) {
+function get_s3_connection(aws) {
 	return _q().then(function() { return new aws.S3(); });
 }
 
-function s3BucketExists(log, s3, bucket) {
+function s3_bucket_exists(log, s3, bucket) {
 	var d = _q.defer();
 
 	s3.headBucket({ Bucket: bucket }, function(err, data) {
@@ -55,12 +52,12 @@ function s3BucketExists(log, s3, bucket) {
 	return d.promise;
 }
 
-function createS3Bucket(log, s3, bucket) {
+function create_s3_bucket(log, s3, bucket) {
 	var options = {
 		Bucket: bucket,
 		ACL: 'public-read',
 		CreateBucketConfiguration: {
-			LocationConstraint: _config.region
+			LocationConstraint: _config.aws_region
 		}
 	};
 
@@ -71,7 +68,7 @@ function createS3Bucket(log, s3, bucket) {
 	});
 }
 
-function getAllJobsFromS3(log, s3, bucket, prefix, max_count) {
+function get_all_jobs_from_s3(log, s3, bucket, prefix, max_count) {
 	var options = {
 		Bucket: bucket
 	};
@@ -95,9 +92,9 @@ function getAllJobsFromS3(log, s3, bucket, prefix, max_count) {
 
 		return _q.all(
 			result.Contents.filter(function(item) {
-				return isJobKey(item.Key);
+				return is_job_key(item.Key);
 			}).map(function(item) {
-				return getJobFromS3(log, s3, bucket, item.Key).then(function(job) {
+				return get_job_from_s3(log, s3, bucket, item.Key).then(function(job) {
 					return { key: item.Key, val: job };
 				});
 			})
@@ -112,7 +109,7 @@ function getAllJobsFromS3(log, s3, bucket, prefix, max_count) {
 	});
 }
 
-function getJobFromS3(log, s3, bucket, key) {
+function get_job_from_s3(log, s3, bucket, key) {
 	return _q.ninvoke(s3, 'getObject', {
 		Bucket: bucket,
 		Key: key,
@@ -123,16 +120,16 @@ function getJobFromS3(log, s3, bucket, key) {
 	});
 }
 
-function addJobsToS3(log, s3, bucket, jobs) {
+function add_jobs_to_s3(log, s3, bucket, jobs) {
 	var promises = [];
 	for (var i = 0; i < jobs.length; i++) {
-		promises.push(addJobToS3(log, s3, bucket, jobs[i]));
+		promises.push(add_job_to_s3(log, s3, bucket, jobs[i]));
 	}
 	return _q.all(promises);
 }
 
-function addJobToS3(log, s3, bucket, job) {
-	var key = createKeyFromJob(job);
+function add_job_to_s3(log, s3, bucket, job) {
+	var key = create_key_from_job(job);
 
 	// Check if item already exists
 	if (typeof(_cache[key]) !== 'undefined') {
@@ -156,42 +153,48 @@ function addJobToS3(log, s3, bucket, job) {
 	});
 }
 
-function init(log) {
-	log.info('Initializing jd store');
+function init(log, aws_key_id, aws_key, aws_region, s3_bucket) {
+	log.info(
+		{ aws_key_id: aws_key_id, aws_key: aws_key, aws_region: aws_region, s3_bucket: s3_bucket },
+		'Initializing jd store'
+	);
+
+	if (!aws_key_id || !aws_key || !aws_region || !s3_bucket) {
+		log.error('Missing required parameter');
+		return _q.reject(new Error('Missing required parameter'));
+	}
 
 	if (typeof(_cache) !== 'undefined') {
 		log.warn('Tried to initialize multiple times');
 		return _q();
 	}
 
-	if (typeof(_config) === 'undefined') {
+	if (!_config) {
 		_config = {
-			accessKeyId: process.env.AWS_KEY_ID,
-			secretAccessKey: process.env.AWS_KEY,
-			region: process.env.AWS_REGION
+			aws_key_id: aws_key_id,
+			aws_key: aws_key,
+			aws_region: aws_region,
+			s3_bucket: s3_bucket
 		};
 	}
-	
-	if (typeof(_config.accessKeyId) === 'undefined' ||
-		typeof(_config.secretAccessKey) === 'undefined' ||
-		typeof(_config.region) === 'undefined') {
-		log.error(_config, 'Required config values not set');
-		throw new Error('Must define environment variables AWS_KEY_ID, AWS_KEY, and AWS_REGION');
-	}
 
-	_aws.config.update(_config);
+	_aws.config.update({
+		accessKeyId: _config.aws_key_id,
+		secretAccessKey: _config.aws_key,
+		region: _config.aws_region
+	});
 
-	log.info({ bucket: _s3_bucket }, 'Loading jds from s3');
+	log.info({ bucket: _config.s3_bucket }, 'Loading jds from s3');
 	var s3;
-	return getS3Connection(_aws).then(function(s3_cxn) {
+	return get_s3_connection(_aws).then(function(s3_cxn) {
 		s3 = s3_cxn;
-		return s3BucketExists(log, s3, _s3_bucket);
+		return s3_bucket_exists(log, s3, _config.s3_bucket);
 	}).then(function(exists) {
 		if (!exists) {
-			return createS3Bucket(log, s3, _s3_bucket);
+			return create_s3_bucket(log, s3, _config.s3_bucket);
 		}
 	}).then(function() {
-		return getAllJobsFromS3(log, s3, _s3_bucket);
+		return get_all_jobs_from_s3(log, s3, _config.s3_bucket);
 	}).then(function(jobs) {
 		_cache = jobs;
 		log.info({ jd_count: Object.keys(jobs).length }, 'Loaded jds into cache');
@@ -199,14 +202,14 @@ function init(log) {
 		// Remove any jobs with invalid keys. This can happen if s3 objects 
 		// are manually created or there's a change in the key gen scheme.
 		var options = {
-			Bucket: _s3_bucket,
+			Bucket: _config.s3_bucket,
 			Delete: { Objects: [] }
 		};
 
 		log.info('Checking for invalid jd keys and removing any from cache');
 		var invalidJobs = [];
 		for (var jobKey in _cache) {
-			if (jobKey !== createKeyFromJob(_cache[jobKey])) {
+			if (jobKey !== create_key_from_job(_cache[jobKey])) {
 				options.Delete.Objects.push({ Key: jobKey });
 				delete(_cache[jobKey]);
 			}
@@ -214,7 +217,7 @@ function init(log) {
 
 		// The AWS SDK has a limit of 1000 keys for the deleteObjects request
 		if (options.Delete.Objects.length > 1000) {
-			throw new Error('Deletion of more than 1000 keys not yet implemented');
+			return _q.reject(new Error('Deletion of more than 1000 keys not yet implemented'));
 		}
 
 		if (options.Delete.Objects.length > 0) {
@@ -227,8 +230,8 @@ function init(log) {
 }
 
 function add_jobs(log, jobs) {
-	return getS3Connection(_aws).then(function(s3) {
-		return addJobsToS3(log, s3, _s3_bucket, jobs);
+	return get_s3_connection(_aws).then(function(s3) {
+		return add_jobs_to_s3(log, s3, _config.s3_bucket, jobs);
 	});
 }
 
@@ -243,19 +246,19 @@ function remove_jobs(log, jobs) {
 	}
 
 	var options = {
-		Bucket: _s3_bucket,
+		Bucket: _config.s3_bucket,
 		Delete: { Objects: [] }
 	};
 
 	log.info({ count: jobs.length }, 'Removing jds from cache');
 	for (var i = 0; i < jobs.length; i++) {
-		var key = createKeyFromJob(jobs[i]);
+		var key = create_key_from_job(jobs[i]);
 		delete(_cache[key]);
 		options.Delete.Objects.push({ Key: key });
 	}
 
 	log.info(options, 'Deleting jds from s3');
-	return getS3Connection(_aws).then(function(s3) {
+	return get_s3_connection(_aws).then(function(s3) {
 		return _q.ninvoke(s3, 'deleteObjects', options).then(function(result) {
 			log.info(options, 'Deleted jds from s3');
 		});
@@ -268,7 +271,7 @@ function query_jobs(log, query) {
 	var result = [];
 
 	if (typeof(query.company) !== 'undefined') {
-		var prefix = createKeyPrefixFromCompany(query.company);
+		var prefix = create_key_prefix_from_company(query.company);
 		result = Object.keys(_cache).filter(function(item) {
 			return item.startsWith(prefix);
 		});
