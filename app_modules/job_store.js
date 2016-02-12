@@ -189,7 +189,7 @@ function init(log, aws_key_id, aws_key, aws_region, s3_bucket) {
 		region: _config.aws_region
 	});
 
-	log.info({ bucket: _config.s3_bucket }, 'Loading jds from s3');
+	log.info({ bucket: _config.s3_bucket }, 'Loading jds from s3 and bulding cache');
 	var s3;
 	return get_s3_connection(_aws).then(function(s3_cxn) {
 		s3 = s3_cxn;
