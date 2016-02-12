@@ -9,7 +9,7 @@ function request(log, url) {
     var headers = {
         'User-Agent': 'startup-jobs'
     };
-    return _q.nfcall(_request, { url: url, headers: headers }).spread(function(res, html) {
+    return _q.nfcall(_request, { url: url, headers: headers }).spread(function(res, payload) {
         if (res.statusCode != 200) {
             log.error(
             	{ url: url, status_code: res.statusCode, status_message: res.statusMessage },
@@ -21,7 +21,7 @@ function request(log, url) {
             throw new Error('Request redirected from ' + url + ' to ' + res.request.uri.href);
         }
 
-        return html;
+        return payload;
     }, function(err) {
     	log.error({ url: url, err: err }, 'HTTP request failed');
     	throw err;	// Rethrow to handler further down chain
