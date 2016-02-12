@@ -1,82 +1,62 @@
 var _q = require('q');
-var _request = require('request');
 var _cheerio = require('cheerio');
 var _node_url = require('url');
 var _util = require('./scraper_utils.js');
 
 function scrape(log, company, g_id) {
-    var d = _q.defer();
-
     var url = 'https://people.gild.com/company/' + g_id + '?limit=1000&offset=0';
-
     log.info({ company: company, g_id: g_id, url: url }, 'Getting jds');
-    _request(url, function(err, res, html) {
-        if (err) {
-            d.reject(err);
-        } else {
-            var $ = _cheerio.load(html);
-            var jds = [];
+    return _util.request(log, url).then(function(html) {
+        var $ = _cheerio.load(html);
+        var jds = [];
 
-            if ($('.pagination').length > 0) {
-                d.reject(new Error('Pagination not yet implemeneted'));
-                return;
-            }
-
-            $('a.view-job').each(function() {
-                var jd_url = _node_url.resolve(url, $(this).attr('href'));
-	            jds.push(scrape_job_description(log, company, jd_url));
-            });
-
-            d.resolve(_q.all(jds));
+        if ($('.pagination').length > 0) {
+            return _q.reject(new Error('Pagination not yet implemeneted'));
         }
-    });
 
-    return d.promise;
+        $('a.view-job').each(function() {
+            var jd_url = _node_url.resolve(url, $(this).attr('href'));
+            jds.push(scrape_job_description(log, company, jd_url));
+        });
+
+        return _q.all(jds);
+    });
 }
 
 function scrape_job_description(log, company, url) {
-    var d = _q.defer();
-
     log.info({ company: company, url: url }, 'Getting jd');
-    _request(url, function(err, res, html) {
-        if (err) {
-            d.reject(err);
-        } else {
-            var $ = _cheerio.load(html);
+    return _util.request(log, url).then(function(html) {
+        var $ = _cheerio.load(html);
 
-            var title_node = $('.job-position-header').clone().children().remove().end();
+        var title_node = $('.job-position-header').clone().children().remove().end();
 
-            var location;
-            var description_node;
-            $('.job-position > dl > dt').each(function() {
-                if ($(this).text().trim().toLowerCase() === 'location') {
-                    location = _util.scrub_string($(this).next().text());
-                }
-                if ($(this).text().trim().toLowerCase() === 'job description') {
-                    description_node = $(this).next();
-                }
-            });
-
-            if (typeof(location) === 'undefined') {
-                d.reject(new Error('Unexpected format, couldn\'t find location'));
-            } else if (typeof(description_node) === 'undefined') {
-                d.reject(new Error('Unexpected format, couldn\'t find location'));
-            } else {
-                var jd = _util.create_jd(
-                    log,
-                    url,
-                    company,
-                    _util.scrub_string(title_node.text()),
-                    location,
-                    _util.scrub_string(description_node.text()),
-                    description_node.html().trim()
-                );
-                d.resolve(jd);
+        var location;
+        var description_node;
+        $('.job-position > dl > dt').each(function() {
+            if ($(this).text().trim().toLowerCase() === 'location') {
+                location = _util.scrub_string($(this).next().text());
             }
-        }
-    });
+            if ($(this).text().trim().toLowerCase() === 'job description') {
+                description_node = $(this).next();
+            }
+        });
 
-    return d.promise;
+        if (typeof(location) === 'undefined') {
+            return _q.reject(new Error('Unexpected format, couldn\'t find location'));
+        } else if (typeof(description_node) === 'undefined') {
+            return _q.reject(new Error('Unexpected format, couldn\'t find location'));
+        }
+
+        return _util.create_jd(
+            log,
+            url,
+            company,
+            _util.scrub_string(title_node.text()),
+            location,
+            _util.scrub_string(description_node.text()),
+            description_node.html().trim()
+        );
+    });
 }
 
 module.exports = {

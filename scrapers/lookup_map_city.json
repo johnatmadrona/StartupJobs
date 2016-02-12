@@ -3,6 +3,10 @@
 		"canonicalName": "Albany",
 		"state": "ny"
 	},
+	"albuquerque": {
+		"canonicalName": "Albuquerque",
+		"state": "nm"
+	},
 	"atlanta": {
 		"canonicalName": "Atlanta",
 		"state": "ga"
@@ -195,6 +199,10 @@
 		"canonicalName": "Queen Anne",
 		"state": "wa"
 	},
+	"raleigh": {
+		"canonicalName": "Raleigh",
+		"state": "nc"
+	},
 	"redmond": {
 		"canonicalName": "Redmond",
 		"state": "wa"
@@ -225,6 +233,10 @@
 	},
 	"san-francisco": {
 		"canonicalName": "San Francisco",
+		"state": "ca"
+	},
+	"san-jose": {
+		"canonicalName": "San Jose",
 		"state": "ca"
 	},
 	"bay-area": {

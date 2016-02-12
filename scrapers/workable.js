@@ -1,65 +1,45 @@
 var _q = require('q');
-var _request = require('request');
 var _cheerio = require('cheerio');
 var _node_url = require('url');
 var _util = require('./scraper_utils.js');
 
 function scrape(log, company, w_id) {
     var url = 'https://' + w_id + '.workable.com/';
-    var d = _q.defer();
-
     log.info({ company: company, w_id: w_id, url: url }, 'Getting jd links');
-    _request(url, function(err, res, html) {
-        if (err) {
-            d.reject(err);
-        } else {
-            var $ = _cheerio.load(html);
-            var links = $('.job a');
-            var jds = [];
-            links.each(function() {
-                var jd_url = _node_url.resolve(url, $(this).attr('href'));
-                jds.push(scrapeJobDescription(log, company, jd_url));
-            });
+    return _util.request(log, url).then(function(html) {
+        var $ = _cheerio.load(html);
+        var jds = [];
+        $('.job a').each(function() {
+            var jd_url = _node_url.resolve(url, $(this).attr('href'));
+            jds.push(scrape_job_description(log, company, jd_url));
+        });
 
-            d.resolve(_q.all(jds));
-        }
+        return _q.all(jds);
     });
-
-    return d.promise;
 }
 
-function scrapeJobDescription(log, company, url) {
+function scrape_job_description(log, company, url) {
     log.info({ company: company, url: url }, 'Getting jd');
+    return _util.request(log, url).then(function(html) {
+        var $ = _cheerio.load(html);
 
-    var d = _q.defer();
+        var description_text = '';
+        var description_html = '';
+        $('.section--text').each(function() {
+            description_text += _util.scrub_string($(this).text()) + ' ';
+            description_html += _util.outer_html($(this)) + ' ';
+        });
 
-    _request(url, function(err, res, html) {
-        if (err) {
-            d.reject(err);
-        } else {
-            var $ = _cheerio.load(html);
-
-            var description_text = '';
-            var description_html = '';
-            $('.section--text').each(function() {
-                description_text += _util.scrub_string($(this).text()) + ' ';
-                description_html += _util.outer_html($(this)) + ' ';
-            });
-
-            var jd = _util.create_jd(
-                log,
-                url,
-                company,
-                _util.scrub_string($('.section--header > h1').text()),
-                _util.scrub_string($('.section--header > .meta').text()),
-                description_text.trim(),
-                description_html.trim()
-            );
-            d.resolve(jd);
-        }
+        return _util.create_jd(
+            log,
+            url,
+            company,
+            _util.scrub_string($('.section--header > h1').text()),
+            _util.scrub_string($('.section--header > .meta').text()),
+            description_text.trim(),
+            description_html.trim()
+        );
     });
-
-    return d.promise;
 }
 
 module.exports = {

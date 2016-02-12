@@ -111,6 +111,14 @@
 		"canonicalName": "Missouri",
 		"country": "usa"
 	},
+	"nm": {
+		"canonicalName": "New Mexico",
+		"country": "usa"
+	},
+	"new-mexico": {
+		"canonicalName": "New Mexico",
+		"country": "usa"
+	},
 	"new-south-wales": {
 		"canonicalName": "New South Wales",
 		"country": "australia"
