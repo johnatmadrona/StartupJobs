@@ -1,4 +1,4 @@
-var _q = require('Q');
+var _q = require('q');
 var _cheerio = require('cheerio');
 var _request = require('request');
 var _city_lookup = require('./lookup_map_city.json');
