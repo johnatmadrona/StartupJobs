@@ -56,7 +56,8 @@ function get_obsolete_jobs(log, store, company, jds) {
 	for (var i = 0; i < jds.length; i++) {
 		new_jobs_map[_hash(jds[i])] = true;
 	}
-	return store.query_jobs(log, { company: company }).then(function(old_jobs) {
+	var query = { operation: 'jobs-by-company', company: company };
+	return store.query(log, query).then(function(old_jobs) {
 		// Create a list of stored jobs that are obsolete
 		return old_jobs.filter(function(old_job) {
 			return typeof(new_jobs_map[_hash(old_job)]) === 'undefined';

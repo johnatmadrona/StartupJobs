@@ -149,7 +149,8 @@ function add_job_to_s3(log, s3, bucket, job) {
 
 	log.info({ bucket: bucket, key: key }, 'Adding jd to s3');
 	return _q.ninvoke(s3, 'putObject', options).then(function(result) {
-		log.info({ bucket: bucket, key: key }, 'Added jd to s3');
+		_cache[key] = job;
+		log.info({ bucket: bucket, key: key }, 'Added jd to s3 and cache');
 	});
 }
 
@@ -270,26 +271,43 @@ function remove_jobs(log, jobs) {
 	});
 }
 
-function query_jobs(log, query) {
+function query(log, query) {
 	log.info({ query: query }, 'Querying jds');
 
-	var result = [];
-
-	if (typeof(query.company) !== 'undefined') {
-		var prefix = create_key_prefix_from_company(query.company);
-		result = Object.keys(_cache).filter(function(item) {
-			return item.startsWith(prefix);
-		});
+	if (typeof(query.operation) !== 'string') {
+		return _q.reject(new Error('Must supply value for query.operation'));
 	}
 
-	return _q(result.map(function(cache_key) {
-		return _cache[cache_key];
-	}));
+	if (query.operation === 'list-companies') {
+		var company_map = Object.keys(_cache).reduce(function(cm, cache_key) {
+			var company = _cache[cache_key].company;
+			if (!cm[company]) {
+				cm[company] = { name: company };
+			}
+			return cm;
+		}, {});
+		return _q(Object.keys(company_map).map(function(key) {
+			return company_map[key];
+		}));
+	} else if (query.operation === 'jobs-by-company') {
+		if (typeof(query.company) === 'undefined') {
+			return _q.reject(new Error('Must supply value for query.company'));
+		}
+		var prefix = create_key_prefix_from_company(query.company);
+		var jobs_by_company = Object.keys(_cache).filter(function(item) {
+			return item.startsWith(prefix);
+		}).map(function(cache_key) {
+			return _cache[cache_key];
+		});
+		return _q(jobs_by_company);
+	}
+
+	return _q.reject(new Error('Invalid value for query.operation: ' + query.operation));
 }
 
 module.exports = {
 	init: init,
 	add_jobs: add_jobs,
 	remove_jobs: remove_jobs,
-	query_jobs: query_jobs
+	query: query
 };

@@ -79,17 +79,10 @@ app.use(function(req, res, next) {
 
 	next();
 });
-
 app.use(_express.static(__dirname + '/WebUI'));
 app.use('/logos', _express.static(__dirname + '/images/logos'));
 
 app.set('port', (process.env.PORT || 5000));
-
-_job_api.setup_jobs_api(_log, app);
-
-app.listen(app.get('port'), function() {
-	_log.info('Express server started on port ' + app.get('port'));
-});
 
 _log.info('Initializing store');
 _store.init(
@@ -101,8 +94,15 @@ _store.init(
 ).then(function() {
 	_log.info('Store initialized, scheduling scraping');
 	_scraping_manager.schedule(_log, _store, _scrapers, _config.hour_of_day_to_scrape);
+}).then(function() {
+	_log.info('Scraping scheduled, setting up jobs api');
+	_job_api.setup_jobs_api(app, _store);
+}).then(function() {
+	app.listen(app.get('port'), function() {
+		_log.info('Express server started on port ' + app.get('port'));
+	});
 }).done(function() {
-	_log.info('Scraping scheduled');
+	_log.info('Setup complete');
 }, function(err) {
 	_log.error({ err: err }, 'Irrecoverable failure while setting up scraping');
 	throw err;
