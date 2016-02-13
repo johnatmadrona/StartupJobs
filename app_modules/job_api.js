@@ -4,7 +4,7 @@ function setup_jobs_api(log, express_app) {
 
 	// List available logos
 	express_app.get('/api/logos', function(req, res, next) {
-		var dir_path = __dirname + '/images/logos/';
+		var dir_path = __dirname + '/../images/logos/';
 		var suffix = '-logo.png';
 		_fs.readdir(dir_path, function(err, files) {
 			if (err) {
@@ -40,7 +40,7 @@ function setup_jobs_api(log, express_app) {
 			return next();
 		}
 
-		var file_path = __dirname + '/images/logos/' + req.params.company_name + '-logo.png';
+		var file_path = __dirname + '/../images/logos/' + req.params.company_name + '-logo.png';
 		_fs.stat(file_path, function(err, stats) {
 			if (err) {
 				log.error(err, 'Error retrieving file "' + file_path + '"');
