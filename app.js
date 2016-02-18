@@ -10,21 +10,6 @@ var _scrapers = require('./scrapers');
 var _job_store = require('./app_modules/job_store');
 var _value_store = require('./app_modules/value_store');
 
-var _log = new _bunyan({
-	name: 'job-scraper',
-	streams: [
-		{
-			stream: process.stdout,
-			level: 'debug'
-		},
-		{
-			path: 'errors.log',
-			level: 'error'
-		}
-	],
-	serializers: _bunyan.stdSerializers
-});
-
 var _config = (function() {
 	var aws_key_id = process.env.AWS_KEY_ID;
 	if (!aws_key_id || aws_key_id.length < 1) {
@@ -47,15 +32,37 @@ var _config = (function() {
 		hour_of_day_to_scrape < 0 || hour_of_day_to_scrape > 23) {
 		throw new Error('Must set HOUR_OF_DAY_TO_SCRAPE to an integer in the range of 0 to 23');
 	}
+	var log_level = process.env.LOG_LEVEL;
+	if (!log_level || log_level.length < 1) {
+		log_level = 'info';
+	}
 
 	return {
 		aws_key_id: process.env.AWS_KEY_ID,
 		aws_key: process.env.AWS_KEY,
 		aws_region: process.env.AWS_REGION,
-		s3_bucket: s3_bucket, //'startup-jobs-v1',
-		hour_of_day_to_scrape: hour_of_day_to_scrape
+		s3_bucket: s3_bucket,
+		hour_of_day_to_scrape: hour_of_day_to_scrape,
+		log_level: log_level
 	};
 })();
+
+var _log = new _bunyan({
+	name: 'job-scraper',
+	streams: [
+		{
+			stream: process.stdout,
+			level: _config.log_level
+		},
+		{
+			// If log size becomes an issue, can consider 
+			// https://www.npmjs.com/package/bunyan-rotating-file-stream
+			path: 'errors.log',
+			level: 'error'
+		}
+	],
+	serializers: _bunyan.stdSerializers
+});
 
 var app = _express();
 app.use(_body_parser.json());

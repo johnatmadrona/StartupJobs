@@ -81,7 +81,6 @@ function schedule_scraping(log, job_store, value_store, scrapers, recurring_hour
 	}, 15 * 60 * 1000);
 
 	return is_time_for_next_run(log, value_store, recurring_hour_of_day).then(function(do_run) {
-		console.log(do_run);
 		if (do_run) {
 			return run_scrapers(log, job_store, scrapers).then(function() {
 				return value_store.add_value(log, _last_time_key, _moment());

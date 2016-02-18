@@ -114,7 +114,7 @@ function add_job_to_s3(log, s3, job) {
 
 	// Check if item already exists
 	if (typeof(_cache[key]) !== 'undefined') {
-		log.debug({ bucket: bucket, key: key }, 'Would add jd to s3, but it already exists');
+		log.debug({ key: key }, 'Would add jd to s3, but it already exists');
 		return _q();
 	}
 
