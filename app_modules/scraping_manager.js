@@ -33,16 +33,19 @@ function run_scrapers(log, store, scrapers) {
 
 function run_scraper(log, store, scraper) {
 	log.info({ company: scraper.company }, 'Running scraper');
-	return scraper.scrape(log)
-		.then(function(jds) { return store_jobs(log, store, jds); })
-		.then(function(jds) { return get_obsolete_jobs(log, store, scraper.company, jds); })
-		.then(function(obsolete_jobs) {
+	return scraper.scrape(log).then(function(jds) {
+		return store_jobs(log, store, jds);
+	}).then(function(jds) {
+		return get_obsolete_jobs(log, store, scraper.company, jds);
+	}).then(function(obsolete_jobs) {
+		if (obsolete_jobs.length > 0) {
 			log.info({ company: scraper.company, count: obsolete_jobs.length }, 'Deleting obsolete jobs');
 			return store.remove_jobs(log, obsolete_jobs);
-		}).catch(function(err) {
-			log.error({ company: scraper.company, err: err }, 'Error while running scraper');
-			return _q.reject(err);
-		});
+		}
+	}).catch(function(err) {
+		log.error({ company: scraper.company, err: err }, 'Error while running scraper');
+		return _q.reject(err);
+	});
 }
 
 function store_jobs(log, store, jds) {
@@ -67,54 +70,70 @@ function get_obsolete_jobs(log, store, company, jds) {
 
 var _last_time_key = 'last-run-time';
 function schedule_scraping(log, job_store, value_store, scrapers, recurring_hour_of_day) {
-	return get_ms_until_next_run(log, value_store, recurring_hour_of_day).then(function(ms_until_next_time) {
-		setTimeout(function() {
-			schedule_scraping(
-				log,
-				job_store,
-				value_store,
-				scrapers,
-				recurring_hour_of_day
-			).then(function() {
-				return run_scrapers(log, job_store, scrapers);
-			}).then(function() {
-				return value_store.add_value(log, _last_time_key, _moment());
-			}).done(function() {
-				log.debug('Updated last scrape time');
-			}, function(err) {
-				log.error({ err: err }, 'Error while scheduling scraping');
-			});
-		}, ms_until_next_time);
+	setTimeout(function() {
+		schedule_scraping(
+			log,
+			job_store,
+			value_store,
+			scrapers,
+			recurring_hour_of_day
+		);
+	}, 15 * 60 * 1000);
 
-		var next_scrape_time = _moment().add(ms_until_next_time, 'ms');
-		log.info({ next_scrape_time: next_scrape_time }, 'Timer set for next scraping');
+	return is_time_for_next_run(log, value_store, recurring_hour_of_day).then(function(do_run) {
+		console.log(do_run);
+		if (do_run) {
+			return run_scrapers(log, job_store, scrapers).then(function() {
+				return value_store.add_value(log, _last_time_key, _moment());
+			});
+		}
+	}).done(function() {
+		log.debug('Scraping complete');
+	}, function(err) {
+		log.error({ err: err }, 'Error while scheduling scraping');
 	});
 }
 
-function get_ms_until_next_run(log, value_store, desired_hour_of_day) {
+function is_time_for_next_run(log, value_store, desired_hour_of_day) {
 	return value_store.get_value(log, _last_time_key).then(function(last_time_str) {
 		if (last_time_str === null) {
-			return 0;
+			return true;
 		}
 
 		var last_time = _moment(last_time_str);
-		var next_time = _moment([last_time.year(), last_time.month(), last_time.date()])
-			.add(1, 'd')
-			.add(desired_hour_of_day, 'h');
+		var day_of_last_time = _moment([last_time.year(), last_time.month(), last_time.date()]);
+		var now = _moment();
+		var today = _moment([now.year(), now.month(), now.date()]);
+		var target_time_today = today.clone().add(desired_hour_of_day, 'h');
 
-		return next_time.valueOf() - last_time.valueOf();
+		// If the last run happened today, but occurred before the 
+		// desired hour, we need to run again after the desired hour
+		var need_to_run_again_today = 
+			day_of_last_time.diff(today) === 0 && 
+			last_time.diff(target_time_today) < 0 && 
+			now.diff(target_time_today) >= 0;
+
+		// If the last run happened before today, we need to run 
+		// after the desired hour today
+		var need_to_run_first_time_today = 
+			day_of_last_time.diff(today) < 0 && 
+			now.diff(target_time_today) >= 0;
+
+		return need_to_run_again_today || need_to_run_first_time_today;
 	});
 }
 
 module.exports = {
 	run: run_scrapers,
 	schedule: function(log, job_store, value_store, scrapers, recurring_hour_of_day) {
-		return schedule_scraping(
-			log,
-			job_store,
-			value_store,
-			scrapers.scrapers,
-			recurring_hour_of_day
-		);
+		setTimeout(function() {
+			schedule_scraping(
+				log,
+				job_store,
+				value_store,
+				scrapers.scrapers,
+				recurring_hour_of_day
+			);
+		}, 0);
 	}
 };

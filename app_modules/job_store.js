@@ -74,7 +74,7 @@ function init(log, aws_key_id, aws_key, aws_region, s3_bucket) {
 
 		if (keys_to_remove.length > 0) {
 			log.warn({ options }, 'Deleting invalid jds from s3');
-			return _s3.remove(keys_to_remove).then(function() {
+			return _s3.remove(log, keys_to_remove).then(function() {
 				log.debug(options, 'Deleted invalid jds from s3');
 			});
 		}
@@ -135,7 +135,7 @@ function remove_jobs_from_s3(log, s3, jobs) {
 	}
 
 	log.debug({ count: keys_to_remove.length }, 'Removing jds from s3');
-	return s3.remove(keys_to_remove).then(function() {
+	return s3.remove(log, keys_to_remove).then(function() {
 		log.debug({ count: keys_to_remove.length }, 'Removed jds from s3');
 	});
 }
