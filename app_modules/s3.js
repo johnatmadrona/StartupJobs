@@ -88,7 +88,7 @@ function upsert(log, key, value) {
 	if (typeof(key) !== 'string' || key === null || key.length < 1) {
 		return _q.reject(new Error('Must provide a string value for parameter "key"'));
 	}
-	if (typeof(value) === 'undefined') {
+	if (typeof(value) === 'undefined' || value === null) {
 		return _q.reject(new Error('Must supply a value for parameter "value"'));
 	}
 
@@ -102,7 +102,7 @@ function upsert(log, key, value) {
 		ContentType: 'application/json'
 	};
 	log.debug({ options: options }, 'Writing value to s3');
-	return get_s3_connection(aws).then(function(s3) {
+	return get_s3_connection(_aws).then(function(s3) {
 		return _q.ninvoke(s3, 'putObject', options);
 	});
 }

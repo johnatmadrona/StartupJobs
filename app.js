@@ -7,7 +7,8 @@ var _body_parser = require('body-parser');
 var _job_api = require('./app_modules/job_api');
 var _scraping_manager = require('./app_modules/scraping_manager');
 var _scrapers = require('./scrapers');
-var _store = require('./app_modules/job_store');
+var _job_store = require('./app_modules/job_store');
+var _value_store = require('./app_modules/value_store');
 
 var _log = new _bunyan({
 	name: 'job-scraper',
@@ -84,19 +85,34 @@ app.use('/logos', _express.static(__dirname + '/images/logos'));
 
 app.set('port', (process.env.PORT || 5000));
 
-_log.info('Initializing store');
-_store.init(
+_log.info('Initializing job store');
+_job_store.init(
 	_log,
 	_config.aws_key_id,
 	_config.aws_key,
 	_config.aws_region,
 	_config.s3_bucket
 ).then(function() {
-	_log.info('Store initialized, scheduling scraping');
-	_scraping_manager.schedule(_log, _store, _scrapers, _config.hour_of_day_to_scrape);
+	_log.info('Initializing value store');
+	return _value_store.init(
+		_log,
+		_config.aws_key_id,
+		_config.aws_key,
+		_config.aws_region,
+		_config.s3_bucket
+	);
+}).then(function() {
+	_log.info('Scheduling job scraping');
+	return _scraping_manager.schedule(
+		_log,
+		_job_store,
+		_value_store,
+		_scrapers,
+		_config.hour_of_day_to_scrape
+	);
 }).then(function() {
 	_log.info('Scraping scheduled, setting up jobs api');
-	_job_api.setup_jobs_api(app, _store);
+	_job_api.setup_jobs_api(app, _job_store);
 }).then(function() {
 	app.listen(app.get('port'), function() {
 		_log.info('Express server started on port ' + app.get('port'));
