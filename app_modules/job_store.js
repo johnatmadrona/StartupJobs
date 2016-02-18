@@ -110,7 +110,7 @@ function add_jobs_to_s3(log, s3, jobs) {
 }
 
 function add_job_to_s3(log, s3, job) {
-	var key = create_key_from_job(jobs[i]);
+	var key = create_key_from_job(job);
 
 	// Check if item already exists
 	if (typeof(_cache[key]) !== 'undefined') {

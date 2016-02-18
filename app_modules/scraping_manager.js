@@ -49,7 +49,7 @@ function run_scraper(log, store, scraper) {
 }
 
 function store_jobs(log, store, jds) {
-	return store.add_jobs(log, store, jds).then(function() {
+	return store.add_jobs(log, jds).then(function() {
 		return jds;
 	});
 }
