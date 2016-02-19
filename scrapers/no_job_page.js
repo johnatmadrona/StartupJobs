@@ -17,7 +17,7 @@ function scrape(log, company, info_url, location, contact_name, contact_email) {
         company,
         'Opportunistic Role',
         location,
-        _util.scrub_string($.text()),
+        _util.scrub_string($('*').text()),
         $.html()
     );
     return _q.all([result]);
