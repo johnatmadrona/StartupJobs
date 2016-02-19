@@ -68,22 +68,22 @@ function get_obsolete_jobs(log, store, company, jds) {
 	});
 }
 
-var _last_time_key = 'last-run-time';
-function schedule_scraping(log, job_store, value_store, scrapers, recurring_hour_of_day) {
+var _last_time_utc_key = 'last-run-time-utc';
+function schedule_scraping(log, job_store, value_store, scrapers, recurring_hour_of_day_utc) {
 	setTimeout(function() {
 		schedule_scraping(
 			log,
 			job_store,
 			value_store,
 			scrapers,
-			recurring_hour_of_day
+			recurring_hour_of_day_utc
 		);
 	}, 15 * 60 * 1000);
 
-	return is_time_for_next_run(log, value_store, recurring_hour_of_day).then(function(do_run) {
+	return is_time_for_next_run(log, value_store, recurring_hour_of_day_utc).then(function(do_run) {
 		if (do_run) {
 			return run_scrapers(log, job_store, scrapers).then(function() {
-				return value_store.add_value(log, _last_time_key, _moment());
+				return value_store.add_value(log, _last_time_utc_key, _moment.utc());
 			});
 		}
 	}).done(function() {
@@ -93,17 +93,17 @@ function schedule_scraping(log, job_store, value_store, scrapers, recurring_hour
 	});
 }
 
-function is_time_for_next_run(log, value_store, desired_hour_of_day) {
-	return value_store.get_value(log, _last_time_key).then(function(last_time_str) {
+function is_time_for_next_run(log, value_store, desired_hour_of_day_utc) {
+	return value_store.get_value(log, _last_time_utc_key).then(function(last_time_str) {
 		if (last_time_str === null) {
 			return true;
 		}
 
-		var last_time = _moment(last_time_str);
-		var day_of_last_time = _moment([last_time.year(), last_time.month(), last_time.date()]);
-		var now = _moment();
-		var today = _moment([now.year(), now.month(), now.date()]);
-		var target_time_today = today.clone().add(desired_hour_of_day, 'h');
+		var last_time = _moment.utc(last_time_str);
+		var day_of_last_time = _moment.utc([last_time.year(), last_time.month(), last_time.date()]);
+		var now = _moment.utc();
+		var today = _moment.utc([now.year(), now.month(), now.date()]);
+		var target_time_today = today.clone().add(desired_hour_of_day_utc, 'h');
 
 		// If the last run happened today, but occurred before the 
 		// desired hour, we need to run again after the desired hour
@@ -124,14 +124,14 @@ function is_time_for_next_run(log, value_store, desired_hour_of_day) {
 
 module.exports = {
 	run: run_scrapers,
-	schedule: function(log, job_store, value_store, scrapers, recurring_hour_of_day) {
+	schedule: function(log, job_store, value_store, scrapers, recurring_hour_of_day_utc) {
 		setTimeout(function() {
 			schedule_scraping(
 				log,
 				job_store,
 				value_store,
 				scrapers.scrapers,
-				recurring_hour_of_day
+				recurring_hour_of_day_utc
 			);
 		}, 0);
 	}

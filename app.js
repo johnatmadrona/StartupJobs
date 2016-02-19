@@ -27,10 +27,10 @@ var _config = (function() {
 	if (!s3_bucket || s3_bucket.length < 1) {
 		throw new Error('Must set S3_BUCKET');
 	}
-	var hour_of_day_to_scrape = Number.parseInt(process.env.HOUR_OF_DAY_TO_SCRAPE);
-	if (!hour_of_day_to_scrape || !Number.isInteger(hour_of_day_to_scrape) ||
-		hour_of_day_to_scrape < 0 || hour_of_day_to_scrape > 23) {
-		throw new Error('Must set HOUR_OF_DAY_TO_SCRAPE to an integer in the range of 0 to 23');
+	var hour_of_day_to_scrape_utc = Number.parseInt(process.env.HOUR_OF_DAY_TO_SCRAPE_UTC);
+	if (!hour_of_day_to_scrape_utc || !Number.isInteger(hour_of_day_to_scrape_utc) ||
+		hour_of_day_to_scrape_utc < 0 || hour_of_day_to_scrape_utc > 23) {
+		throw new Error('Must set HOUR_OF_DAY_TO_SCRAPE_UTC to an integer in the range of 0 to 23');
 	}
 	var log_level = process.env.LOG_LEVEL;
 	if (!log_level || log_level.length < 1) {
@@ -42,7 +42,7 @@ var _config = (function() {
 		aws_key: process.env.AWS_KEY,
 		aws_region: process.env.AWS_REGION,
 		s3_bucket: s3_bucket,
-		hour_of_day_to_scrape: hour_of_day_to_scrape,
+		hour_of_day_to_scrape_utc: hour_of_day_to_scrape_utc,
 		log_level: log_level
 	};
 })();
@@ -115,7 +115,7 @@ _job_store.init(
 		_job_store,
 		_value_store,
 		_scrapers,
-		_config.hour_of_day_to_scrape
+		_config.hour_of_day_to_scrape_utc
 	);
 }).then(function() {
 	_log.info('Scraping scheduled, setting up jobs api');

@@ -56,6 +56,7 @@ function init(log, aws_key_id, aws_key, aws_region, s3_bucket) {
 	}
 
 	return _s3.init(log, aws_key_id, aws_key, aws_region, s3_bucket).then(function() {
+		log.info({ s3_bucket: s3_bucket }, 'Loading all jobs from s3');
 		return get_all_jobs_from_s3(log, _s3);
 	}).then(function(jobs) {
 		_cache = jobs;
@@ -75,7 +76,7 @@ function init(log, aws_key_id, aws_key, aws_region, s3_bucket) {
 		if (keys_to_remove.length > 0) {
 			log.warn({ options }, 'Deleting invalid jds from s3');
 			return _s3.remove(log, keys_to_remove).then(function() {
-				log.debug(options, 'Deleted invalid jds from s3');
+				log.info(options, 'Deleted invalid jds from s3');
 			});
 		}
 	});
@@ -88,11 +89,12 @@ function get_all_jobs_from_s3(log, s3, prefix, max_count) {
 			return is_job_key(item.Key);
 		});
 	}).then(function(items) {
+		log.debug({ count: items.length }, 'Retrieving jds from s3');
 		return _q.all(items.map(function(item) {
 			return s3.retrieve(log, item.Key);
 		}));
 	}).then(function(jobs) {
-		log.debug({ count: jobs.length }, 'Successfully retrieved all jds');
+		log.debug({ count: jobs.length }, 'Successfully retrieved jds from s3');
 		var job_map = {};
 		for (var i = 0; i < jobs.length; i++) {
 			job_map[create_key_from_job(jobs[i])] = jobs[i];
