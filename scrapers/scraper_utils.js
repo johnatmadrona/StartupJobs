@@ -12,7 +12,12 @@ function request(log, url) {
     return _q.nfcall(_request, { url: url, headers: headers }).spread(function(res, payload) {
         if (res.statusCode != 200) {
             log.error(
-            	{ url: url, status_code: res.statusCode, status_message: res.statusMessage },
+				{
+					url: url,
+					status_code: res.statusCode,
+					status_message: res.statusMessage,
+					headers: res.headers
+				},
             	'Server responded with an unexpected status code'
             );
             return _q.reject(new Error('Unexpected response from server with status code ' + res.statusCode));
@@ -121,7 +126,7 @@ function map_location(log, raw_location) {
 
 	// If we couldn't find the location, set the city to the unknown value
 	if (typeof(mapped.country) === 'undefined') {
-	    log.warn({ raw_location: raw_location }, 'Location not found in lookup maps');
+	    log.debug({ raw_location: raw_location }, 'Location not found in lookup maps');
 	    mapped.city = raw_location;
 	}
 
