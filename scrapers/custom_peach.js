@@ -4,7 +4,7 @@ var _util = require('./scraper_utils.js');
 
 function scrape(log, company, url) {
     var jobs_url = _node_url.resolve(url, '/api/jobs/');
-    log.info({ company: company, url: url, jobs_url: jobs_url }, 'Getting jd links');
+    log.info({ company: company, url: url, jobs_url: jobs_url }, 'Getting jd listing');
     return _util.request(log, jobs_url).then(function(json) {
         var jobs = JSON.parse(json);
         var jds = [];

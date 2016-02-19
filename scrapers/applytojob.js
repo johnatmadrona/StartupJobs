@@ -7,8 +7,11 @@ function scrape(log, company, atj_id) {
     log.info({ company: company, atj_id: atj_id, url: url }, 'Getting jd links');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
+        var jd_link_nodes = $('.list-group-item-heading > a');
         var jds = [];
-        $('.list-group-item-heading > a').each(function() {
+
+        log.info({ company: company, count: jd_link_nodes.length }, 'Getting jds');
+        jd_link_nodes.each(function() {
             jds.push(scrape_job_description(log, company, $(this).attr('href')));
         });
 
@@ -17,7 +20,7 @@ function scrape(log, company, atj_id) {
 }
 
 function scrape_job_description(log, company, url) {
-    log.info({ company: company, url: url }, 'Getting jd');
+    log.debug({ company: company, url: url }, 'Getting jd');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
         return _util.create_jd(

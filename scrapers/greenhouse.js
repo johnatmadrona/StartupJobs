@@ -7,9 +7,11 @@ function scrape(log, company, gh_id) {
     log.info({ company: company, gh_id: gh_id, url: url }, 'Getting jd links');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
-        var links = $('.opening > a');
+        var jd_link_nodes = $('.opening > a');
         var jds = [];
-        links.each(function() {
+
+        log.info({ company: company, count: jd_link_nodes.length }, 'Getting jds');
+        jd_link_nodes.each(function() {
             var jd_home_url = $(this).attr('href');
             var jd_id = /gh_jid=(\d+)/.exec(jd_home_url)[1];
             jds.push(scrape_job_description(log, company, jd_home_url, gh_id, jd_id));
@@ -21,7 +23,7 @@ function scrape(log, company, gh_id) {
 
 function scrape_job_description(log, company, jd_home_url, gh_id, jd_id) {
     var url = 'https://boards.greenhouse.io/embed/job_app?for=' + gh_id + '&token=' + jd_id;
-    log.info(
+    log.debug(
         { company: company, jd_home_url: jd_home_url, gh_id: gh_id, jd_id: jd_id, url: url },
         'Getting jd'
     );

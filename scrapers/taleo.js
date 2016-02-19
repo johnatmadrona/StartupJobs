@@ -4,7 +4,7 @@ var _util = require('./scraper_utils.js');
 
 function scrape(log, company, t_id) {
     var url = 'http://chj.tbe.taleo.net/chj04/ats/careers/searchResults.jsp?org=' + t_id + '&cws=4';
-    log.info({ company: company, t_id: t_id, url: url }, 'Getting jds');
+    log.info({ company: company, t_id: t_id, url: url }, 'Getting jd links');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
 
@@ -16,8 +16,11 @@ function scrape(log, company, t_id) {
             }
         }
 
+        var jd_link_nodes = $('a[href*="/requisition.jsp"]');
         var jds = [];
-        $('a[href*="/requisition.jsp"]').each(function() {
+
+        log.info({ company: company, count: jd_link_nodes.length }, 'Getting jds');
+        jd_link_nodes.each(function() {
             var jd_url = $(this).attr('href').replace(/;jsessionid=[\dA-Z]+\?/, '?');
             jds.push(scrape_job_description(log, company, jd_url));
         });
@@ -27,7 +30,7 @@ function scrape(log, company, t_id) {
 }
 
 function scrape_job_description(log, company, url) {
-    log.info({ company: company, url: url }, 'Getting jd');
+    log.debug({ company: company, url: url }, 'Getting jd');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
 

@@ -4,20 +4,20 @@ var _node_url = require('url');
 var _util = require('./scraper_utils.js');
 
 function scrape(log, company, location, url) {
-    log.info({ company: company, url: url }, 'Getting jds');
+    log.info({ company: company, url: url }, 'Getting javascript link');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
         var js_url = _node_url.resolve(url, $('script[src$="/bundle-main.js"]').attr('src'));
-        return parse_js(log, company, location, js_url);
+        return scrape_js(log, company, location, js_url);
     });
 }
 
-function parse_js(log, company, location, url) {
+function scrape_js(log, company, location, url) {
     log.info({ company: company, url: url }, 'Retrieveing javascript');
     return _util.request(log, url).then(function(js) {
         // Consider using PhantomJS for page rendering instead of parsing Javascript
 
-        log.info('Parsing javascript');
+        log.info({ company: company }, 'Parsing javascript');
 
         // Extract the root
         var start = js.indexOf('createElement("div",{className:"container"},i["default"].createElement("h1"');
@@ -29,7 +29,7 @@ function parse_js(log, company, location, url) {
         var tree = build_tree(js, root_markers);
         var html = render_html(tree);
 
-        log.info('Building JDs');
+        log.info({ company: company }, 'Building jds');
         var jds = create_jds_from_html(log, company, location, url, html);
         return _q.all(jds);
     });

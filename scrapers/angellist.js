@@ -11,7 +11,7 @@ function scrape(log, company, angellist_id) {
         var listings = $('.listing');
         var jds = [];
 
-        log.info('Found ' + listings.length + ' listings');
+        log.info({ company: company, count: listings.length }, 'Scraping jds');
         listings.each(function() {
             var titleNode = $(this).find('.title > a');
             var locationNode = $(this).find('.job-data').eq(1);
@@ -29,7 +29,7 @@ function scrape(log, company, angellist_id) {
 }
 
 function scrape_job_description(log, company, title, location, url) {
-    log.info({ company: company, title: title, location: location, url: url }, 'Getting jd');
+    log.debug({ company: company, title: title, location: location, url: url }, 'Getting jd');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
         return _util.create_jd(

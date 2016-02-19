@@ -21,6 +21,7 @@ function parse_listing_and_scrape_jds(log, company, parsed_url, html) {
 
     if (parsed_url.hostname === 'jobs.jobvite.com') {
         return get_jobs_style_links(log, parsed_url, html).then(function(urls) {
+            log.info({ company: company, count: urls.length }, 'Getting jds');
             for (var i = 0; i < urls.length; i++) {
                 jds.push(scrape_job_description(log, company, urls[i]));
             }
@@ -52,6 +53,8 @@ function parse_listing_and_scrape_jds(log, company, parsed_url, html) {
                 jds.push(scrape_job_description(log, company, jd_url));
             });
         }
+
+        log.info({ company: company, count: links.length }, 'Getting jds');
         return _q.all(jds); 
     } else {
         return _q.reject(new Error('Invalid domain for jobvite scraping: ' + parsed_url.hostname));
@@ -118,7 +121,7 @@ function get_jvGoToPage_url(base_url, company_id, on_click_text) {
 }
 
 function scrape_job_description(log, company, url) {
-    log.info({ company: company, url: url }, 'Getting jd');
+    log.debug({ company: company, url: url }, 'Getting jd');
 
     var parsed_url = _node_url.parse(url);
     if (parsed_url.hostname !== 'jobs.jobvite.com' &&

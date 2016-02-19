@@ -4,11 +4,14 @@ var _node_url = require('url');
 var _util = require('./scraper_utils.js');
 
 function scrape(log, company, url) {
-    log.info({ company: company, url: url }, 'Getting jds');
+    log.info({ company: company, url: url }, 'Getting jd links');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
+        var jd_link_nodes = $('.career a');
         var jds = [];
-        $('.career a').each(function() {
+
+        log.info({ company: company, count: jd_link_nodes.length }, 'Getting jds');
+        jd_link_nodes.each(function() {
             var title = _util.scrub_string($(this).find('h3').text());
             var location = _util.scrub_string($(this).find('.location-name').text());
             var jd_url = _node_url.resolve(url, $(this).attr('href'));
@@ -19,7 +22,7 @@ function scrape(log, company, url) {
 }
 
 function scrape_job_description(log, company, title, location, url) {
-    log.info({ company: company, url: url }, 'Getting jd');
+    log.debug({ company: company, url: url }, 'Getting jd');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
         var description = _cheerio.load('<span></span>')('span')

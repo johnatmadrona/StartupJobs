@@ -7,8 +7,11 @@ function scrape(log, company, n_id) {
     log.info({ company: company, n_id: n_id, url: url }, 'Getting jd links');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
+        var jd_link_nodes = $('.gnewtonCareerGroupRowClass');
         var jds = [];
-        $('.gnewtonCareerGroupRowClass').each(function() {
+
+        log.info({ company: company, count: jd_link_nodes.length }, 'Getting jds');
+        jd_link_nodes.each(function() {
             var jd_link_node = $(this).find('.gnewtonCareerGroupJobTitleClass > a');
             var location_node = $(this).find('.gnewtonCareerGroupJobDescriptionClass');
             jds.push(scrape_job_description(
@@ -24,7 +27,7 @@ function scrape(log, company, n_id) {
 }
 
 function scrape_job_description(log, company, title, location, url) {
-    log.info({ company: company, title: title, location: location, url: url }, 'Getting jd');
+    log.debug({ company: company, title: title, location: location, url: url }, 'Getting jd');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
         var description_node = $('#gnewtonJobDescriptionText');

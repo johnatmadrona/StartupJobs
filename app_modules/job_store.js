@@ -143,7 +143,7 @@ function remove_jobs_from_s3(log, s3, jobs) {
 }
 
 function query(log, query) {
-	log.info({ query: query }, 'Querying jds');
+	log.debug({ query: query }, 'Querying jds');
 
 	if (typeof(query.operation) !== 'string') {
 		return _q.reject(new Error('Must supply string value for query.operation'));

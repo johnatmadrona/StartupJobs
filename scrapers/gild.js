@@ -5,16 +5,19 @@ var _util = require('./scraper_utils.js');
 
 function scrape(log, company, g_id) {
     var url = 'https://people.gild.com/company/' + g_id + '?limit=1000&offset=0';
-    log.info({ company: company, g_id: g_id, url: url }, 'Getting jds');
+    log.info({ company: company, g_id: g_id, url: url }, 'Getting jd links');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
-        var jds = [];
 
         if ($('.pagination').length > 0) {
             return _q.reject(new Error('Pagination not yet implemeneted'));
         }
 
-        $('a.view-job').each(function() {
+        var jd_link_nodes = $('a.view-job');
+        var jds = [];
+
+        log.info({ company: company, count: jd_link_nodes.length }, 'Getting jds');
+        jd_link_nodes.each(function() {
             var jd_url = _node_url.resolve(url, $(this).attr('href'));
             jds.push(scrape_job_description(log, company, jd_url));
         });
@@ -24,7 +27,7 @@ function scrape(log, company, g_id) {
 }
 
 function scrape_job_description(log, company, url) {
-    log.info({ company: company, url: url }, 'Getting jd');
+    log.debug({ company: company, url: url }, 'Getting jd');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
 
