@@ -114,7 +114,7 @@ _job_store.init(
 		_log,
 		_job_store,
 		_value_store,
-		_scrapers,
+		_scrapers.scrapers,
 		_config.hour_of_day_to_scrape_utc
 	);
 }).then(function() {

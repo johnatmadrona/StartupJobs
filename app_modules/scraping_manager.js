@@ -130,9 +130,10 @@ module.exports = {
 				log,
 				job_store,
 				value_store,
-				scrapers.scrapers,
+				scrapers,
 				recurring_hour_of_day_utc
 			);
 		}, 0);
+		return _q();
 	}
 };
