@@ -58,7 +58,10 @@ var _log = new _bunyan({
 			// If log size becomes an issue, can consider 
 			// https://www.npmjs.com/package/bunyan-rotating-file-stream
 			path: 'errors.log',
-			level: 'error'
+			level: 'error',
+			type: 'rotating-file',
+			period: '1w',
+			count: 3
 		}
 	],
 	serializers: _bunyan.stdSerializers
