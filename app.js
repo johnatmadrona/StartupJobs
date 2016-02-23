@@ -9,41 +9,78 @@ var _scraping_manager = require('./app_modules/scraping_manager');
 var _scrapers = require('./scrapers');
 var _job_store = require('./app_modules/job_store');
 var _value_store = require('./app_modules/value_store');
+var _email = require('./app_modules/email');
 
 var _config = (function() {
+	var log_level = process.env.LOG_LEVEL;
+	if (typeof(log_level) === 'undefined') {
+		log_level = 'info';
+	} else if (log_level !== 'trace' &&
+		log_level !== 'debug' &&
+		log_level !== 'info' &&
+		log_level !== 'warn' &&
+		log_level !== 'error' &&
+		log_level !== 'fatal') {
+		throw new Error('Log level must be one of the following string values: trace, debug, info, warn, error, fatal');
+	}
+
 	var aws_key_id = process.env.AWS_KEY_ID;
-	if (!aws_key_id || aws_key_id.length < 1) {
-		throw new Error('Must set AWS_KEY_ID');
+	if (typeof(aws_key_id) !== 'string' || aws_key_id.length < 1) {
+		throw new Error('Must set a string value for AWS_KEY_ID');
 	}
 	var aws_key = process.env.AWS_KEY;
-	if (!aws_key || aws_key.length < 1) {
-		throw new Error('Must set AWS_KEY');
+	if (typeof(aws_key) !== 'string' || aws_key.length < 1) {
+		throw new Error('Must set a string value for AWS_KEY');
 	}
 	var aws_region = process.env.AWS_REGION;
-	if (!aws_region || aws_region.length < 1) {
-		throw new Error('Must set AWS_REGION');
+	if (typeof(aws_region) !== 'string' || aws_region.length < 1) {
+		throw new Error('Must set a string value for AWS_REGION');
 	}
 	var s3_bucket = process.env.S3_BUCKET;
-	if (!s3_bucket || s3_bucket.length < 1) {
-		throw new Error('Must set S3_BUCKET');
+	if (typeof(s3_bucket) !== 'string' || s3_bucket.length < 1) {
+		throw new Error('Must set a string value for S3_BUCKET');
 	}
+
 	var hour_of_day_to_scrape_utc = Number.parseInt(process.env.HOUR_OF_DAY_TO_SCRAPE_UTC);
 	if (!hour_of_day_to_scrape_utc || !Number.isInteger(hour_of_day_to_scrape_utc) ||
 		hour_of_day_to_scrape_utc < 0 || hour_of_day_to_scrape_utc > 23) {
 		throw new Error('Must set HOUR_OF_DAY_TO_SCRAPE_UTC to an integer in the range of 0 to 23');
 	}
-	var log_level = process.env.LOG_LEVEL;
-	if (!log_level || log_level.length < 1) {
-		log_level = 'info';
+
+	var email_host = process.env.EMAIL_HOST;
+	if (typeof(email_host) !== 'string' || email_host.length < 1) {
+		throw new Error('Must set a string value for EMAIL_HOST');
+	}
+	var email_port = Number.parseInt(process.env.EMAIL_PORT);
+	if (!email_port || !Number.isInteger(email_port) ||
+		email_port < 0 || email_port > 65535) {
+		throw new Error('Must set EMAIL_PORT to an integer in the range of 0 to 65535');
+	}
+	var email_sender_address = process.env.EMAIL_SENDER_ADDRESS;
+	if (typeof(email_sender_address) !== 'string' || email_sender_address.length < 1) {
+		throw new Error('Must set a string value for EMAIL_SENDER_ADDRESS');
+	}
+	var email_sender_pwd = process.env.EMAIL_SENDER_PWD;
+	if (typeof(email_sender_pwd) !== 'string' || email_sender_pwd.length < 1) {
+		throw new Error('Must set a string value for EMAIL_SENDER_PWD');
+	}
+	var email_recipients = process.env.EMAIL_RECIPIENTS;
+	if (typeof(email_recipients) !== 'string' || email_recipients.length < 1) {
+		throw new Error('Must set a string value for EMAIL_RECIPIENTS');
 	}
 
 	return {
-		aws_key_id: process.env.AWS_KEY_ID,
-		aws_key: process.env.AWS_KEY,
-		aws_region: process.env.AWS_REGION,
+		log_level: log_level,
+		aws_key_id: aws_key_id,
+		aws_key: aws_key,
+		aws_region: aws_region,
 		s3_bucket: s3_bucket,
 		hour_of_day_to_scrape_utc: hour_of_day_to_scrape_utc,
-		log_level: log_level
+		email_host: email_host,
+		email_port: email_port,
+		email_sender_address: email_sender_address,
+		email_sender_pwd: email_sender_pwd,
+		email_recipients: email_recipients
 	};
 })();
 
@@ -112,12 +149,21 @@ _job_store.init(
 		_config.s3_bucket
 	);
 }).then(function() {
+	return _email.create(
+		_config.email_host,
+		_config.email_port,
+		_config.email_sender_address,
+		_config.email_sender_pwd,
+		_config.email_recipients
+	);
+}).then(function(emailer) {
 	_log.info('Scheduling job scraping');
 	return _scraping_manager.schedule(
 		_log,
 		_job_store,
 		_value_store,
 		_scrapers.scrapers,
+		emailer,
 		_config.hour_of_day_to_scrape_utc
 	);
 }).then(function() {

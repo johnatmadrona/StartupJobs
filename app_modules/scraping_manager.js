@@ -2,7 +2,7 @@ var _q = require('q');
 var _hash = require('object-hash');
 var _moment = require('moment');
 
-function run_scrapers(log, store, scrapers) {
+function run_scrapers(log, store, scrapers, emailer) {
 	return _q().then(function() {
 		log.info({ scraper_count: scrapers.length }, 'Initiating scraping');
 		var ops = [];
@@ -11,23 +11,43 @@ function run_scrapers(log, store, scrapers) {
 		}
 		return _q.allSettled(ops);
 	}).then(function(results) {
-		var success_count = results.reduce(function(p, item) {
-			return p + (item.state === 'rejected' ? 0 : 1);
-		}, 0);
+		var failures = results.reduce(function(aggregate, item) {
+			if (item.state === 'rejected') {
+				aggregate.push(item.reason);
+			}
+			return aggregate;
+		}, []);
 
 		var status = {
 			total_count: results.length,
-			success_count: success_count,
-			failure_count: results.length - success_count
+			success_count: results.length - failures.length,
+			failure_count: failures.length
 		};
 
 		if (status.failure_count > 0) {
-			log.error(status, 'Scraping complete, with errors');
+			log.error(status, 'Scraping complete, with errors - sending error report');
+			return emailer.send(
+				'Scraper Error Report ' + _moment().format('YYYY-MM-DD'),
+				create_error_report(failures)
+			).then(function() {
+				log.info('Successfully sent scrapper error report');
+			}, function(err) {
+				log.error({ err: err }, 'Error sending scrapper error report');
+			});
 		} else {
 			log.info(status, 'Scraping complete, without errors');
+			return _q();
 		}
 	}, function(err) {
-		log.error(err, 'Error while running scrapers');
+		log.error({ err: err }, 'Fatal error while running scrapers - sending error report');
+		return emailer.send(
+			'Fatal Scraper Error ' + _moment().format('YYYY-MM-DD'),
+			create_error_report([err])
+		).then(function() {
+			log.info('Successfully sent fatal error report');
+		}, function(email_err) {
+			log.error({ err: email_err }, 'Error sending fatal error report');
+		});;
 	});
 }
 
@@ -68,8 +88,17 @@ function get_obsolete_jobs(log, store, company, jds) {
 	});
 }
 
+function create_error_report(errors) {
+	var report = 'The following error(s) occured while running scrappers<br /><br />';
+	for (var i = 0; i < errors.length; i++) {
+		report += '<strong>' + errors[i].message + '</strong><br /><br />' +
+			errors[i].stack + '<br /><br />';
+	}
+	return report;
+}
+
 var _last_time_utc_key = 'last-run-time-utc';
-function schedule_scraping(log, job_store, value_store, scrapers, recurring_hour_of_day_utc) {
+function schedule_scraping(log, job_store, value_store, scrapers, emailer, recurring_hour_of_day_utc) {
 	setTimeout(function() {
 		schedule_scraping(
 			log,
@@ -82,7 +111,7 @@ function schedule_scraping(log, job_store, value_store, scrapers, recurring_hour
 
 	return is_time_for_next_run(log, value_store, recurring_hour_of_day_utc).then(function(do_run) {
 		if (do_run) {
-			return run_scrapers(log, job_store, scrapers).then(function() {
+			return run_scrapers(log, job_store, scrapers, emailer).then(function() {
 				return value_store.add_value(log, _last_time_utc_key, _moment.utc());
 			});
 		}
@@ -124,13 +153,14 @@ function is_time_for_next_run(log, value_store, desired_hour_of_day_utc) {
 
 module.exports = {
 	run: run_scrapers,
-	schedule: function(log, job_store, value_store, scrapers, recurring_hour_of_day_utc) {
+	schedule: function(log, job_store, value_store, scrapers, emailer, recurring_hour_of_day_utc) {
 		setTimeout(function() {
 			schedule_scraping(
 				log,
 				job_store,
 				value_store,
 				scrapers,
+				emailer,
 				recurring_hour_of_day_utc
 			);
 		}, 0);
