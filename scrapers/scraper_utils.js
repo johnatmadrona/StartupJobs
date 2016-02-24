@@ -5,7 +5,7 @@ var _city_lookup = require('./lookup_map_city.json');
 var _state_lookup = require('./lookup_map_state.json');
 var _country_lookup = require('./lookup_map_country.json');
 
-function request(log, url) {
+function request(log, url, options) {
     var headers = {
         'User-Agent': 'startup-jobs'
     };
@@ -22,8 +22,15 @@ function request(log, url) {
             );
             return _q.reject(new Error('Unexpected response from server with status code ' + res.statusCode));
 		} else if (!are_urls_equivalent(url, res.request.uri.href, true)) {
-            log.error({ original_url: url, redirected_url: res.request.uri.href }, 'URL redirected');
-            return _q.reject(new Error('Request redirected from ' + url + ' to ' + res.request.uri.href));
+			if (typeof(options.allow_redirect) !== 'undefined' && options.allow_redirect === true) {
+				log.warn({ original_url: url, redirected_url: res.request.uri.href }, 'URL redirected');
+			} else {
+	            log.error(
+	            	{ original_url: url, redirected_url: res.request.uri.href },
+	            	'URL redirected and redirects not allowed'
+	            );
+	            return _q.reject(new Error('Request redirected from ' + url + ' to ' + res.request.uri.href));
+	        }
         }
 
         return payload;
