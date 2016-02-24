@@ -105,6 +105,7 @@ function schedule_scraping(log, job_store, value_store, scrapers, emailer, recur
 			job_store,
 			value_store,
 			scrapers,
+			emailer,
 			recurring_hour_of_day_utc
 		);
 	}, 15 * 60 * 1000);
