@@ -296,7 +296,7 @@ module.exports = {
 			}
 		},
 		{
-			company: 'Opal Labs',
+			company: 'Opal',
 			scrape: function(log) {
 				return _custom_opal.scrape(log, this.company, 'http://workwithopal.com/careers');
 			}
