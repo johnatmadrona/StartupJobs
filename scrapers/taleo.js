@@ -3,7 +3,7 @@ var _cheerio = require('cheerio');
 var _util = require('./scraper_utils.js');
 
 function scrape(log, company, t_id) {
-    var url = 'http://chj.tbe.taleo.net/chm03/ats/careers/searchResults.jsp?org=' + t_id + '&cws=4';
+    var url = 'http://chm.tbe.taleo.net/chm03/ats/careers/searchResults.jsp?org=' + t_id + '&cws=4';
     log.info({ company: company, t_id: t_id, url: url }, 'Getting jd links');
     return _util.request(log, url, { allow_redirect: true }).then(function(html) {
         var $ = _cheerio.load(html);

@@ -97,8 +97,8 @@ var _log = new _bunyan({
 			path: 'errors.log',
 			level: 'error',
 			type: 'rotating-file',
-			period: '1w',
-			count: 3
+			period: '1d',
+			count: 5
 		}
 	],
 	serializers: _bunyan.stdSerializers
