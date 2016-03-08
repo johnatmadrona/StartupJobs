@@ -6,10 +6,19 @@ var _state_lookup = require('./lookup_map_state.json');
 var _country_lookup = require('./lookup_map_country.json');
 
 function request(log, url, options) {
-    var headers = {
-        'User-Agent': 'startup-jobs'
-    };
-    return _q.nfcall(_request, { url: url, headers: headers }).spread(function(res, payload) {
+	var request_options = {
+		url: url,
+		headers: {
+			'User-Agent': 'startup-jobs'
+		}
+	};
+
+	if (typeof(options) !== 'undefined' && typeof(options.proxy) === 'string') {
+		log.debug({ proxy: options.proxy, url: url }, 'Tunneling request through proxy');
+		request_options.proxy = options.proxy;
+	}
+
+    return _q.nfcall(_request, request_options).spread(function(res, payload) {
         if (res.statusCode != 200) {
             log.error(
 				{

@@ -2,44 +2,54 @@ var _q = require('q');
 var _node_url = require('url');
 var _cheerio = require('cheerio');
 var _util = require('./scraper_utils.js');
+var _proxy_lookup = require('../app_modules/proxy_lookup');
 
 function scrape(log, company, angellist_id) {
     var url = 'https://angel.co/' + angellist_id + '/jobs/';
-    log.info({ company: company, angellist_id: angellist_id, url: url }, 'Getting jd links');
-    return _util.request(log, url).then(function(html) {
-        var $ = _cheerio.load(html);
-        var listings = $('.listing');
-        var jds = [];
 
-        log.info({ company: company, count: listings.length }, 'Scraping jds');
-        listings.each(function() {
-            var titleNode = $(this).find('.title > a');
-            var locationNode = $(this).find('.job-data').eq(1);
-            jds.push(scrape_job_description(
-                log,
-                company,
-                _util.scrub_string(titleNode.text()),
-                _util.scrub_string(locationNode.text()),
-                _node_url.resolve(url, titleNode.attr('href'))
-            ));
+    return _proxy_lookup.find_known_proxy(log).then(function(proxy_url) {
+        log.info({
+            company: company,
+            angellist_id: angellist_id,
+            url: url,
+            proxy_url: proxy_url
+        }, 'Getting jd links');
+        return _util.request(log, url, { proxy: proxy_url }).then(function(html) {
+            var $ = _cheerio.load(html);
+            var link_nodes = $('.listing-title > a');
+            var jds = [];
+            log.info({ company: company, url: url, count: link_nodes.length }, 'Scraping jds');
+            link_nodes.each(function() {
+                var jd_url = _node_url.resolve(url, $(this).attr('href'));
+                jds.push(scrape_job_description(log, company, jd_url));
+            });
+
+            return _q.all(jds);
         });
-
-        return _q.all(jds);
     });
 }
 
-function scrape_job_description(log, company, title, location, url) {
-    log.debug({ company: company, title: title, location: location, url: url }, 'Getting jd');
-    return _util.request(log, url).then(function(html) {
+function scrape_job_description(log, company, url, proxy) {
+    log.debug({ company: company, url: url, proxy: proxy }, 'Getting jd');
+    return _util.request(log, url, { proxy: proxy }).then(function(html) {
         var $ = _cheerio.load(html);
+
+        var titleNode = $('.company-summary > h1');
+
+        var locationNode = titleNode.next();
+        var locationNodeText = _util.scrub_string(locationNode.text());
+        var location = locationNodeText.split('\u00b7')[0].trim();
+
+        var descriptionNode = $('.job-description');
+
         return _util.create_jd(
             log,
             url,
             company,
-            title,
+            _util.scrub_string(titleNode.text()),
             location,
-            _util.scrub_string($('.product-info').text()),
-            $('.product-info').html().trim()
+            _util.scrub_string(descriptionNode.text()),
+            descriptionNode.html().trim()
         );
     });
 }
