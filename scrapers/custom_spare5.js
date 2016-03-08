@@ -8,21 +8,34 @@ function scrape(log, company, location, url) {
         var $ = _cheerio.load(html);
 
         var jds = [];
-        $('*[data-type="page"] *[data-block-type="23"]').each(function() {
-            var title = _util.scrub_string($(this).text());
-        	var new_jd = _util.create_jd(
+        $('a[href*="?jobs="]').each(function() {
+            jds.push(scrape_job_description(
                 log,
-                url,
                 company,
-                title,
                 location,
-                _util.scrub_string($(this).next().text()),
-                $(this).next().html().trim()
-            );
-            jds.push(new_jd);
+                $(this).attr('href')
+            ));
         });
 
         return _q.all(jds);
+    });
+}
+
+function scrape_job_description(log, company, location, url) {
+    log.debug({ company: company, location: location, url: url }, 'Getting jd');
+    return _util.request(log, url).then(function(html) {
+        var $ = _cheerio.load(html);
+        var title_node = $('.heading-text > .entry-title');
+        var description_node = $('.body-text');
+        return _util.create_jd(
+            log,
+            url,
+            company,
+            _util.scrub_string(title_node.text()),
+            location,
+            _util.scrub_string(description_node.text()),
+            description_node.html().trim()
+        );
     });
 }
 

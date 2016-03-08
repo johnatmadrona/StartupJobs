@@ -22,7 +22,9 @@ function request(log, url, options) {
             );
             return _q.reject(new Error('Unexpected response from server with status code ' + res.statusCode));
 		} else if (!are_urls_equivalent(url, res.request.uri.href, true)) {
-			if (typeof(options.allow_redirect) !== 'undefined' && options.allow_redirect === true) {
+			if (typeof(options) !== 'undefined' && 
+				typeof(options.allow_redirect) !== 'undefined' && 
+				options.allow_redirect === true) {
 				log.warn({ original_url: url, redirected_url: res.request.uri.href }, 'URL redirected');
 			} else {
 	            log.error(
