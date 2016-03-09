@@ -267,7 +267,7 @@ module.exports = {
 		{
 			company: 'Matcherino',
 			scrape: function(log) {
-				return _custom_matcherino.scrape(log, this.company, 'Seattle, WA', 'https://matcherino.com/jobs');
+				return _angellist.scrape(log, this.company, 'matcherino');
 			}
 		},
 		{
