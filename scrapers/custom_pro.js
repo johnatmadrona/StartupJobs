@@ -1,6 +1,5 @@
 var _q = require('q');
 var _cheerio = require('cheerio');
-var _node_url = require('url');
 var _util = require('./scraper_utils.js');
 
 function scrape(log, company, url) {
