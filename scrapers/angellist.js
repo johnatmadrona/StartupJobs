@@ -7,7 +7,7 @@ var _proxy_lookup = require('../app_modules/proxy_lookup');
 function scrape(log, company, angellist_id) {
     var url = 'https://angel.co/' + angellist_id + '/jobs/';
 
-    return _proxy_lookup.find_known_proxy(log).then(function(proxy_url) {
+    return _proxy_lookup.find_proxy(log).then(function(proxy_url) {
         log.info({
             company: company,
             angellist_id: angellist_id,
