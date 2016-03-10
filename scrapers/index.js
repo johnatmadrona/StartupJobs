@@ -6,7 +6,6 @@ var _custom_echodyne = require('./custom_echodyne.js');
 var _custom_envelopvr = require('./custom_envelopvr.js');
 var _custom_eventbase = require('./custom_eventbase.js');
 var _custom_highspot  = require('./custom_highspot.js');
-var _custom_matcherino = require('./custom_matcherino.js');
 var _custom_opal = require('./custom_opal.js');
 var _custom_peach = require('./custom_peach.js');
 var _custom_pro = require('./custom_pro.js');
