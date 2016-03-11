@@ -6,7 +6,6 @@ var _custom_echodyne = require('./custom_echodyne.js');
 var _custom_envelopvr = require('./custom_envelopvr.js');
 var _custom_eventbase = require('./custom_eventbase.js');
 var _custom_highspot  = require('./custom_highspot.js');
-var _custom_opal = require('./custom_opal.js');
 var _custom_peach = require('./custom_peach.js');
 var _custom_pro = require('./custom_pro.js');
 var _custom_spare5 = require('./custom_spare5.js');
@@ -297,7 +296,7 @@ module.exports = {
 		{
 			company: 'Opal',
 			scrape: function(log) {
-				return _custom_opal.scrape(log, this.company, 'http://workwithopal.com/careers');
+				return _jazz.scrape(log, this.company, 'opal', 'http://jobs.workwithopal.com/');
 			}
 		},
 		{
