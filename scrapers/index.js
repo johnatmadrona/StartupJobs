@@ -394,7 +394,7 @@ module.exports = {
 		{
 			company: 'Spare5',
 			scrape: function(log) {
-				return _custom_spare5.scrape(log, this.company, 'Seattle, WA', 'http://spare5.com/hiring/');
+				return _custom_spare5.scrape(log, this.company, 'Seattle, WA', 'https://spare5.com/hiring/');
 			}
 		},
 		{
