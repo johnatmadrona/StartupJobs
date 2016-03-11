@@ -20,7 +20,9 @@ function find_proxy(log) {
     // 'http://52.11.232.88:3128'
     // 'http://64.207.93.203:34002'
 
-    return _q(process.env.HTTP_PROXY);
+    // IMPORTANT: Env variable HTTP_PROXY is used by 'request' module, 
+    // hencet the name ACTIVE_HTTP_PROXY
+    return _q(process.env.ACTIVE_HTTP_PROXY);
 }
 
 function find_proxy_internal(log) {
