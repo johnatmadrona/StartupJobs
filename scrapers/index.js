@@ -89,7 +89,7 @@ module.exports = {
 		{
 			company: 'Boomerang Commerce',
 			scrape: function(log) {
-				return _jobvite.scrape(log, this.company, 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qg0aVfw5&k=JobListing&jvresize=');
+				return _jobvite.scrape(log, this.company, 'http://jobs.jobvite.com/careers/boomerangcommerce/');
 			}
 		},
 		{
