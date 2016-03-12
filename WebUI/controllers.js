@@ -5,14 +5,14 @@ sjpAppModule.factory("sjpSharedService", function($rootScope) {
 	sharedService.selectedCompany = "";
 	sharedService.selectedTitle = "";
 	sharedService.selectedLocation = "";
-	sharedService.selectedSourceUri = "";
-	sharedService.selectedFullDescription = "";
-	sharedService.selectJd = function(jd, transformedFullDescription) {
-		this.selectedCompany = jd.Company;
-		this.selectedTitle = jd.Title;
-		this.selectedLocation = jd.Location;
-		this.selectedSourceUri = jd.SourceUri;
-		this.selectedFullDescription = transformedFullDescription;
+	sharedService.selectedUrl = "";
+	sharedService.selectedDescription = "";
+	sharedService.selectJd = function(jd) {
+		this.selectedCompany = jd.company;
+		this.selectedTitle = jd.title;
+		this.selectedLocation = jd.location.raw;
+		this.selectedUrl = jd.url;
+		this.selectedDescription = jd.html_description;
 		$rootScope.$broadcast("jdSelected");
 	};
 
@@ -28,33 +28,27 @@ sjpAppModule.controller(
 			searchDescriptions: true
 		};
 
-		function parseJds(jds) {
-			for (var i = 0; i < jds.length; i++) {
-				parseJd(jds[i]);
-			}
-		}
-
 		function parseJd(jd) {
 			jd.visible = true;
 			$scope.$apply(function() {
 				for (var i = 0; i < $scope.companies.length; i++) {
 					var company = $scope.companies[i];
-					if (company.name == jd.Company) {
+					if (company.name == jd.company) {
 						// Sorted insertion because Angular doesn't seem to 
 						// properly support sorted nested lists
 						// TODO: Investigate whether this can be addressed 
 						// in Angular instead of here
 						for (var j = 0; j < company.jobs.length; j++) {
-							if (jd.Title.toUpperCase() < company.jobs[j].Title.toUpperCase()) {
+							if (jd.title.toUpperCase() < company.jobs[j].title.toUpperCase()) {
 								company.jobs.splice(j, 0, jd);
 								return;
 							}
 						}
 						company.jobs.push(jd);
 						return;
-					} else if (jd.Company.toUpperCase() < company.name.toUpperCase()) {
+					} else if (jd.company.toUpperCase() < company.name.toUpperCase()) {
 						$scope.companies.splice(i, 0, {
-							"name": jd.Company,
+							"name": jd.company,
 							"visible": true,
 							"expanded": false,
 							"jobs": [jd]
@@ -63,7 +57,7 @@ sjpAppModule.controller(
 					}
 				}
 				$scope.companies.push({
-					"name": jd.Company,
+					"name": jd.company,
 					"visible": true,
 					"expanded": false,
 					"jobs": [jd]
@@ -158,13 +152,13 @@ sjpAppModule.controller(
 						if ($scope.searchString.searchTitles) {
 							visible = window.common.evaluateBooleanQuery(
 								$scope.searchString.text,
-								$scope.companies[i].jobs[j].Title
+								$scope.companies[i].jobs[j].title
 								);
 						}
 						if (!visible && $scope.searchString.searchDescriptions) {
 							visible = window.common.evaluateBooleanQuery(
 								$scope.searchString.text,
-								$scope.companies[i].jobs[j].FullTextDescription
+								$scope.companies[i].jobs[j].text_description
 								);
 						}
 					}
@@ -183,15 +177,7 @@ sjpAppModule.controller(
 			company.selected = true;
 			jd.selected = true;
 
-			// TODO: Update highlighting
-			/*var transformedDescription = window.common.booleanSearch.match(
-				$scope.searchString.text,
-				jd.FullHtmlDescription,
-				"<span class='highlighted'>",
-				"</span>"
-				) || jd.FullHtmlDescription;
-			sjpSharedService.selectJd(jd, transformedDescription);*/
-			sjpSharedService.selectJd(jd, jd.FullHtmlDescription);
+			sjpSharedService.selectJd(jd);
 		};
 	}
 );
@@ -202,14 +188,14 @@ sjpAppModule.controller(
 		$scope.company = "Madrona Venture Group";
 		$scope.title = "Startup Job Search";
 		$scope.location = "Madrona Venture Group is a Seattle-based VC firm"
-		$scope.sourceUri = "//www.madrona.com";
-		$scope.fullHtmlDescription = "Use the search box and the navigation tree to explore startup jobs";
+		$scope.url = "//www.madrona.com";
+		$scope.description = "Use the search box and the navigation tree to explore startup jobs";
 		$scope.$on("jdSelected", function() {
 			$scope.company = sjpSharedService.selectedCompany;
 			$scope.title = sjpSharedService.selectedTitle;
 			$scope.location = sjpSharedService.selectedLocation;
-			$scope.sourceUri = sjpSharedService.selectedSourceUri;
-			$scope.fullHtmlDescription = sjpSharedService.selectedFullDescription;
+			$scope.url = sjpSharedService.selectedUrl;
+			$scope.description = sjpSharedService.selectedDescription;
 		});
 	}
 );

@@ -111,7 +111,7 @@
           <ul ng-show="company.expanded">
             <li ng-repeat="job in company.jobs" ng-show="job.visible">
               <a href="javascript:void(0);" ng-click="selectJd($parent.$index, $index)">
-                {{ job.Title }}
+                {{ job.title }}
               </a>
             </li>
           </ul>
@@ -125,14 +125,14 @@
     <h2>{{ title }}</h2>
 		<i>Job Location: {{ location }}</i><br />
 		<br />
-    <a ng-href="{{ sourceUri }}" target="_blank">Learn more at {{ company }}'s website</a><br />
+    <a ng-href="{{ url }}" target="_blank">Learn more at {{ company }}'s website</a><br />
 		<br />
 		<hr />
-    <div ng-bind-html-unsafe="fullHtmlDescription"></div><br />
+    <div ng-bind-html-unsafe="description"></div><br />
     <br />
   </div>
   <div class="footer">
-    &#169; 2013 Madrona Venture Group, LLC. 206-674-3000. <a href="mailto:information@madrona.com">information@madrona.com</a>.
+    &#169; 2013-2016 Madrona Venture Group, LLC. 206-674-3000. <a href="mailto:information@madrona.com">information@madrona.com</a>.
   </div>
 </body>
 </html>
