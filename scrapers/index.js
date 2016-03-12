@@ -26,7 +26,7 @@ module.exports = {
 		{
 			company: '2nd Watch',
 			scrape: function(log) {
-				return _jazz.scrape(log, this.company, '2ndwatch', 'http://2ndwatch.com/contact-us/careers/');
+				return _jazz.scrape(log, this.company, '2ndwatch', 'http://2ndwatch.com/about-us/careers/');
 			}
 		},
 		{
