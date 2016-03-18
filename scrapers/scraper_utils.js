@@ -4,6 +4,7 @@ var _request = require('request');
 var _city_lookup = require('./lookup_map_city.json');
 var _state_lookup = require('./lookup_map_state.json');
 var _country_lookup = require('./lookup_map_country.json');
+var _job_category_lookup = require('./lookup_map_job_category.json');
 
 function request(log, url, options) {
 	var request_options = {
@@ -96,6 +97,7 @@ function create_jd(
         url: url,
         company: company,
         title: title,
+        category: get_job_category(title),
         location: map_location(log, location_text),
         text_description: text_description,
         html_description: html_description
@@ -151,6 +153,27 @@ function map_location(log, raw_location) {
 	return mapped;
 }
 
+// For now, this is a simple heuristic that runs on the job title. 
+// Could probably do better by creating a model based on job description.
+function get_job_category(job_title) {
+	for (var key in _job_category_lookup) {
+		if (contains_one_of(job_title, _job_category_lookup[key])) {
+			return key;
+		}
+	}
+	return "other";
+}
+
+function contains_one_of(text, terms) {
+	var lower_case = text.toLowerCase();
+	for (var i = 0; i < terms.length; i++) {
+		if (lower_case.indexOf(terms[i].toLowerCase()) != -1) {
+			return true;
+		}
+	}
+	return false;
+}
+
 function outer_html(cheerio_node) {
 	return _cheerio.load('<span></span>')('span').append(cheerio_node.clone()).html();
 }
@@ -166,6 +189,7 @@ function scrub_string(text) {
 
 module.exports = {
 	create_jd: create_jd,
+	get_job_category: get_job_category,
 	outer_html: outer_html,
 	request: request,
 	scrub_string: scrub_string

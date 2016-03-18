@@ -1,0 +1,51 @@
+{
+	"engineering": [
+		"engineer",
+		"sde",
+		"developer",
+		"software",
+		"programmer",
+		"architect",
+		"science",
+		"scientist",
+		"database"
+	],
+	"product": [
+		"product manager",
+		"program manager",
+		"project manager"
+	],
+	"business": [
+		"analyst",
+		"business",
+		"partner"
+	],
+	"design": [
+		"design",
+		"graphic",
+		"artist",
+		"art"
+	],
+	"marketing": [
+		"marketing",
+		"brand",
+		"social",
+		"video",
+		"content"
+	],
+	"sales": [
+		"sale",
+		"account"
+	],
+	"hr": [
+		"hr",
+		"human",
+		"people",
+		"recruit",
+		"talent"
+	],
+	"operations": [
+		"operations",
+		"customer"
+	]
+}
