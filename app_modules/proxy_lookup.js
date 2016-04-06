@@ -4,24 +4,15 @@ var _cheerio = require('cheerio');
 var _node_url = require('url');
 
 function find_proxy(log) {
-    // The following were found via http://proxyrox.com/top-proxies on 
-    // 2016-03-09. The site disallows scraping (as done by find_proxy_internal), 
-    // so getting an env variable is a temp work-around until a decision 
-    // is made to purchase data.
-
-    // 'http://74.81.130.106:34002'
-    // 'http://47.88.104.164:3128'
-    // 'http://74.82.168.153:1080'
-    // 'http://104.45.152.53:3128'
-    // 'http://104.209.182.251:3128'
-    // 'http://52.2.54.139:3128'
-    // 'http://96.36.19.66:3128'
-    // 'http://146.20.68.224:3128'
-    // 'http://52.11.232.88:3128'
-    // 'http://64.207.93.203:34002'
+    // We should probably automate proxy choice, but this usually 
+    // requires payment for some service. Until that's decided, a couple 
+    // places to find proxies include:
+    // 
+    // http://ipaddress.com/proxy-list/
+    // http://proxysearcher.sourceforge.net/Proxy%20List.php?type=http
 
     // IMPORTANT: Env variable HTTP_PROXY is used by 'request' module, 
-    // hencet the name ACTIVE_HTTP_PROXY
+    // hence the name ACTIVE_HTTP_PROXY
     return _q(process.env.ACTIVE_HTTP_PROXY);
 }
 
@@ -137,5 +128,6 @@ function test_proxy(log, proxy_url) {
 }
 
 module.exports = {
-	find_proxy: find_proxy
+	find_proxy: find_proxy,
+    test_proxy: test_proxy
 };
