@@ -21,7 +21,7 @@ function scrape(log, company, angellist_id) {
             log.info({ company: company, url: url, count: link_nodes.length }, 'Scraping jds');
             link_nodes.each(function() {
                 var jd_url = _node_url.resolve(url, $(this).attr('href'));
-                jds.push(scrape_job_description(log, company, jd_url));
+                jds.push(scrape_job_description(log, company, jd_url, proxy_url));
             });
 
             return _q.all(jds);
