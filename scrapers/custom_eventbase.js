@@ -3,7 +3,7 @@ var _cheerio = require('cheerio');
 var _node_url = require('url');
 var _util = require('./scraper_utils.js');
 
-function scrape(log, company, location, url) {
+function scrape(log, company, url) {
     log.info({ company: company, url: url }, 'Getting jd links');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
@@ -13,36 +13,29 @@ function scrape(log, company, location, url) {
         log.info({ company: company, count: jd_link_nodes.length }, 'Getting jd links');
         jd_link_nodes.each(function() {
             var jd_url = _node_url.resolve(url, $(this).attr('href'));
-            jds.push(scrape_job_description(log, company, location, jd_url));
+            jds.push(scrape_job_description(log, company, jd_url));
         });
         return _q.all(jds);
     });
 }
 
-function scrape_job_description(log, company, location, url) {
+function scrape_job_description(log, company, url) {
     log.debug({ company: company, url: url }, 'Getting jd');
     return _util.request(log, url).then(function(html) {
         var $ = _cheerio.load(html);
 
-        var description_text = '';
-        var description_html = '';
-        $('div[property="content:encoded"]').children().each(function() {
-            if ($(this).text().trim().toLowerCase().startsWith('how to apply')) {
-                // Stop reading after this point
-                return false;
-            }
-            description_text += _util.scrub_string($(this).text()) + ' ';
-            description_html += _util.outer_html($(this)) + ' ';
-        });
+        var title_node = $('.content-wrapper > h1');
+        var location_node = $('.content-wrapper > .secondary-header > .secondary-item').eq(1);
+        var description_node = $('.content-wrapper .body');
 
         return _util.create_jd(
             log,
             url,
             company,
-            _util.scrub_string($('span[property="dc:title"]').attr('content')),
-            location,
-            description_text,
-            description_html
+            _util.scrub_string(title_node.text()),
+            _util.scrub_string(location_node.text()),
+            _util.scrub_string(description_node.text()),
+            description_node.html().trim()
         );
     });
 }

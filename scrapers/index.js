@@ -155,7 +155,7 @@ module.exports = {
 		{
 			company: 'Eventbase',
 			scrape: function(log) {
-				return _custom_eventbase.scrape(log, this.company, 'Vancouver, BC', 'https://www.eventbase.com/careers');
+				return _custom_eventbase.scrape(log, this.company, 'https://www.eventbase.com/careers');
 			}
 		},
 		{
