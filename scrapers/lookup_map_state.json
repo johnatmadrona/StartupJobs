@@ -1,226 +1,282 @@
 {
 	"alberta": {
 		"canonicalName": "Alberta",
+		"region": "Canada",
 		"country": "canada"
 	},
 	"arizona": {
 		"canonicalName": "Arizona",
+		"region": "Other",
 		"country": "usa"
 	},
 	"az": {
 		"canonicalName": "Arizona",
+		"region": "Other",
 		"country": "usa"
 	},
 	"arkansas": {
 		"canonicalName": "Arkansas",
+		"region": "Other",
 		"country": "usa"
 	},
 	"ak": {
 		"canonicalName": "Arkansas",
+		"region": "Other",
 		"country": "usa"
 	},
 	"bavaria": {
 		"canonicalName": "Bavaria",
+		"region": "Europe",
 		"country": "germany"
 	},
 	"british-columbia": {
 		"canonicalName": "British Columbia",
+		"region": "Canada",
 		"country": "canada"
 	},
 	"bc": {
 		"canonicalName": "British Columbia",
+		"region": "Canada",
 		"country": "canada"
 	},
 	"california": {
 		"canonicalName": "California",
+		"region": "California",
 		"country": "usa"
 	},
 	"ca": {
 		"canonicalName": "California",
+		"region": "California",
 		"country": "usa"
 	},
 	"central-region": {
 		"canonicalName": "Central Region",
+		"region": "Other",
 		"country": "usa"
 	},
 	"colorado": {
 		"canonicalName": "Colorado",
+		"region": "Other",
 		"country": "usa"
 	},
 	"co": {
 		"canonicalName": "Colorado",
+		"region": "Other",
 		"country": "usa"
 	},
 	"east-coast": {
 		"canonicalName": "East Coast",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"england": {
 		"canonicalName": "England",
+		"region": "Europe",
 		"country": "uk"
 	},
 	"florida": {
 		"canonicalName": "Florida",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"fl": {
 		"canonicalName": "Florida",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"georgia": {
 		"canonicalName": "Georgia",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"ga": {
 		"canonicalName": "Georgia",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"illinois": {
 		"canonicalName": "Illinois",
+		"region": "Other",
 		"country": "usa"
 	},
 	"il": {
 		"canonicalName": "Illinois",
+		"region": "Other",
 		"country": "usa"
 	},
 	"karnataka": {
 		"canonicalName": "Karnataka",
+		"region": "Asia",
 		"country": "india"
 	},
 	"massachusetts": {
 		"canonicalName": "Massachusetts",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"ma": {
 		"canonicalName": "Massachusetts",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"minnesota": {
 		"canonicalName": "Minnesota",
+		"region": "Other",
 		"country": "usa"
 	},
 	"mn": {
 		"canonicalName": "Minnesota",
+		"region": "Other",
 		"country": "usa"
 	},
 	"missouri": {
 		"canonicalName": "Missouri",
+		"region": "Other",
 		"country": "usa"
 	},
 	"mo": {
 		"canonicalName": "Missouri",
+		"region": "Other",
 		"country": "usa"
 	},
 	"nm": {
 		"canonicalName": "New Mexico",
+		"region": "Other",
 		"country": "usa"
 	},
 	"new-mexico": {
 		"canonicalName": "New Mexico",
+		"region": "Other",
 		"country": "usa"
 	},
 	"new-south-wales": {
 		"canonicalName": "New South Wales",
+		"region": "Australia",
 		"country": "australia"
 	},
 	"new-york": {
 		"canonicalName": "New York",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"ny": {
 		"canonicalName": "New York",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"north-carolina": {
 		"canonicalName": "North Carolina",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"nc": {
 		"canonicalName": "North Carolina",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"ohio": {
 		"canonicalName": "Ohio",
+		"region": "Other",
 		"country": "usa"
 	},
 	"oh": {
 		"canonicalName": "Ohio",
+		"region": "Other",
 		"country": "usa"
 	},
 	"ontario": {
 		"canonicalName": "Ontario",
+		"region": "Canada",
 		"country": "canada"
 	},
 	"oregon": {
 		"canonicalName": "Oregon",
+		"region": "Northwest",
 		"country": "usa"
 	},
 	"or": {
 		"canonicalName": "Oregon",
+		"region": "Pacific Northwest",
 		"country": "usa"
 	},
 	"pennsylvania": {
 		"canonicalName": "Pennsylvania",
+		"region": "Other",
 		"country": "usa"
 	},
 	"pa": {
 		"canonicalName": "Pennsylvania",
+		"region": "Other",
 		"country": "usa"
 	},
 	"quebec": {
 		"canonicalName": "Quebec",
+		"region": "Canada",
 		"country": "canada"
 	},
 	"qc": {
 		"canonicalName": "Quebec",
+		"region": "Canada",
 		"country": "canada"
 	},
 	"rhode-island": {
 		"canonicalName": "Rhode Island",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"ri": {
 		"canonicalName": "Rhode Island",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"south-carolina": {
 		"canonicalName": "South Carolina",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"sc": {
 		"canonicalName": "South Carolina",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"texas": {
 		"canonicalName": "Texas",
+		"region": "Other",
 		"country": "usa"
 	},
 	"tx": {
 		"canonicalName": "Texas",
+		"region": "Other",
 		"country": "usa"
 	},
 	"tokyo": {
 		"canonicalName": "Tokyo",
+		"region": "Asia",
 		"country": "japan"
 	},
 	"victoria": {
 		"canonicalName": "Victoria",
+		"region": "Australia",
 		"country": "australia"
 	},
 	"virginia": {
 		"canonicalName": "Virginia",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"va": {
 		"canonicalName": "Virginia",
+		"region": "East Coast",
 		"country": "usa"
 	},
 	"washington": {
 		"canonicalName": "Washington",
+		"region": "Pacific Northwest",
 		"country": "usa"
 	},
 	"wa": {
 		"canonicalName": "Washington",
+		"region": "Pacific Northwest",
 		"country": "usa"
 	}
 }

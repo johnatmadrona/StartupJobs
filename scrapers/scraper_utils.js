@@ -110,7 +110,8 @@ function get_hashable_text(name) {
 
 function map_location(log, raw_location) {
 	var mapped = {
-		raw: raw_location
+		raw: raw_location,
+        region: 'Other'
 	};
 
 	var loc_parts = raw_location.split(',');
@@ -131,11 +132,13 @@ function map_location(log, raw_location) {
 	        state = _state_lookup[city.state];
 	        mapped.city = city.canonicalName;
 	        mapped.state = state.canonicalName;
+	        mapped.region = state.region;
 	        mapped.country = _country_lookup[state.country].canonicalName;
 	        break;
 	    } else if (_state_lookup[key]) {
 	        state = _state_lookup[key];
 	        mapped.state = state.canonicalName;
+	        mapped.region = state.region;
 	        mapped.country = _country_lookup[state.country].canonicalName;
 	        break;
 	    } else if (_country_lookup[key]) {
