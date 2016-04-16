@@ -36,12 +36,6 @@ var _config = (function() {
 		throw new Error('Must set a string value for S3_BUCKET');
 	}
 
-	var hour_of_day_to_scrape_utc = Number.parseInt(process.env.HOUR_OF_DAY_TO_SCRAPE_UTC);
-	if (!hour_of_day_to_scrape_utc || !Number.isInteger(hour_of_day_to_scrape_utc) ||
-		hour_of_day_to_scrape_utc < 0 || hour_of_day_to_scrape_utc > 23) {
-		throw new Error('Must set HOUR_OF_DAY_TO_SCRAPE_UTC to an integer in the range of 0 to 23');
-	}
-
 	var email_host = process.env.EMAIL_HOST;
 	if (typeof(email_host) !== 'string' || email_host.length < 1) {
 		throw new Error('Must set a string value for EMAIL_HOST');
@@ -70,7 +64,6 @@ var _config = (function() {
 		aws_key: aws_key,
 		aws_region: aws_region,
 		s3_bucket: s3_bucket,
-		hour_of_day_to_scrape_utc: hour_of_day_to_scrape_utc,
 		email_host: email_host,
 		email_port: email_port,
 		email_sender_address: email_sender_address,
