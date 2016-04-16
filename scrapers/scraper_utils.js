@@ -116,7 +116,7 @@ function map_location(log, raw_location) {
 
 	var loc_parts = raw_location.split(',');
 	for (var i = 0; i < loc_parts.length; i++) {
-		var entity = loc_parts[i];
+		var entity = loc_parts[i].trim();
 		if (entity.toLowerCase().startsWith('greater ')) {
 			entity = entity.substring(8);
 		}

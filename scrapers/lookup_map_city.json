@@ -103,6 +103,10 @@
 		"canonicalName": "Kirkland",
 		"state": "wa"
 	},
+	"liberty-lake": {
+		"canonicalName": "Liberty Lake",
+		"state": "wa"
+	},
 	"london": {
 		"canonicalName": "London",
 		"state": "england"
