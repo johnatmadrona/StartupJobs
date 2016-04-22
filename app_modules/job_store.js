@@ -61,24 +61,6 @@ function init(log, aws_key_id, aws_key, aws_region, s3_bucket) {
 	}).then(function(jobs) {
 		_cache = jobs;
 		log.info({ jd_count: Object.keys(jobs).length }, 'Loaded jds into cache');
-	}).then(function() {
-		// Remove any jobs with invalid keys. This can happen if s3 objects 
-		// are manually created or there's a change in the key gen scheme.
-		log.info('Checking for invalid jd keys and removing any from cache');
-		var keys_to_remove = [];
-		for (var jobKey in _cache) {
-			if (jobKey !== create_key_from_job(_cache[jobKey])) {
-				keys_to_remove.push(jobKey);
-				delete(_cache[jobKey]);
-			}
-		}
-
-		if (keys_to_remove.length > 0) {
-			log.warn({ options }, 'Deleting invalid jds from s3');
-			return _s3.remove(log, keys_to_remove).then(function() {
-				log.info(options, 'Deleted invalid jds from s3');
-			});
-		}
 	});
 }
 
@@ -91,15 +73,36 @@ function get_all_jobs_from_s3(log, s3, prefix) {
 	}).then(function(items) {
 		log.debug({ count: items.length }, 'Retrieving jds from s3');
 		return _q.all(items.map(function(item) {
-			return s3.retrieve(log, item.Key);
+			return s3.retrieve(log, item.Key).then(function(job) {
+				return {
+					key: item.Key,
+					job: job
+				}
+			});
 		}));
 	}).then(function(jobs) {
 		log.debug({ count: jobs.length }, 'Successfully retrieved jds from s3');
-		var job_map = {};
+
+		var inconsistent_keys = []
+		var valid_jobs_map = {};
+
 		for (var i = 0; i < jobs.length; i++) {
-			job_map[create_key_from_job(jobs[i])] = jobs[i];
+			if (jobs[i].key !== create_key_from_job(jobs[i].job)) {
+				inconsistent_keys.push(jobs[i].key);
+			} else {
+				valid_jobs_map[create_key_from_job(jobs[i].job)] = jobs[i].job;
+			}
 		}
-		return job_map;
+
+		var first_op = _q();
+		if (inconsistent_keys.length > 0) {
+			log.warn({ keys: inconsistent_keys }, 'Deleting jds with inconsistent keys from s3');
+			first_op = _s3.remove(log, inconsistent_keys).then(function() {
+				log.info({ keys: inconsistent_keys }, 'Deleted jds with inconsistent keys from s3');
+			});
+		}
+
+		return first_op.then(function() { return valid_jobs_map; });
 	});
 }
 
