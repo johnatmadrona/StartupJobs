@@ -174,7 +174,7 @@ module.exports = {
 		{
 			company: 'ExtraHop',
 			scrape: function(log) {
-		 		return _jobvite.scrape(log, this.company, 'https://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qAYaVfwn&jvresize=');
+		 		return _jobvite.scrape(log, this.company, 'https://app.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qAYaVfwn&jvresize=');
 			}
 		},
 		{
@@ -198,25 +198,25 @@ module.exports = {
 		{
 			company: 'Igneous Systems',
 			scrape: function(log) {
-		 		return _jobvite.scrape(log, this.company, 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qpO9Vfw1&jvresize=');
+		 		return _jobvite.scrape(log, this.company, 'http://app.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qpO9Vfw1&jvresize=');
 			}
 		},
 		{
 			company: 'Impinj',
 			scrape: function(log) {
-		 		return _jobvite.scrape(log, this.company, 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qPD9Vfwg&jvresize=');
+		 		return _jobvite.scrape(log, this.company, 'http://app.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qPD9Vfwg&jvresize=');
 			}
 		},
 		{
 			company: 'Indochino',
 			scrape: function(log) {
-				return _jobvite.scrape(log, this.company, 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qWn9Vfw7&jvresize=');
+				return _jobvite.scrape(log, this.company, 'http://app.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qWn9Vfw7&jvresize=');
 			}
 		},
 		{
 			company: 'iSpot.tv',
 			scrape: function(log) {
-				return _jobvite.scrape(log, this.company, 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qrI9VfwX&jvresize=');
+				return _jobvite.scrape(log, this.company, 'http://app.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qrI9VfwX&jvresize=');
 			}
 		},
 		{
@@ -277,7 +277,7 @@ module.exports = {
 		{
 			company: 'Mixpo',
 			scrape: function(log) {
-				return _jobvite.scrape(log, this.company, 'https://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qc3aVfw4&jvresize=');
+				return _jobvite.scrape(log, this.company, 'https://app.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qc3aVfw4&jvresize=');
 			}
 		},
 		{
@@ -351,7 +351,7 @@ module.exports = {
 		{
 			company: 'Redfin',
 			scrape: function(log) {
-				return _jobvite.scrape(log, this.company, 'https://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qf49Vfw7&jvresize=');
+				return _jobvite.scrape(log, this.company, 'https://app.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&c=qf49Vfw7&jvresize=');
 			}
 		},
 		{

@@ -6,7 +6,7 @@ var _util = require('./scraper_utils.js');
 function scrape(log, company, url) {
     var parsed_url = _node_url.parse(url);
     if (parsed_url.hostname !== 'jobs.jobvite.com' &&
-        parsed_url.hostname !== 'hire.jobvite.com') {
+        parsed_url.hostname !== 'app.jobvite.com') {
         return _q.reject(new Error('Invalid domain for jobvite scraping: ' + parsed_url.hostname));
     }
 
@@ -27,7 +27,7 @@ function parse_listing_and_scrape_jds(log, company, parsed_url, html) {
             }
             return _q.all(jds);
         });
-    } else if (parsed_url.hostname === 'hire.jobvite.com') {
+    } else if (parsed_url.hostname === 'app.jobvite.com') {
         var $ = _cheerio.load(html);
         var links;
 
@@ -49,7 +49,7 @@ function parse_listing_and_scrape_jds(log, company, parsed_url, html) {
             }
             links.each(function() {
                 var job_id = /[\?&]jvi=([\w,]+)/.exec($(this).attr('href'))[1];
-                var jd_url = 'https://hire.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&jvresize=&c=' + company_id + '&j=' + escape(job_id);
+                var jd_url = 'https://app.jobvite.com/CompanyJobs/Careers.aspx?k=JobListing&jvresize=&c=' + company_id + '&j=' + escape(job_id);
                 jds.push(scrape_job_description(log, company, jd_url));
             });
         }
@@ -125,7 +125,7 @@ function scrape_job_description(log, company, url) {
 
     var parsed_url = _node_url.parse(url);
     if (parsed_url.hostname !== 'jobs.jobvite.com' &&
-        parsed_url.hostname !== 'hire.jobvite.com') {
+        parsed_url.hostname !== 'app.jobvite.com') {
         return _q.reject(new Error('Invalid domain for jobvite scraping: ' + parsed_url.hostname));
     }
 
@@ -136,7 +136,7 @@ function scrape_job_description(log, company, url) {
             title = _util.scrub_string($('.jv-header').text());
             location = _util.scrub_string($('.jv-job-detail-meta').contents()[2].data);
             content_node = $('.jv-job-detail-description');
-        } else if (parsed_url.hostname === 'hire.jobvite.com') {
+        } else if (parsed_url.hostname === 'app.jobvite.com') {
             var location_node;
             if ($('.title_jobdesc').length > 0) {
                 title = _util.scrub_string($('.title_jobdesc > h2').text());
