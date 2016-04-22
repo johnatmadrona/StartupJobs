@@ -154,26 +154,30 @@ function remove(log, keys) {
 	});
 }
 
-function list(log, prefix, max_count) {
+function list(log, prefix, start_key) {
 	var options = {
 		Bucket: _config.s3_bucket
 	};
 	if (typeof(prefix) !== 'undefined' && prefix !== null) {
 		options.Prefix = prefix;
 	}
-	if (typeof(max_count) !== 'undefined') {
-		options.MaxKeys = max_count;
+	if (typeof(startKey) !== 'undefined' && startKey !== null) {
+		options.Marker = start_key;
 	}
 
 	log.debug({ options: options }, 'Listing s3 objects');
 	return get_s3_connection(_aws).then(function(s3) {
 		return _q.ninvoke(s3, 'listObjects', options);
-	}).then(function(result) {
-		if ((typeof(max_count) === 'undefined' || result.Contents.length < max_count) && result.IsTruncated) {
-			//var nextMarker = result.Contents[data.Contents.length - 1].Key;
-			return _q.reject(new Error('Truncation handling not yet implemented'));
+	}).then(function(initial_result) {
+		var next_op = _q();
+		if (initial_result.IsTruncated) {
+			var last_key = initial_result.Contents[initial_result.Contents.length - 1].Key;
+			next_op = list(log, prefix, last_key);
 		}
-		return _q.all(result.Contents);
+		return next_op.then(function(next_result) {
+			var ops = next_result || [];
+			return _q.all(ops.concat(initial_result.Contents));
+		});
 	});
 }
 

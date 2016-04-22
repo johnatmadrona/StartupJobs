@@ -82,9 +82,9 @@ function init(log, aws_key_id, aws_key, aws_region, s3_bucket) {
 	});
 }
 
-function get_all_jobs_from_s3(log, s3, prefix, max_count) {
-	log.debug({ prefix: prefix, max_count: max_count }, 'Retrieving jd list from s3');
-	return s3.list(log, prefix, max_count).then(function(items) {
+function get_all_jobs_from_s3(log, s3, prefix) {
+	log.debug({ prefix: prefix }, 'Retrieving jd list from s3');
+	return s3.list(log, prefix).then(function(items) {
 		return items.filter(function(item) {
 			return is_job_key(item.Key);
 		});
