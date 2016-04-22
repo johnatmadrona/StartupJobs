@@ -1,10 +1,7 @@
 *.suo
-*.user
 *.swp
 *~
 *.log
-bin/
-obj/
+*.log.*
 node_modules/
 *.private.*
-
