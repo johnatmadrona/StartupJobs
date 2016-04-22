@@ -161,7 +161,7 @@ function list(log, prefix, start_key) {
 	if (typeof(prefix) !== 'undefined' && prefix !== null) {
 		options.Prefix = prefix;
 	}
-	if (typeof(startKey) !== 'undefined' && startKey !== null) {
+	if (typeof(start_key) !== 'undefined' && start_key !== null) {
 		options.Marker = start_key;
 	}
 
