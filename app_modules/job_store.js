@@ -1,6 +1,7 @@
 var _q = require('q');
 var _hash = require('object-hash');
-var _s3 = require('./s3');
+
+var _s3;
 
 // This should really use a separate service like memcached or redis, but 
 // given the current simplicity of this app, that's unecessary
@@ -39,28 +40,24 @@ function is_job_key(str) {
 /// Storage operations
 ///
 
-function init(log, aws_key_id, aws_key, aws_region, s3_bucket) {
-	log.debug(
-		{
-			aws_key_id: aws_key_id ? '(set)' : aws_key_id,
-			aws_key: aws_key ? '(set)' : aws_key,
-			aws_region: aws_region ? '(set)' : aws_region,
-			s3_bucket: s3_bucket
-		},
-		'Initializing jd store'
-	);
+function init(log, s3) {
+	log.debug('Initializing job store');
+
+	if (typeof(s3) === 'undefined' || s3 === null) {
+		throw new Error('Must provide parameter "s3"');
+	}
 
 	if (typeof(_cache) !== 'undefined') {
 		log.warn('Tried to initialize multiple times');
 		return _q();
 	}
 
-	return _s3.init(log, aws_key_id, aws_key, aws_region, s3_bucket).then(function() {
-		log.info({ s3_bucket: s3_bucket }, 'Loading all jobs from s3');
-		return get_all_jobs_from_s3(log, _s3);
-	}).then(function(jobs) {
+	_s3 = s3;
+
+	log.info('Loading all jobs from s3');
+	return get_all_jobs_from_s3(log, _s3).then(function(jobs) {
 		_cache = jobs;
-		log.info({ jd_count: Object.keys(jobs).length }, 'Loaded jds into cache');
+		log.info({ jd_count: Object.keys(jobs).length }, 'Loaded jobs into cache');
 	});
 }
 

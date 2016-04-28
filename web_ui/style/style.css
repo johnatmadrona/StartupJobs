@@ -32,7 +32,7 @@ body {
 }
 
 .contentHeaderImage {
-	background-image:url('/images/madrona_header_300x81.png');
+	background-image:url('../images/madrona_header_300x81.png');
 	width: 300px;
 	height: 81px;
 	margin-left: auto;

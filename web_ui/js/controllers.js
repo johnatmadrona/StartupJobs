@@ -121,10 +121,12 @@ sjpAppModule.controller(
 			iterateDir = iterateLocalDir
 		}
 		iterateDir("data/", function(companyUrl) {
-			iterateDir(companyUrl, function(jdUrl) {
-				$.getJSON(jdUrl, parseJd).error(function(xhr, status, error) {
-					alert("Status: " + status + "\nError: " + error);
-				});
+			iterateDir(companyUrl, function(keyUrl) {
+				if (/jd-\w+\.json$/.test(keyUrl)) {
+					$.getJSON(keyUrl, parseJd).error(function(xhr, status, error) {
+						alert("Status: " + status + "\nError: " + error);
+					});
+				}
 			})
 		});
 

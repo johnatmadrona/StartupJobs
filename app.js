@@ -5,6 +5,7 @@ var _scraping_manager = require('./app_modules/scraping_manager');
 var _scrapers = require('./scrapers');
 var _job_store = require('./app_modules/job_store');
 var _email = require('./app_modules/email');
+var _s3 = require('./app_modules/s3');
 
 var _config = (function() {
 	var log_level = process.env.LOG_LEVEL;
@@ -92,14 +93,19 @@ var _log = new _bunyan({
 	serializers: _bunyan.stdSerializers
 });
 
-_log.info('Initializing job store');
-_job_store.init(
+_s3.init(
 	_log,
 	_config.aws_key_id,
 	_config.aws_key,
 	_config.aws_region,
 	_config.s3_bucket
 ).then(function() {
+	_log.info('Uploading web UI');
+	return _s3.create_website('web_ui/', 'index.html');
+}).then(function() {
+	_log.info('Initializing job store');
+	return _job_store.init(_log, _s3);
+}).then(function() {
 	_log.info('Setting up emailer');
 	return _email.create(
 		_config.email_host,
